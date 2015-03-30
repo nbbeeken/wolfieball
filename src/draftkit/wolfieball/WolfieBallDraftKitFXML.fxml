@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="833.0" prefWidth="1235.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="draftkit.wolfieball.FXMLDocumentController">
+   <children>
+      <VBox layoutY="12.0" prefHeight="858.0" prefWidth="1235.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Pane layoutX="8.0" layoutY="12.0" prefHeight="77.0" prefWidth="1235.0">
+               <children>
+                  <HBox prefHeight="64.0" prefWidth="1235.0" spacing="175.0">
+                     <children>
+                        <ImageView fitHeight="64.0" fitWidth="753.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../images/Logo.png" />
+                           </image>
+                        </ImageView>
+                        <TextArea fx:id="infoArea" editable="false" layoutX="618.0" layoutY="7.0" prefHeight="64.0" prefWidth="569.0">
+                           <HBox.margin>
+                              <Insets bottom="5.0" top="5.0" />
+                           </HBox.margin>
+                        </TextArea>
+                     </children>
+                     <padding>
+                        <Insets right="70.0" />
+                     </padding>
+                  </HBox>
+               </children>
+            </Pane>
+            <AnchorPane layoutY="62.0" prefHeight="782.0" prefWidth="1235.0">
+               <children>
+                  <TabPane layoutY="24.0" prefHeight="715.0" prefWidth="1059.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="24.0">
+                    <tabs>
+                      <Tab fx:id="playerTab" text="Players">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="687.0" prefWidth="1044.0">
+                                 <children>
+                                    <SplitPane dividerPositions="0.6707663197729423" layoutX="679.0" layoutY="512.0" prefHeight="686.0" prefWidth="1059.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                      <items>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                             <children>
+                                                <VBox layoutX="191.0" layoutY="236.0" prefHeight="684.0" prefWidth="706.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                   <children>
+                                                      <TableView fx:id="playerTable" prefHeight="571.0" prefWidth="804.0">
+                                                        <columns>
+                                                          <TableColumn prefWidth="111.0" text="Last Name" />
+                                                          <TableColumn prefWidth="110.0" text="First Name" />
+                                                        </columns>
+                                                      </TableView>
+                                                      <HBox prefHeight="205.0" prefWidth="686.0" spacing="20.0">
+                                                         <children>
+                                                            <VBox prefHeight="205.0" prefWidth="163.0" spacing="10.0">
+                                                               <children>
+                                                                  <Label text="Player Positions" />
+                                                                  <RadioButton mnemonicParsing="false" text="Hitter" />
+                                                                  <RadioButton mnemonicParsing="false" text="Pitcher" />
+                                                                  <RadioButton mnemonicParsing="false" text="etc" />
+                                                               </children>
+                                                            </VBox>
+                                                         </children>
+                                                         <padding>
+                                                            <Insets left="30.0" right="30.0" top="30.0" />
+                                                         </padding>
+                                                      </HBox>
+                                                   </children>
+                                                   <opaqueInsets>
+                                                      <Insets />
+                                                   </opaqueInsets>
+                                                   <padding>
+                                                      <Insets left="10.0" right="10.0" top="10.0" />
+                                                   </padding>
+                                                </VBox>
+                                             </children>
+                                          </AnchorPane>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                             <children>
+                                                <VBox layoutX="14.0" layoutY="14.0" prefHeight="728.0" prefWidth="403.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                   <children>
+                                                      <HBox layoutX="14.0" layoutY="14.0" spacing="10.0">
+                                                         <children>
+                                                            <TextField fx:id="searchField" layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="253.0" promptText="Search Player by Last Name" />
+                                                            <Button fx:id="searchBtn" layoutX="279.0" layoutY="14.0" mnemonicParsing="false" text="Search" />
+                                                         </children>
+                                                      </HBox>
+                                                      <Button fx:id="playerImageBtn" layoutX="14.0" layoutY="46.0" mnemonicParsing="false" prefHeight="342.0" prefWidth="343.0" text="PlayerImage" />
+                                                      <HBox layoutX="20.0" layoutY="397.0" spacing="10.0">
+                                                         <children>
+                                                            <Label fx:id="playerLbl" layoutX="20.0" layoutY="401.0" prefHeight="17.0" prefWidth="124.0" text="Player Name" />
+                                                            <Button fx:id="addBtn" layoutX="156.0" layoutY="397.0" mnemonicParsing="false" text="Add Player" />
+                                                            <Button fx:id="removeBtn" layoutX="238.0" layoutY="397.0" mnemonicParsing="false" text="Remove Player" />
+                                                         </children>
+                                                      </HBox>
+                                                      <Label layoutX="14.0" layoutY="447.0" text="Bio:" />
+                                                      <TextArea fx:id="bioArea" editable="false" layoutX="14.0" layoutY="470.0" prefHeight="200.0" prefWidth="319.0" />
+                                                   </children>
+                                                   <padding>
+                                                      <Insets left="30.0" right="35.0" top="10.0" />
+                                                   </padding>
+                                                </VBox>
+                                             </children>
+                                          </AnchorPane>
+                                      </items>
+                                    </SplitPane>
+                                 </children>
+                              </AnchorPane>
+                        </content>
+                      </Tab>
+                      <Tab fx:id="fantasyTab" text="Fantasy Team">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        </content>
+                      </Tab>
+                        <Tab fx:id="standingsTab" text="Fantasy Standings">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                          </content>
+                        </Tab>
+                        <Tab fx:id="draftTab" text="Draft">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                          </content>
+                        </Tab>
+                        <Tab fx:id="mlbTeamsTab" text="MLB Teams">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                          </content>
+                        </Tab>
+                    </tabs>
+                  </TabPane>
+                  <MenuBar fx:id="menuBar" prefHeight="25.0" prefWidth="1235.0">
+                    <menus>
+                      <Menu fx:id="fileMenu" mnemonicParsing="false" text="File">
+                        <items>
+                          <MenuItem mnemonicParsing="false" text="Close" />
+                        </items>
+                      </Menu>
+                      <Menu fx:id="editMenu" mnemonicParsing="false" text="Edit">
+                        <items>
+                          <MenuItem mnemonicParsing="false" text="Delete" />
+                        </items>
+                      </Menu>
+                      <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">
+                        <items>
+                          <MenuItem mnemonicParsing="false" text="About" />
+                        </items>
+                      </Menu>
+                    </menus>
+                  </MenuBar>
+               </children>
+            </AnchorPane>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

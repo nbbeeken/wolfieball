@@ -1,0 +1,53 @@
+/*
+ * Empty Stylesheet file.
+ */
+
+.mainFxmlClass {
+    -fx-background-color: #2A2642;
+}
+
+.headerClass{
+    -fx-background-color: #2A2642;
+}
+.menu-bar {
+    -fx-background-color: #2A2642;
+}
+
+.menu .label {
+    -fx-text-fill: #BA5062;
+}
+
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-background-color: #422a26;
+}
+
+.tab-pane
+{
+    -fx-tab-min-width:140px;
+}
+
+.tab{
+    -fx-background-insets: 0 1 0 1,0,0;
+}
+.tab-pane .tab
+{
+    -fx-background-color: #8a7b7b;
+
+}
+
+.tab-pane .tab:selected
+{
+    -fx-background-color: #2A2642;
+}
+
+.tab .tab-label { 
+    -fx-alignment: CENTER;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.tab:selected .tab-label { 
+    -fx-alignment: CENTER;
+    -fx-text-fill: #BA5062;
+}

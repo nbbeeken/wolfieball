@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import java.net.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="742.0" prefWidth="1293.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wolfieball.gui.FXMLDocumentController">
+    <stylesheets>
+        <URL value="@wolfieball.css" />
+    </stylesheets>
+   <children>
+      <VBox layoutX="65.0" layoutY="350.0" prefWidth="1359.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox prefHeight="64.0" prefWidth="1027.0" spacing="175.0" style="-fx-background-color: #2A2642;" styleClass="headerClass" stylesheets="@wolfieball.css">
+               <children>
+                  <ImageView fitHeight="64.0" fitWidth="753.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../images/Logo.png" />
+                     </image>
+                  </ImageView>
+                  <TextArea fx:id="infoArea" editable="false" layoutX="618.0" layoutY="7.0" prefHeight="54.0" prefWidth="335.0">
+                     <HBox.margin>
+                        <Insets bottom="5.0" top="5.0" />
+                     </HBox.margin>
+                  </TextArea>
+               </children>
+               <padding>
+                  <Insets right="70.0" />
+               </padding>
+            </HBox>
+            <MenuBar fx:id="menuBar" prefHeight="25.0" prefWidth="626.0">
+              <menus>
+                <Menu fx:id="fileMenu" mnemonicParsing="false" styleClass="menu" text="File">
+                  <items>
+                        <CustomMenuItem mnemonicParsing="false" text="New Draft...">
+                           <content>
+                              <ImageView fitHeight="18.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../images/New.png" />
+                                 </image>
+                                 <viewport>
+                                    <Rectangle2D />
+                                 </viewport>
+                              </ImageView>
+                           </content>
+                        </CustomMenuItem>
+                    <MenuItem mnemonicParsing="false" text="Close" />
+                  </items>
+                </Menu>
+                <Menu fx:id="editMenu" mnemonicParsing="false" text="Edit">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="Delete" />
+                  </items>
+                </Menu>
+                <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="About" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+            <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+              <tabs>
+                  <Tab text="Start Tab">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <VBox alignment="CENTER" layoutX="561.0" layoutY="259.0" prefHeight="717.0" prefWidth="1359.0" spacing="50.0" styleClass="mainFxmlClass" stylesheets="@wolfieball.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <Button fx:id="newDraftBtn" mnemonicParsing="false" text="Start New Draft">
+                                       <font>
+                                          <Font size="23.0" />
+                                       </font>
+                                    </Button>
+                                    <Button fx:id="loadDraftBtn" mnemonicParsing="false" text="Load Existing Draft">
+                                       <font>
+                                          <Font size="23.0" />
+                                       </font>
+                                    </Button>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </AnchorPane>
+                    </content>
+                  </Tab>
+                <Tab fx:id="playerTab" text="Players">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="687.0" prefWidth="1044.0">
+                           <children>
+                              <SplitPane dividerPositions="0.705232129697863" layoutX="679.0" layoutY="512.0" prefHeight="686.0" prefWidth="1059.0" style="-fx-background-color: #2A2642;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <items>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                       <children>
+                                          <VBox layoutX="191.0" layoutY="236.0" prefHeight="684.0" prefWidth="706.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                             <children>
+                                                <TableView fx:id="playerTable" prefHeight="571.0" prefWidth="804.0" VBox.vgrow="NEVER">
+                                                  <columns>
+                                                    <TableColumn fx:id="lastNameCol" prefWidth="107.0" text="Last Name" />
+                                                    <TableColumn fx:id="firstNameCol" prefWidth="101.0" text="First Name" />
+                                                      <TableColumn fx:id="teamCol" prefWidth="49.0" text="Team" />
+                                                      <TableColumn fx:id="othPosCol" prefWidth="103.0" text="Other Positions" />
+                                                      <TableColumn fx:id="runsCol" prefWidth="49.0" text="Runs" />
+                                                      <TableColumn fx:id="homeRunsCol" prefWidth="92.0" text="Home Runs" />
+                                                      <TableColumn fx:id="runsBatInCol" prefWidth="106.0" text="Runs Batted In" />
+                                                      <TableColumn fx:id="stolenBasesCol" prefWidth="93.0" text="Stolen Bases" />
+                                                      <TableColumn fx:id="battingAvgCol" prefWidth="106.0" text="Batting Average" />
+                                                      <TableColumn fx:id="salaryCol" text="Salary" />
+                                                  </columns>
+                                                </TableView>
+                                                <HBox prefHeight="205.0" prefWidth="686.0" spacing="20.0">
+                                                   <children>
+                                                      <VBox prefHeight="105.0" prefWidth="144.0" spacing="10.0">
+                                                         <children>
+                                                            <Label style="-fx-text-fill: #BA5062;" text="Player Positions" />
+                                                            <RadioButton fx:id="firstBasemanRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="First Baseman (1B)" />
+                                                            <RadioButton fx:id="secondBasemanRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="Second Baseman (2B)" />
+                                                            <RadioButton fx:id="thirdBasemanRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="Third Baseman (3B)" />
+                                                         </children>
+                                                      </VBox>
+                                                      <VBox prefHeight="105.0" prefWidth="149.0" spacing="10.0">
+                                                         <children>
+                                                            <RadioButton fx:id="cornerInfielderRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="Corner Infielder (CI)" />
+                                                            <RadioButton fx:id="catcherRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="Catcher (C)" />
+                                                            <RadioButton fx:id="shortStopRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="Short Stop (SS)" />
+                                                         </children>
+                                                         <padding>
+                                                            <Insets top="25.0" />
+                                                         </padding>
+                                                      </VBox>
+                                                      <VBox prefHeight="105.0" prefWidth="149.0" spacing="10.0">
+                                                         <children>
+                                                            <RadioButton fx:id="middleInfieldRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="Middle Infield (MI)" />
+                                                            <RadioButton fx:id="outfielderRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="Outfielder (OF)" />
+                                                            <RadioButton fx:id="utilityRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="Utility (U)" />
+                                                         </children>
+                                                         <padding>
+                                                            <Insets top="25.0" />
+                                                         </padding>
+                                                      </VBox>
+                                                   </children>
+                                                   <padding>
+                                                      <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+                                                   </padding>
+                                                </HBox>
+                                             </children>
+                                             <opaqueInsets>
+                                                <Insets />
+                                             </opaqueInsets>
+                                             <padding>
+                                                <Insets left="10.0" right="10.0" top="10.0" />
+                                             </padding>
+                                          </VBox>
+                                       </children>
+                                    </AnchorPane>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                       <children>
+                                          <VBox layoutX="14.0" layoutY="14.0" prefHeight="728.0" prefWidth="403.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                             <children>
+                                                <HBox layoutX="14.0" layoutY="14.0" spacing="10.0">
+                                                   <children>
+                                                      <TextField fx:id="searchField" layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="225.0" promptText="Search Player by Last Name" />
+                                                      <Button fx:id="searchBtn" layoutX="279.0" layoutY="14.0" mnemonicParsing="false" text="Search" />
+                                                   </children>
+                                                </HBox>
+                                                <ImageView fx:id="playerImage" fitHeight="362.0" fitWidth="199.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../../images/jmitchell.jpg" />
+                                                   </image>
+                                                </ImageView>
+                                                <HBox layoutX="20.0" layoutY="397.0" spacing="10.0">
+                                                   <children>
+                                                      <Label fx:id="playerLbl" layoutX="20.0" layoutY="401.0" prefHeight="17.0" prefWidth="124.0" text="Player Name" />
+                                                      <Button fx:id="addBtn" layoutX="156.0" layoutY="397.0" mnemonicParsing="false" text="Add Player" />
+                                                      <Button fx:id="removeBtn" layoutX="238.0" layoutY="397.0" mnemonicParsing="false" text="Remove Player" />
+                                                   </children>
+                                                </HBox>
+                                                <Label layoutX="14.0" layoutY="447.0" text="Bio:" />
+                                                <TextArea fx:id="bioArea" editable="false" layoutX="14.0" layoutY="470.0" prefHeight="86.0" prefWidth="313.0" />
+                                             </children>
+                                             <padding>
+                                                <Insets left="30.0" right="35.0" top="10.0" />
+                                             </padding>
+                                          </VBox>
+                                       </children>
+                                    </AnchorPane>
+                                </items>
+                              </SplitPane>
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+                <Tab fx:id="fantasyTab" text="Fantasy Team">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                  </content>
+                </Tab>
+                  <Tab fx:id="standingsTab" text="Fantasy Standings">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    </content>
+                  </Tab>
+                  <Tab fx:id="draftTab" text="Draft">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    </content>
+                  </Tab>
+                  <Tab fx:id="mlbTeamsTab" text="MLB Teams">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    </content>
+                  </Tab>
+              </tabs>
+            </TabPane>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

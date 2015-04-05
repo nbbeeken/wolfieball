@@ -4,7 +4,7 @@
  * CSE 219 Stony Brook
  * Prof.  Richard McKenna
  */
-package draftkit.wolfieball;
+package wolfieball.gui;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

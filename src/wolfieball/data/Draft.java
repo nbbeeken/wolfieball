@@ -13,4 +13,33 @@ package wolfieball.data;
 public class Draft {
     League mlb;
     League fantasy;
+    String name;
+    
+    
+
+    public League getMlb() {
+        return mlb;
+    }
+
+    public void setMlb(League mlb) {
+        this.mlb = mlb;
+    }
+
+    public League getFantasy() {
+        return fantasy;
+    }
+
+    public void setFantasy(League fantasy) {
+        this.fantasy = fantasy;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    
 }

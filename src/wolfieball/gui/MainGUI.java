@@ -6,11 +6,8 @@
  */
 package wolfieball.gui;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -25,9 +22,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
-import javafx.stage.Stage;
-import wolfieball.gui.dialog.DialogType;
-import wolfieball.gui.dialog.FXMLDialog;
+import wolfieball.data.DraftManager;
 
 /**
  * FXML Controller class
@@ -74,6 +69,8 @@ public class MainGUI implements Initializable {
     @FXML
     private TableColumn<?, ?> salaryCol;
     @FXML
+    private TableColumn<?, ?> yearOfBirthCol; 
+    @FXML
     private RadioButton firstBasemanRbtn;
     @FXML
     private RadioButton secondBasemanRbtn;
@@ -104,17 +101,32 @@ public class MainGUI implements Initializable {
     @FXML
     private Button removeBtn;
     @FXML
-    private TextArea bioArea;
-    @FXML
     private Tab fantasyTab;
     @FXML
     private Tab standingsTab;
     @FXML
     private Tab draftTab;
     @FXML
+    private Tab startTab;
+    @FXML
     private Tab mlbTeamsTab;
+    @FXML
+    private RadioButton allRbtn;
+    @FXML
+    private Button headerNewBtn;
+    @FXML
+    private Button headerLoadBtn;
+    @FXML
+    private Button headerSaveBtn;
+    @FXML
+    private Button headerExportBtn;
+    @FXML
+    private Button headerQuitBtn;
+    
 
     private final ToggleGroup group = new ToggleGroup();
+    
+    private DraftManager draftManager;
 
     /**
      * Initializes the controller class.
@@ -124,21 +136,24 @@ public class MainGUI implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initRadioBtns();
-
-        newDraftBtn.setOnAction(e -> {
-            try {
-                showDialog();
-            } catch (IOException ex) {
-                Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (Exception ex) {
-                Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        });
+        initTabs();
+        initButtons();
                 
+    }    
+
+    private void initTabs() {
+        //Start Tabs Off until New or Load selected
+        playerTab.setDisable(true);
+        draftTab.setDisable(true);
+        fantasyTab.setDisable(true);
+        standingsTab.setDisable(true);
+        mlbTeamsTab.setDisable(true);
     }    
     
     
     private void initRadioBtns() {
+        //Add to Toggle Group
+        allRbtn.setToggleGroup(group);
         firstBasemanRbtn.setToggleGroup(group);
         secondBasemanRbtn.setToggleGroup(group);
         thirdBasemanRbtn.setToggleGroup(group);
@@ -148,13 +163,34 @@ public class MainGUI implements Initializable {
         middleInfieldRbtn.setToggleGroup(group);
         outfielderRbtn.setToggleGroup(group);
         utilityRbtn.setToggleGroup(group);
-    }    
-
-    private void showDialog() throws IOException, Exception {
-        Stage s = new Stage();
-        FXMLDialog dialog = new FXMLDialog(DialogType.NewPlayer);
-        dialog.start(s);
+        //Set Events
         
-    }  
+    }      
+
+    private void initButtons() {
+        //Set Events
+        headerQuitBtn.setOnAction(e ->{
+            System.exit(0);
+        });
+        //New Buttons Pair
+        headerNewBtn.setOnAction(e ->{
+            try{
+                draftManager.newDraftRequest();
+            }catch(UnsupportedOperationException exxx){
+                System.out.println("YOOOOOOOOOOOO");
+            }
+            
+        });
+        newDraftBtn.setOnAction(e ->{
+            draftManager.newDraftRequest();
+        });
+        //Load Buttons Pair
+        headerLoadBtn.setOnAction(e ->{
+            draftManager.loadDraftRequest();
+        });
+        loadDraftBtn.setOnAction(e ->{
+            draftManager.loadDraftRequest();
+        });
+    }
     
 }

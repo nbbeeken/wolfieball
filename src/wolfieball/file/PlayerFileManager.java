@@ -15,5 +15,10 @@ public interface PlayerFileManager {
 //    public void                 saveSubjects(List<Object> subjects, String filePath) throws IOException;
 //    public ArrayList<String>    loadSubjects(String filePath) throws IOException;
     
+//    public void saveDraft(Draft draftToSave) throws IOException;
+//    public void loadDraft(Draft draftToLoad, String draftPath)throws IOException;
+//    public void savePlayer(Player player, String filepath)throws IOException;
+//    public void loadPlayer();
+    
     
 }

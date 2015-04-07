@@ -6,20 +6,21 @@
  */
 package wolfieball.data;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 /**
  *
  * @author Neal
  */
-class Player {
+public class Player {
 
     private final StringProperty lastName;
     private final StringProperty firstName;
 
-    public Player(StringProperty lastName, StringProperty firstName) {
-        this.lastName = lastName;
-        this.firstName = firstName;
+    public Player() {
+        lastName = new SimpleStringProperty();
+        firstName  = new SimpleStringProperty();
     }
 
         public String getFirstName() {

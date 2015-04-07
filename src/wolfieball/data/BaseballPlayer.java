@@ -10,6 +10,7 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 /**
@@ -17,103 +18,104 @@ import javafx.beans.property.StringProperty;
  * @author Neal
  */
 public class BaseballPlayer extends Player{
+    private final StringProperty TEAM = new SimpleStringProperty();
+    private final StringProperty LAST_NAME = new SimpleStringProperty();
+    private final StringProperty FIRST_NAME = new SimpleStringProperty();
+    private final StringProperty NOTES = new SimpleStringProperty();
+    private final IntegerProperty YEAR_OF_BIRTH = new SimpleIntegerProperty();
+    private final StringProperty NATION_OF_BIRTH = new SimpleStringProperty();
+    private final DoubleProperty estimatedValue = new SimpleDoubleProperty();
 
-    private final IntegerProperty salary;
-    private final IntegerProperty runs;
-    private final IntegerProperty homeRuns;
-    private final IntegerProperty runsBattedIn;
-    private final IntegerProperty stolenBases;
-    private final DoubleProperty battingAverage;
-
-    public BaseballPlayer(StringProperty lastName, StringProperty firstName, IntegerProperty salary, IntegerProperty runs, IntegerProperty homeRuns, IntegerProperty runsBattedIn, IntegerProperty stolenBases, DoubleProperty battingAverage) {
-        super(lastName, firstName);
-        this.salary = salary;
-        this.runs = runs;
-        this.homeRuns = homeRuns;
-        this.runsBattedIn = runsBattedIn;
-        this.stolenBases = stolenBases;
-        this.battingAverage = battingAverage;
+    public double getEstimatedValue() {
+        return estimatedValue.get();
     }
 
-    public BaseballPlayer(StringProperty lastName, StringProperty firstName) {
-        super(lastName, firstName);
-        salary = new SimpleIntegerProperty();
-        runs = new SimpleIntegerProperty();
-        homeRuns = new SimpleIntegerProperty();
-        stolenBases = new SimpleIntegerProperty();
-        runsBattedIn = new SimpleIntegerProperty();
-        battingAverage = new SimpleDoubleProperty();
+    public void setEstimatedValue(double value) {
+        estimatedValue.set(value);
     }
 
-    private int getSalary() {
-        return salary.get();
-    }
-
-    private void setSalary(int value) {
-        salary.set(value);
-    }
-
-    private IntegerProperty salaryProperty() {
-        return salary;
+    public DoubleProperty estimatedValueProperty() {
+        return estimatedValue;
     }
     
-    private int getRuns() {
-        return runs.get();
+
+    public String getNATION_OF_BIRTH() {
+        return NATION_OF_BIRTH.get();
     }
 
-    private void setRuns(int value) {
-        runs.set(value);
+    public void setNATION_OF_BIRTH(String value) {
+        NATION_OF_BIRTH.set(value);
     }
 
-    private IntegerProperty runsProperty() {
-        return runs;
+    public StringProperty NATION_OF_BIRTHProperty() {
+        return NATION_OF_BIRTH;
     }
     
-    private int getHomeRuns() {
-        return homeRuns.get();
+    
+    public int getYEAR_OF_BIRTH() {
+        return YEAR_OF_BIRTH.get();
     }
 
-    private void setHomeRuns(int value) {
-        homeRuns.set(value);
+    public void setYEAR_OF_BIRTH(int value) {
+        YEAR_OF_BIRTH.set(value);
     }
 
-    private IntegerProperty homeRunsProperty() {
-        return homeRuns;
-    }
-
-    private int getStolenBases() {
-        return stolenBases.get();
-    }
-
-    private void setStolenBases(int value) {
-        stolenBases.set(value);
-    }
-
-    private IntegerProperty stolenBasesProperty() {
-        return stolenBases;
+    public IntegerProperty YEAR_OF_BIRTHProperty() {
+        return YEAR_OF_BIRTH;
     }
     
-    private int getRunsBattedIn() {
-        return runsBattedIn.get();
+    
+    public String getNOTES() {
+        return NOTES.get();
     }
 
-    private void setRunsBattedIn(int value) {
-        runsBattedIn.set(value);
+    public void setNOTES(String value) {
+        NOTES.set(value);
     }
 
-    private IntegerProperty runsBattedInProperty() {
-        return runsBattedIn;
+    public StringProperty NOTESProperty() {
+        return NOTES;
     }
     
-    private double getBattingAverage() {
-        return battingAverage.get();
+    
+    public String getFIRST_NAME() {
+        return FIRST_NAME.get();
     }
 
-    private void setBattingAverage(int value) {
-        battingAverage.set(value);
+    public void setFIRST_NAME(String value) {
+        FIRST_NAME.set(value);
     }
 
-    private DoubleProperty battingAverageProperty() {
-        return battingAverage;
+    public StringProperty FIRST_NAMEProperty() {
+        return FIRST_NAME;
     }
+    
+    
+    public String getLAST_NAME() {
+        return LAST_NAME.get();
+    }
+
+    public void setLAST_NAME(String value) {
+        LAST_NAME.set(value);
+    }
+
+    public StringProperty LAST_NAMEProperty() {
+        return LAST_NAME;
+    }
+    
+    public String getTEAM() {
+        return TEAM.get();
+    }
+
+    public void setTEAM(String value) {
+        TEAM.set(value);
+    }
+
+    public StringProperty TEAMProperty() {
+        return TEAM;
+    }
+
+    
+
+    
 }

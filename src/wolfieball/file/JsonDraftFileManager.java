@@ -1,5 +1,12 @@
 package wolfieball.file;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import javax.json.Json;
+import javax.json.JsonWriter;
+import wolfieball.data.Draft;
+
 /**
  * This is a CourseFileManager that uses the JSON file format to 
  * implement the necessary functions for loading and saving different
@@ -13,7 +20,15 @@ public class JsonDraftFileManager implements PlayerFileManager {
     
     
     
-    
+    public void saveDraft(Draft draft) throws IOException{
+        String draftFilePath = "drafts/" + draft.getName() + ".json";
+        
+        OutputStream os = new FileOutputStream(draftFilePath);
+        JsonWriter jsonWriter = Json.createWriter(os);
+        
+        
+        
+    }
     
     
     

@@ -1,9 +1,14 @@
 package wolfieball.file;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
 import javax.json.JsonWriter;
 import wolfieball.data.Draft;
 
@@ -16,16 +21,29 @@ import wolfieball.data.Draft;
  */
 public class JsonDraftFileManager implements PlayerFileManager {
     
-    
-    
-    
-    
+    /**
+     * Saves Draft to JSON
+     * @param draft
+     * @throws IOException
+     */
     public void saveDraft(Draft draft) throws IOException{
         String draftFilePath = "drafts/" + draft.getName() + ".json";
         
         OutputStream os = new FileOutputStream(draftFilePath);
         JsonWriter jsonWriter = Json.createWriter(os);
         
+        
+        
+    }
+    
+    /**
+     *  Loads the JSON formatted Draft file.
+     * @param draft
+     * @param jsonFilePath
+     * @throws IOException
+     */
+    public void loadDraft(Draft draft, String jsonFilePath) throws IOException{
+        JsonObject json = loadJSONFile(jsonFilePath);
         
         
     }
@@ -297,14 +315,16 @@ public class JsonDraftFileManager implements PlayerFileManager {
 //    // AND HERE ARE THE PRIVATE HELPER METHODS TO HELP THE PUBLIC ONES
 //    
 //    // LOADS A JSON FILE AS A SINGLE OBJECT AND RETURNS IT
-//    private JsonObject loadJSONFile(String jsonFilePath) throws IOException {
-//        InputStream is = new FileInputStream(jsonFilePath);
-//        JsonReader jsonReader = Json.createReader(is);
-//        JsonObject json = jsonReader.readObject();
-//        jsonReader.close();
-//        is.close();
-//        return json;
-//    }    
+   private JsonObject loadJSONFile(String jsonFilePath) throws IOException {
+       JsonObject json;
+        try (InputStream is = new FileInputStream(jsonFilePath); JsonReader jsonReader = Json.createReader(is)) {
+            json = jsonReader.readObject();
+            return json;
+        }catch (FileNotFoundException e) {
+            //MainGUI.print("Unable to load: " + jsonFilePath);
+        }
+        return null;
+    }    
 //    
 //    // LOADS AN ARRAY OF A SPECIFIC NAME FROM A JSON FILE AND
 //    // RETURNS IT AS AN ArrayList FULL OF THE DATA FOUND

@@ -6,30 +6,32 @@
  */
 package wolfieball.data;
 
+import javafx.collections.ObservableList;
+
 /**
  *
  * @author Neal
  */
 public class Draft {
-    League mlb;
-    League fantasy;
+    ObservableList<BaseballPlayer> mlb;
+    ObservableList<BaseballPlayer> fantasy;
     String name;
     
     
 
-    public League getMlb() {
+    public ObservableList<BaseballPlayer> getMlb() {
         return mlb;
     }
 
-    public void setMlb(League mlb) {
+    public void setMlb(ObservableList<BaseballPlayer> mlb) {
         this.mlb = mlb;
     }
 
-    public League getFantasy() {
+    public ObservableList<BaseballPlayer> getFantasy() {
         return fantasy;
     }
 
-    public void setFantasy(League fantasy) {
+    public void setFantasy(ObservableList<BaseballPlayer> fantasy) {
         this.fantasy = fantasy;
     }
 

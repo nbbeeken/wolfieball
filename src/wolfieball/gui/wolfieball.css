@@ -5,7 +5,9 @@
 .mainFxmlClass {
     -fx-background-color: #2A2642;
 }
-
+.anchorPane {
+    -fx-background-color: #2A2642;
+}
 .headerClass{
     -fx-background-color: #2A2642;
 }

@@ -6,7 +6,10 @@
  */
 package wolfieball.data;
 
-import java.util.ArrayList;
+import java.io.File;
+import javafx.stage.FileChooser;
+import javafx.stage.Window;
+import wolfieball.file.JsonDraftFileManager;
 import wolfieball.gui.MainGUI;
 
 /**
@@ -14,10 +17,13 @@ import wolfieball.gui.MainGUI;
  * @author Neal
  */
 public class DraftManager {
-    Draft draft;
-
+    private final JsonDraftFileManager jsonManager;
+    private final Draft draft;
+    public Draft getDraft() {return draft;}
+    
     public DraftManager() {
-        this.draft = new Draft();
+        this.draft = new Draft("");
+        this.jsonManager = new JsonDraftFileManager();
     }
 
     /**
@@ -26,9 +32,8 @@ public class DraftManager {
      * @param gui
      * @return
      */
-    public ArrayList<BaseballPlayer> newDraftRequest(MainGUI gui) {
+    public void newDraftRequest(MainGUI gui) {
         gui.print("New Draft");
-        return null;
     }
     
     /**
@@ -37,29 +42,54 @@ public class DraftManager {
      * It will also give the players that need to be filtered 
      * because they have been drafted
      * @param gui
+     * @param window
      * @return
      */
-    public ArrayList<BaseballPlayer> loadDraftRequest(MainGUI gui) {
+    public void loadDraftRequest(MainGUI gui, Window window) {
+        FileChooser fc = new FileChooser();
+        fc.setInitialDirectory(new File("..\\Wolfieball Draft Kit\\drafts"));
+        fc.setTitle("Choose Draft File");
+        File loadedDraft = fc.showOpenDialog(window);
+        if(loadedDraft != null)jsonManager.loadExistingDraft(draft, loadedDraft);
         gui.print("Load Draft"); 
-        return null;
     }
 
+    /**
+     *
+     * @param gui
+     */
     public void saveAndQuitRequest(MainGUI gui) {
         gui.print("Save and Quit Draft"); 
     }
 
-    public void saveRequest(MainGUI gui) {
-        gui.print("saveRequest"); 
+    /**
+     *
+     * @param gui
+     */
+    public void saveRequest(MainGUI gui){
+        gui.print("saveRequest");
     }
 
+    /**
+     *
+     * @param gui
+     */
     public void exportRequest(MainGUI gui) {
         gui.print("exportRequest"); 
     }
 
+    /**
+     *
+     * @param gui
+     */
     public void addPlayerRequest(MainGUI gui) {
         gui.print("addPlayerRequest"); 
     }
 
+    /**
+     *
+     * @param gui
+     */
     public void removePlayerRequest(MainGUI gui) {
         gui.print("removePlayerRequest"); 
     }

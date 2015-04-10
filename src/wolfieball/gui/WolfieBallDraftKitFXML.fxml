@@ -10,7 +10,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="843.0" prefWidth="1240.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wolfieball.gui.MainGUI">
+<AnchorPane id="AnchorPane" prefHeight="843.0" prefWidth="1249.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wolfieball.gui.MainGUI">
     <stylesheets>
         <URL value="@wolfieball.css" />
     </stylesheets>
@@ -139,6 +139,11 @@
                         </AnchorPane>
                     </content>
                   </Tab>
+                <Tab fx:id="fantasyTab" text="Fantasy Teams">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #2A2642;" />
+                  </content>
+                </Tab>
                 <Tab fx:id="playerTab" text="Available Players">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="687.0" prefWidth="1044.0">
@@ -222,20 +227,63 @@
                                                    <children>
                                                       <HBox spacing="10.0">
                                                          <children>
-                                                            <Label style="-fx-text-fill: #BA5062;" text="Player Positions" />
-                                                            <RadioButton fx:id="allRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="All" />
+                                                            <Label style="-fx-text-fill: #BA5062;" text="Player Positions:">
+                                                               <font>
+                                                                  <Font name="System Bold" size="14.0" />
+                                                               </font></Label>
+                                                            <RadioButton fx:id="allRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="All">
+                                                               <font>
+                                                                  <Font name="System Bold" size="14.0" />
+                                                               </font></RadioButton>
                                                          </children>
                                                       </HBox>
-                                                      <RadioButton fx:id="firstBasemanRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="First Baseman (1B)" />
-                                                      <RadioButton fx:id="secondBasemanRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="Second Baseman (2B)" />
-                                                      <RadioButton fx:id="thirdBasemanRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="Third Baseman (3B)" />
+                                                      <RadioButton fx:id="firstBasemanRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="First Baseman (1B)">
+                                                         <font>
+                                                            <Font name="System Bold" size="14.0" />
+                                                         </font></RadioButton>
+                                                      <RadioButton fx:id="secondBasemanRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="Second Baseman (2B)">
+                                                         <font>
+                                                            <Font name="System Bold" size="14.0" />
+                                                         </font></RadioButton>
+                                                      <RadioButton fx:id="thirdBasemanRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="Third Baseman (3B)">
+                                                         <font>
+                                                            <Font name="System Bold" size="14.0" />
+                                                         </font></RadioButton>
                                                    </children>
                                                 </VBox>
-                                                <VBox prefHeight="105.0" prefWidth="149.0" spacing="10.0">
+                                                <VBox prefHeight="110.0" prefWidth="167.0" spacing="10.0">
                                                    <children>
-                                                      <RadioButton fx:id="cornerInfielderRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="Corner Infielder (CI)" />
-                                                      <RadioButton fx:id="catcherRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="Catcher (C)" />
-                                                      <RadioButton fx:id="shortStopRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="Short Stop (SS)" />
+                                                      <RadioButton fx:id="cornerInfielderRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="Corner Infielder (CI)">
+                                                         <font>
+                                                            <Font name="System Bold" size="14.0" />
+                                                         </font></RadioButton>
+                                                      <RadioButton fx:id="catcherRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="Catcher (C)">
+                                                         <font>
+                                                            <Font name="System Bold" size="14.0" />
+                                                         </font></RadioButton>
+                                                      <RadioButton fx:id="shortStopRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="Short Stop (SS)">
+                                                         <font>
+                                                            <Font name="System Bold" size="14.0" />
+                                                         </font></RadioButton>
+                                                   </children>
+                                                   <padding>
+                                                      <Insets top="25.0" />
+                                                   </padding>
+                                                </VBox>
+                                                <VBox prefHeight="110.0" prefWidth="162.0" spacing="10.0">
+                                                   <children>
+                                                      <RadioButton fx:id="middleInfieldRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="Middle Infield (MI)">
+                                                         <font>
+                                                            <Font name="System Bold" size="14.0" />
+                                                         </font></RadioButton>
+                                                      <RadioButton fx:id="outfielderRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="Outfielder (OF)">
+                                                         <font>
+                                                            <Font name="System Bold" size="14.0" />
+                                                         </font></RadioButton>
+                                                      <RadioButton fx:id="utilityRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="Utility (U)">
+                                                         <font>
+                                                            <Font name="System Bold" size="14.0" />
+                                                         </font></RadioButton>
                                                    </children>
                                                    <padding>
                                                       <Insets top="25.0" />
@@ -243,9 +291,10 @@
                                                 </VBox>
                                                 <VBox prefHeight="105.0" prefWidth="149.0" spacing="10.0">
                                                    <children>
-                                                      <RadioButton fx:id="middleInfieldRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="Middle Infield (MI)" />
-                                                      <RadioButton fx:id="outfielderRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="Outfielder (OF)" />
-                                                      <RadioButton fx:id="utilityRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="Utility (U)" />
+                                                      <RadioButton fx:id="pitcherRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="Pitcher (P)">
+                                                         <font>
+                                                            <Font name="System Bold" size="14.0" />
+                                                         </font></RadioButton>
                                                    </children>
                                                    <padding>
                                                       <Insets top="25.0" />
@@ -268,11 +317,6 @@
                               </AnchorPane>
                            </children>
                         </AnchorPane>
-                  </content>
-                </Tab>
-                <Tab fx:id="fantasyTab" text="Fantasy Teams">
-                  <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #2A2642;" />
                   </content>
                 </Tab>
                   <Tab fx:id="standingsTab" text="Fantasy Standings">

@@ -14,17 +14,22 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.stage.Window;
 import wolfieball.data.BaseballPlayer;
 import wolfieball.data.DraftManager;
 
@@ -107,6 +112,8 @@ public class MainGUI implements Initializable {
     @FXML
     private RadioButton utilityRbtn;
     @FXML
+    private RadioButton pitcherRbtn;
+    @FXML
     private TextField searchField;
     @FXML
     private Button addBtn;
@@ -143,6 +150,7 @@ public class MainGUI implements Initializable {
     ArrayList<TableColumn> subCol;
     ArrayList<TableColumn> hitterCol;
     ArrayList<TableColumn> pitcherCol;
+    private int clickCount;
 
     /**
      * Initializes the controller class.
@@ -151,16 +159,13 @@ public class MainGUI implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
-        
-        addTestPlayer();
         this.draftManager = new DraftManager();
+        addTestPlayer();
         initRadioBtns();
         initTabs();
         initButtons();
         setUpTable();
         setUpTableSearchFilter();
-        
         infoArea.setText("Start Program");
     }    
 
@@ -190,6 +195,7 @@ public class MainGUI implements Initializable {
         p.setWHIP(16);
         p.setYEAR_OF_BIRTH(1995);
         playerData.add(p);
+        
     }    
 
     private void initTabs() {
@@ -214,20 +220,26 @@ public class MainGUI implements Initializable {
         middleInfieldRbtn.setToggleGroup(group);
         outfielderRbtn.setToggleGroup(group);
         utilityRbtn.setToggleGroup(group);
+        pitcherRbtn.setToggleGroup(group);
         group.selectToggle(allRbtn);
         //Set Events
         
+        allRbtn.setOnAction(e ->{
+            showAllColumns();
+        });
         
         firstBasemanRbtn.setOnAction(e ->{
-            String positionToFilter="1B";
-            setPositionTableFilter(positionToFilter);
+            //String positionToFilter="1B";
+            //setPositionTableFilter(positionToFilter);
+            hidePitcherColumns();
         });
+        
         
         
         
     }      
 
-    private void initButtons() {
+    private void initButtons(){
         //Main Buttons:
         headerSaveBtn.setDisable(true);
         headerExportBtn.setDisable(true);
@@ -238,23 +250,37 @@ public class MainGUI implements Initializable {
         });
         //New Buttons Pair
         headerNewBtn.setOnAction((ActionEvent e) ->{
-            playerData.setAll(draftManager.newDraftRequest(this));
-            userStartsEditing();
+            draftManager.newDraftRequest(this);
+            if(clickCount <= 0){
+                userStartsEditing();
+                clickCount++;
+            }
         });
         newDraftBtn.setOnAction((ActionEvent e) ->{
-            playerData.setAll(draftManager.newDraftRequest(this));
-            userStartsEditing();
+            draftManager.newDraftRequest(this);
+            if(clickCount <= 0){
+                userStartsEditing();
+                clickCount++;
+            }
         });
         //Load Buttons Pair
         headerLoadBtn.setOnAction((ActionEvent e) ->{
-            playerData.setAll(draftManager.loadDraftRequest(this));
-            userStartsEditing();
+            Window window = ((Node)e.getTarget()).getScene().getWindow();
+            draftManager.loadDraftRequest(this, window);
+            if(clickCount <= 0){
+                userStartsEditing();
+                clickCount++;
+            }
         });
         loadDraftBtn.setOnAction((ActionEvent e) ->{
-            playerData.setAll(draftManager.loadDraftRequest(this));
-            userStartsEditing();
+            Window window = ((Node)e.getTarget()).getScene().getWindow();
+            draftManager.loadDraftRequest(this, window);
+            if(clickCount <= 0){
+                userStartsEditing();
+                clickCount++;
+            }
         });
-        headerSaveBtn.setOnAction(e ->{
+        headerSaveBtn.setOnAction(e -> {
             draftManager.saveRequest(this);
         });
         headerExportBtn.setOnAction(e ->{
@@ -287,38 +313,24 @@ public class MainGUI implements Initializable {
     }
 
     private void setUpTableSearchFilter() {
-        
-        
-        
         FilteredList<BaseballPlayer> filteredData = new FilteredList<>(playerData, p -> true);
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-			filteredData.setPredicate(player -> {
-				// If filter text is empty, display all persons.
-				if (newValue == null || newValue.isEmpty()) {
-					return true;
-				}
-				
-				// Compare first name and last name of every person with filter text.
-				String lowerCaseFilter = newValue.toLowerCase();
-				
-				if (player.getFIRST_NAME().toLowerCase().indexOf(lowerCaseFilter) != -1) {
-					return true; // Filter matches first name.
-				} else if (player.getLAST_NAME().toLowerCase().indexOf(lowerCaseFilter) != -1) {
-					return true; // Filter matches last name.
-				}
-				return false; // Does not match.
-			});
-		});
-        
-        // 3. Wrap the FilteredList in a SortedList. 
-		SortedList<BaseballPlayer> sortedData = new SortedList<>(filteredData);
-		
-		// 4. Bind the SortedList comparator to the TableView comparator.
-		// 	  Otherwise, sorting the TableView would have no effect.
-		sortedData.comparatorProperty().bind(playerTable.comparatorProperty());
-		
-		// 5. Add sorted (and filtered) data to the table.
-		playerTable.setItems(sortedData);
+            filteredData.setPredicate(player -> {
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+                String lowerCaseFilter = newValue.toLowerCase();
+                if (player.getFIRST_NAME().toLowerCase().contains(lowerCaseFilter)) {
+                    return true; // Filter matches first name.
+                } else if (player.getLAST_NAME().toLowerCase().contains(lowerCaseFilter)) {
+                    return true; // Filter matches last name.
+                }
+                return false; // Does not match.
+            });
+        });
+        SortedList<BaseballPlayer> sortedData = new SortedList<>(filteredData);
+        sortedData.comparatorProperty().bind(playerTable.comparatorProperty());
+        playerTable.setItems(sortedData);
     }
 
     private void setUpTable() {
@@ -327,6 +339,7 @@ public class MainGUI implements Initializable {
         hitterCol = new ArrayList<>();
         pitcherCol = new ArrayList<>();
         
+        playerTable.setEditable(true);
         
 
         lastNameCol.setCellValueFactory(new PropertyValueFactory<>("LAST_NAME"));
@@ -336,6 +349,15 @@ public class MainGUI implements Initializable {
         estimatedValueCol.setCellValueFactory(new PropertyValueFactory("estimatedValue"));
         yearOfBirthCol.setCellValueFactory(new PropertyValueFactory("YEAR_OF_BIRTH"));
         notesCol.setCellValueFactory(new PropertyValueFactory("NOTES"));
+        
+        notesCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        notesCol.setOnEditCommit(new EventHandler<CellEditEvent<BaseballPlayer, String>>() {
+            @Override
+            public void handle(CellEditEvent t) {
+                ((BaseballPlayer) t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())).setNOTES((String)t.getNewValue());
+            }
+        });
         
         superCol.add(R_WCol);
         superCol.add(HR_SVCol);
@@ -384,6 +406,25 @@ public class MainGUI implements Initializable {
 
     private void setPositionTableFilter(String positionToFilter) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void hidePitcherColumns() {
+        pitcherCol.stream().forEach((tc) -> {
+            tc.setVisible(false);
+        });
+    }
+    
+    private void hideHitterColumns() {
+        hitterCol.stream().forEach((tc) -> {
+            tc.setVisible(false);
+        });
+    }
+    
+    private void showAllColumns() {
+        subCol.stream().forEach((tc) -> {
+            tc.setVisible(true);
+            //playerTable.getColumns().remove(tc);
+        });
     }
     
 }

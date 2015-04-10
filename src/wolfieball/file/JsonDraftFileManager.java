@@ -1,5 +1,6 @@
 package wolfieball.file;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -7,9 +8,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import javax.json.Json;
+import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.JsonWriter;
+import wolfieball.data.BaseballPlayer;
 import wolfieball.data.Draft;
 
 /**
@@ -39,12 +42,55 @@ public class JsonDraftFileManager implements PlayerFileManager {
     /**
      *  Loads the JSON formatted Draft file.
      * @param draft
-     * @param jsonFilePath
+     * @param jsonFilePathHitters
+     * @param jsonFilePathPitchers
      * @throws IOException
      */
-    public void loadDraft(Draft draft, String jsonFilePath) throws IOException{
-        JsonObject json = loadJSONFile(jsonFilePath);
+    public void loadNewDraft(Draft draft, String jsonFilePathHitters, String jsonFilePathPitchers) throws IOException{
+        JsonObject jsonHitters = loadJSONFile(jsonFilePathHitters);
+        JsonArray hitters = jsonHitters.getJsonArray("Hitters");
         
+        for (int i = 0; i < hitters.size(); i++) {
+            JsonObject hitter = hitters.getJsonObject(i);
+            BaseballPlayer bp = new BaseballPlayer();
+            bp.setTEAM(hitter.getString("TEAM"));
+            bp.setQP(hitter.getString("QP"));
+            bp.setAB(hitter.getInt("AB"));
+            bp.setR(hitter.getInt("R"));
+            bp.setHR(hitter.getInt("HR"));
+            bp.setRBI(hitter.getInt("RBI"));
+            bp.setSB(hitter.getInt("SB"));
+            bp.setH(hitter.getInt("H"));
+            bp.setNOTES(hitter.getString("NOTES"));
+            bp.setYEAR_OF_BIRTH(hitter.getInt("YEAR_OF_BIRTH"));
+            bp.setNATION_OF_BIRTH(hitter.getString("NATION_OF_BIRTH"));
+            bp.setIsHitter(true);
+            
+            draft.getMlb().add(bp);
+        }
+        
+        JsonObject jsonPitchers = loadJSONFile(jsonFilePathPitchers);
+        JsonArray pitchers = jsonPitchers.getJsonArray("Pitchers");
+        
+        for (int i = 0; i < pitchers.size(); i++) {
+            JsonObject pitcher = pitchers.getJsonObject(i);
+            BaseballPlayer bp = new BaseballPlayer();
+            bp.setTEAM(pitcher.getString("TEAM"));
+            bp.setQP("P");
+            bp.setIP(Double.parseDouble(pitcher.getString("IP")));
+            bp.setER(pitcher.getInt("ER"));
+            bp.setW(pitcher.getInt("W"));
+            bp.setSV(pitcher.getInt("SV"));
+            bp.setH_P(pitcher.getInt("H"));
+            bp.setBB(pitcher.getInt("BB"));
+            bp.setK(pitcher.getInt("K"));
+            bp.setNOTES(pitcher.getString("NOTES"));
+            bp.setYEAR_OF_BIRTH(pitcher.getInt("YEAR_OF_BIRTH"));
+            bp.setNATION_OF_BIRTH(pitcher.getString("NATION_OF_BIRTH"));
+            bp.setIsHitter(false);
+            
+            draft.getMlb().add(bp);
+        }
         
     }
     
@@ -457,4 +503,8 @@ public class JsonDraftFileManager implements PlayerFileManager {
 //        JsonObject arrayObject = Json.createObjectBuilder().add(JSON_SUBJECTS, jA).build();
 //        return arrayObject;
 //    }
+
+    public void loadExistingDraft(Draft draft, File draftFile) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

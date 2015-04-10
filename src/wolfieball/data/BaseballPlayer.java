@@ -6,8 +6,10 @@
  */
 package wolfieball.data;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -18,6 +20,20 @@ import javafx.beans.property.StringProperty;
  * @author Neal
  */
 public class BaseballPlayer{
+    private final BooleanProperty isHitter = new SimpleBooleanProperty();
+
+    public boolean isIsHitter() {
+        return isHitter.get();
+    }
+
+    public void setIsHitter(boolean value) {
+        isHitter.set(value);
+    }
+
+    public BooleanProperty isHitterProperty() {
+        return isHitter;
+    }
+    
     private final StringProperty TEAM = new SimpleStringProperty();
     private final StringProperty LAST_NAME = new SimpleStringProperty();
     private final StringProperty FIRST_NAME = new SimpleStringProperty();
@@ -238,7 +254,7 @@ public class BaseballPlayer{
     private final DoubleProperty ER = new SimpleDoubleProperty();
     private final DoubleProperty W = new SimpleDoubleProperty();
     private final DoubleProperty SV = new SimpleDoubleProperty();
-    //private final DoubleProperty H = new SimpleDoubleProperty();
+    private final DoubleProperty H_P = new SimpleDoubleProperty();
     private final DoubleProperty BB = new SimpleDoubleProperty();
     private final DoubleProperty K = new SimpleDoubleProperty();
     //Calculated
@@ -298,17 +314,17 @@ public class BaseballPlayer{
     }
     
     
-//    public double getH() {
-//        return H.get();
-//    }
-//
-//    public void setH(double value) {
-//        H.set(value);
-//    }
-//
-//    public DoubleProperty HProperty() {
-//        return H;
-//    }
+    public double getH_P() {
+        return H_P.get();
+    }
+
+    public void setH_P(double value) {
+        H_P.set(value);
+    }
+
+    public DoubleProperty H_PProperty() {
+        return H_P;
+    }
     
     
     public double getSV() {

@@ -53,3 +53,9 @@
     -fx-alignment: CENTER;
     -fx-text-fill: #BA5062;
 }
+
+.tooltip {
+    -fx-background-radius: 3 3 3 3;
+    -fx-background-color: bisque;
+    -fx-text-fill: black;
+}

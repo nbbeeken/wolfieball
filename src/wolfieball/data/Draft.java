@@ -6,6 +6,7 @@
  */
 package wolfieball.data;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
@@ -16,6 +17,12 @@ public class Draft {
     ObservableList<BaseballPlayer> mlb;
     ObservableList<BaseballPlayer> fantasy;
     String name;
+
+    public Draft(String name) {
+        this.mlb = FXCollections.observableArrayList();
+        this.fantasy = FXCollections.observableArrayList();
+        this.name = name;
+    }
     
     
 

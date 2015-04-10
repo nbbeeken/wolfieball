@@ -31,7 +31,7 @@ public class FXMLDialog extends Application{
                 fxmlRequested = ".fxml";
                 break;
             case SaveDraft:
-                fxmlRequested = ".fxml";
+                fxmlRequested = "SaveDialog.fxml";
                 break;
             case SaveAsDraft:
                 fxmlRequested = ".fxml";

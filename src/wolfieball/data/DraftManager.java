@@ -7,6 +7,9 @@
 package wolfieball.data;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import wolfieball.file.JsonDraftFileManager;
@@ -33,7 +36,12 @@ public class DraftManager {
      * @return
      */
     public void newDraftRequest(MainGUI gui) {
-        gui.print("New Draft");
+        try {
+            jsonManager.loadNewDraft(draft);
+            gui.print("New Draft");
+        } catch (IOException ex) {
+            Logger.getLogger(DraftManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     /**
@@ -50,7 +58,11 @@ public class DraftManager {
         fc.setInitialDirectory(new File("..\\Wolfieball Draft Kit\\drafts"));
         fc.setTitle("Choose Draft File");
         File loadedDraft = fc.showOpenDialog(window);
-        if(loadedDraft != null)jsonManager.loadExistingDraft(draft, loadedDraft);
+        if (loadedDraft != null) {
+            jsonManager.loadExistingDraft(draft, loadedDraft);
+        } else {
+            //Show error dialog
+        }
         gui.print("Load Draft"); 
     }
 

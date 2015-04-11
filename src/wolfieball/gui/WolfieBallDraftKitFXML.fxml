@@ -10,7 +10,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="843.0" prefWidth="1249.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wolfieball.gui.MainGUI">
+<AnchorPane id="AnchorPane" prefHeight="820.0" prefWidth="1245.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wolfieball.gui.MainGUI">
     <stylesheets>
         <URL value="@wolfieball.css" />
     </stylesheets>
@@ -191,7 +191,7 @@
                                           <HBox spacing="10.0">
                                              <children>
                                                 <TextField fx:id="searchField" layoutX="14.0" layoutY="14.0" prefHeight="25.0" prefWidth="225.0" promptText="Search Player by Name" />
-                                                <Pane prefHeight="33.0" prefWidth="884.0" HBox.hgrow="ALWAYS" />
+                                                <Pane prefHeight="33.0" prefWidth="414.0" HBox.hgrow="ALWAYS" />
                                                 <Button fx:id="addBtn" mnemonicParsing="false">
                                                    <HBox.margin>
                                                       <Insets />

@@ -170,31 +170,32 @@ public class MainGUI implements Initializable {
     }    
 
     private void addTestPlayer() {
-        BaseballPlayer p = new BaseballPlayer();
-        p.setAB(1);
-        p.setBA(2);
-        p.setBB(3);
-        p.setER(4);
-        p.setERA(5);
-        p.setEstimatedValue(6);
-        p.setFIRST_NAME("Neal");
-        p.setH(7);
-        p.setHR(8);
-        p.setIP(9);
-        p.setK(10);
-        p.setLAST_NAME("Beeken");
-        p.setNATION_OF_BIRTH("HBIC Land");
-        p.setNOTES("Cool Kid");
-        p.setQP(";)");
-        p.setR(11);
-        p.setRBI(12);
-        p.setSB(13);
-        p.setSV(14);
-        p.setTEAM("GAY");
-        p.setW(15);
-        p.setWHIP(16);
-        p.setYEAR_OF_BIRTH(1995);
-        playerData.add(p);
+//        BaseballPlayer p = new BaseballPlayer();
+//        p.setAB(1);
+//        p.setBA(2);
+//        p.setBB(3);
+//        p.setER(4);
+//        p.setERA(5);
+//        p.setEstimatedValue(6);
+//        p.setFIRST_NAME("Neal");
+//        p.setH(7);
+//        p.setHR(8);
+//        p.setIP(9);
+//        p.setK(10);
+//        p.setLAST_NAME("Beeken");
+//        p.setNATION_OF_BIRTH("HBIC Land");
+//        p.setNOTES("Cool Kid");
+//        p.setQP(";)");
+//        p.setR(11);
+//        p.setRBI(12);
+//        p.setSB(13);
+//        p.setSV(14);
+//        p.setTEAM("GAY");
+//        p.setW(15);
+//        p.setWHIP(16);
+//        p.setYEAR_OF_BIRTH(1995);
+//        playerData.add(p);
+        
         
     }    
 
@@ -251,6 +252,7 @@ public class MainGUI implements Initializable {
         //New Buttons Pair
         headerNewBtn.setOnAction((ActionEvent e) ->{
             draftManager.newDraftRequest(this);
+            playerData.setAll(draftManager.getDraft().getMlb());
             if(clickCount <= 0){
                 userStartsEditing();
                 clickCount++;
@@ -258,6 +260,7 @@ public class MainGUI implements Initializable {
         });
         newDraftBtn.setOnAction((ActionEvent e) ->{
             draftManager.newDraftRequest(this);
+            playerData.setAll(draftManager.getDraft().getMlb());
             if(clickCount <= 0){
                 userStartsEditing();
                 clickCount++;
@@ -342,7 +345,7 @@ public class MainGUI implements Initializable {
         playerTable.setEditable(true);
         
 
-        lastNameCol.setCellValueFactory(new PropertyValueFactory<>("LAST_NAME"));
+        lastNameCol.setCellValueFactory(new PropertyValueFactory("LAST_NAME"));
         firstNameCol.setCellValueFactory(new PropertyValueFactory("FIRST_NAME"));
         teamCol.setCellValueFactory(new PropertyValueFactory("TEAM"));
         positionsCol.setCellValueFactory(new PropertyValueFactory("QP"));

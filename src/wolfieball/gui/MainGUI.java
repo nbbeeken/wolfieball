@@ -160,44 +160,13 @@ public class MainGUI implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.draftManager = new DraftManager();
-        addTestPlayer();
         initRadioBtns();
         initTabs();
         initButtons();
         setUpTable();
         setUpTableSearchFilter();
         infoArea.setText("Start Program");
-    }    
-
-    private void addTestPlayer() {
-//        BaseballPlayer p = new BaseballPlayer();
-//        p.setAB(1);
-//        p.setBA(2);
-//        p.setBB(3);
-//        p.setER(4);
-//        p.setERA(5);
-//        p.setEstimatedValue(6);
-//        p.setFIRST_NAME("Neal");
-//        p.setH(7);
-//        p.setHR(8);
-//        p.setIP(9);
-//        p.setK(10);
-//        p.setLAST_NAME("Beeken");
-//        p.setNATION_OF_BIRTH("HBIC Land");
-//        p.setNOTES("Cool Kid");
-//        p.setQP(";)");
-//        p.setR(11);
-//        p.setRBI(12);
-//        p.setSB(13);
-//        p.setSV(14);
-//        p.setTEAM("GAY");
-//        p.setW(15);
-//        p.setWHIP(16);
-//        p.setYEAR_OF_BIRTH(1995);
-//        playerData.add(p);
-        
-        
-    }    
+    }     
 
     private void initTabs() {
         //Start Tabs Off until New or Load selected
@@ -226,19 +195,54 @@ public class MainGUI implements Initializable {
         //Set Events
         
         allRbtn.setOnAction(e ->{
-            showAllColumns();
+            setCurrentFilter("");
         });
         
         firstBasemanRbtn.setOnAction(e ->{
-            //String positionToFilter="1B";
-            //setPositionTableFilter(positionToFilter);
-            hidePitcherColumns();
+            setCurrentFilter("1B");
+        });
+    
+        secondBasemanRbtn.setOnAction(e -> {
+            setCurrentFilter("2B");
+        });
+        thirdBasemanRbtn.setOnAction(e -> {
+            setCurrentFilter("3B");
+        });
+        cornerInfielderRbtn.setOnAction(e -> {
+            setCurrentFilter("CI");
+        });
+        catcherRbtn.setOnAction(e -> {
+            setCurrentFilter("C");
+        });
+        shortStopRbtn.setOnAction(e ->{
+            setCurrentFilter("SS");
+        });
+        middleInfieldRbtn.setOnAction(e -> {
+            setCurrentFilter("MI");
+        });
+        outfielderRbtn.setOnAction(e -> {
+            setCurrentFilter("OF");
+        });
+        utilityRbtn.setOnAction(e -> {
+            setCurrentFilter("U");
+        });
+        pitcherRbtn.setOnAction(e -> {
+            setCurrentFilter("P");
         });
         
         
-        
-        
-    }      
+    }   
+    
+    private void setCurrentFilter(String filter) {
+        FilteredList<BaseballPlayer> filteredData = new FilteredList<>(playerData, p -> true);
+        filteredData.setPredicate(player -> {
+            String lowerCaseFilter = filter.toLowerCase();
+            return player.getQP().toLowerCase().contains(lowerCaseFilter);
+        });
+        SortedList<BaseballPlayer> sortedData = new SortedList<>(filteredData);
+        sortedData.comparatorProperty().bind(playerTable.comparatorProperty());
+        playerTable.setItems(sortedData);
+    }
 
     private void initButtons(){
         //Main Buttons:

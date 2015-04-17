@@ -21,13 +21,24 @@ import wolfieball.gui.MainGUI;
  */
 public class DraftManager {
     private final JsonDraftFileManager jsonManager;
+    private boolean hasChanged;
     private final Draft draft;
     public Draft getDraft() {return draft;}
-    
+
     public DraftManager() {
         this.draft = new Draft("");
         this.jsonManager = new JsonDraftFileManager();
+        hasChanged = false;
     }
+    
+    public boolean getHasChanged() {
+        return hasChanged;
+    }
+
+    public void setHasChanged(boolean hasChanged) {
+        this.hasChanged = hasChanged;
+    }
+    
 
     /**
      * This method will handle a new Draft request from the user

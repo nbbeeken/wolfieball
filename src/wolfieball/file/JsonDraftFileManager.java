@@ -23,8 +23,8 @@ import wolfieball.data.Draft;
  */
 public class JsonDraftFileManager implements PlayerFileManager {
 
-    private final String HITTER_FILE = "..\\Wolfieball Draft Kit\\drafts\\data\\hitters.json";
-    private final String PITCHER_FILE = "..\\Wolfieball Draft Kit\\drafts\\data\\pitchers.json";
+    private final String HITTER_FILE = "drafts\\data\\hitters.json";
+    private final String PITCHER_FILE = "drafts\\data\\pitchers.json";
 
     /**
      * Saves Draft to JSON
@@ -59,7 +59,14 @@ public class JsonDraftFileManager implements PlayerFileManager {
             bp.setFIRST_NAME(hitter.getString("FIRST_NAME"));
             bp.setLAST_NAME(hitter.getString("LAST_NAME"));
             bp.setTEAM(hitter.getString("TEAM"));
-            bp.setQP(hitter.getString("QP"));
+            String positions = hitter.getString("QP");
+            
+            if(positions.contains("SS") || positions.contains("2B"))
+                positions += "_MI";
+            if(positions.contains("1B") || positions.contains("3B"))
+                positions += "_CI";
+            
+            bp.setQP(positions+"_U");
             bp.setAB(hitter.getInt("AB"));
             bp.setR(hitter.getInt("R"));
             bp.setHR(hitter.getInt("HR"));

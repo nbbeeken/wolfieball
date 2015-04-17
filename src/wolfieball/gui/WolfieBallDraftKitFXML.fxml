@@ -152,7 +152,7 @@
                                  <children>
                                     <VBox layoutX="191.0" layoutY="236.0" prefHeight="684.0" prefWidth="706.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <children>
-                                          <TableView fx:id="playerTable" prefHeight="571.0" prefWidth="804.0" VBox.vgrow="NEVER">
+                                          <TableView fx:id="playerTable" prefHeight="571.0" prefWidth="804.0" tableMenuButtonVisible="true" VBox.vgrow="NEVER">
                                             <columns>
                                               <TableColumn fx:id="lastNameCol" editable="false" prefWidth="128.0" text="Last Name" />
                                               <TableColumn fx:id="firstNameCol" editable="false" prefWidth="118.0" text="First Name" />

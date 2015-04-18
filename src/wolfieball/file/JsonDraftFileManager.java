@@ -6,7 +6,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
@@ -23,8 +22,8 @@ import wolfieball.data.Draft;
  */
 public class JsonDraftFileManager implements PlayerFileManager {
 
-    private final String HITTER_FILE = "drafts\\data\\hitters.json";
-    private final String PITCHER_FILE = "drafts\\data\\pitchers.json";
+    private final String HITTER_FILE = JsonDraftFileManager.class.getResource("Hitters.json").toExternalForm();
+    private final String PITCHER_FILE = JsonDraftFileManager.class.getResource("Pitchers.json").toExternalForm();
 
     /**
      * Saves Draft to JSON
@@ -33,7 +32,7 @@ public class JsonDraftFileManager implements PlayerFileManager {
      * @throws IOException
      */
     public void saveDraft(Draft draft) {
-
+        throw new UnsupportedOperationException("Not supported yet."); 
     }
 
     /**
@@ -110,17 +109,7 @@ public class JsonDraftFileManager implements PlayerFileManager {
         }
         return json;
     } 
-    
-    private static ArrayList<String> loadArrayFromJSONFile(String jsonFilePath, String arrayName) throws IOException {
-        JsonObject json = loadJSONFile(jsonFilePath);
-        ArrayList<String> items = new ArrayList();
-        JsonArray jsonArray = json.getJsonArray(arrayName);
-        jsonArray.stream().forEach((jsV) -> {
-            items.add(jsV.toString());
-        });
-        return items;
-    }
-    
+
     public void loadExistingDraft(Draft draft, File loadedDraft) {
         throw new UnsupportedOperationException("Not supported yet."); 
     }

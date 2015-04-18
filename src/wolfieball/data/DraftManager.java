@@ -8,8 +8,11 @@ package wolfieball.data;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import wolfieball.file.JsonDraftFileManager;
@@ -21,35 +24,28 @@ import wolfieball.gui.MainGUI;
  */
 public class DraftManager {
     private final JsonDraftFileManager jsonManager;
-    private boolean hasChanged;
     private final Draft draft;
     public Draft getDraft() {return draft;}
 
     public DraftManager() {
         this.draft = new Draft("");
         this.jsonManager = new JsonDraftFileManager();
-        hasChanged = false;
     }
-    
-    public boolean getHasChanged() {
-        return hasChanged;
-    }
-
-    public void setHasChanged(boolean hasChanged) {
-        this.hasChanged = hasChanged;
-    }
-    
 
     /**
      * This method will handle a new Draft request from the user
      * It will return a full list of ALL players in the league 
      * @param gui
-     * @return
      */
     public void newDraftRequest(MainGUI gui) {
         try {
-            jsonManager.loadNewDraft(draft);
-            gui.print("New Draft");
+            if(gui.getPlayerData().isEmpty()){
+                jsonManager.loadNewDraft(draft);
+                gui.print("New Draft");
+            }else{
+                saveRequest(gui);
+            }
+            
         } catch (IOException ex) {
             Logger.getLogger(DraftManager.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -62,7 +58,6 @@ public class DraftManager {
      * because they have been drafted
      * @param gui
      * @param window
-     * @return
      */
     public void loadDraftRequest(MainGUI gui, Window window) {
         FileChooser fc = new FileChooser();
@@ -83,6 +78,8 @@ public class DraftManager {
      */
     public void saveAndQuitRequest(MainGUI gui) {
         gui.print("Save and Quit Draft"); 
+        
+        System.exit(0);
     }
 
     /**
@@ -90,6 +87,19 @@ public class DraftManager {
      * @param gui
      */
     public void saveRequest(MainGUI gui){
+        Alert saveConfirm = new Alert(Alert.AlertType.CONFIRMATION);
+        saveConfirm.setTitle("Save");
+        saveConfirm.setContentText("Save current work before continuing?");
+        
+        Optional<ButtonType> result = saveConfirm.showAndWait();
+        
+        if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
+            jsonManager.saveDraft(draft);
+        }
+        if((result.isPresent()) && (result.get() == ButtonType.CANCEL)){
+            gui.print("Continued Working");
+        }
+        
         gui.print("saveRequest");
     }
 

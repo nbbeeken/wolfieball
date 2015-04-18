@@ -7,12 +7,11 @@
 package wolfieball.gui;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
-import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -21,11 +20,13 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -57,36 +58,36 @@ public class MainGUI implements Initializable {
     private TableColumn teamCol;
     @FXML
     private TableColumn positionsCol;
-    @FXML
-    private TableColumn R_WCol;
+    
         @FXML
         private TableColumn RCol;
         @FXML
         private TableColumn WCol;   
-    @FXML
-    private TableColumn HR_SVCol;
+    
         @FXML
         private TableColumn HRCol;
         @FXML
         private TableColumn SVCol;
-    @FXML
-    private TableColumn RBI_KCol;
+
         @FXML
         private TableColumn RBICol;
         @FXML
         private TableColumn KCol;
-    @FXML
-    private TableColumn SB_ERACol;
+
         @FXML
         private TableColumn SBCol;
         @FXML
         private TableColumn ERACol;
-    @FXML
-    private TableColumn BA_WHIPCol;
+
         @FXML
         private TableColumn BACol;
         @FXML
-        private TableColumn WHIPCol;    
+        private TableColumn WHIPCol;   
+        
+    @FXML
+    private TableColumn hitterStatCol;
+    @FXML
+    private TableColumn pitcherStatCol;
     @FXML
     private TableColumn estimatedValueCol;
     @FXML
@@ -130,6 +131,8 @@ public class MainGUI implements Initializable {
     @FXML
     private Tab mlbTeamsTab;
     @FXML
+    private TabPane tabPane;
+    @FXML
     private RadioButton allRbtn;
     @FXML
     private Button headerNewBtn;
@@ -146,10 +149,6 @@ public class MainGUI implements Initializable {
     private final ToggleGroup group = new ToggleGroup();
     private DraftManager draftManager;
     private final ObservableList<BaseballPlayer> playerData = FXCollections.observableArrayList();
-    ArrayList<TableColumn> superCol;
-    ArrayList<TableColumn> subCol;
-    ArrayList<TableColumn> hitterCol;
-    ArrayList<TableColumn> pitcherCol;
     private int clickCount;
 
     /**
@@ -165,6 +164,11 @@ public class MainGUI implements Initializable {
         initButtons();
         setUpTable();
         setUpTableSearchFilter();
+        
+        searchField.setOnAction(e -> {
+            setUpTableSearchFilter();
+        });
+        
         infoArea.setText("Start Program");
     }     
 
@@ -176,7 +180,6 @@ public class MainGUI implements Initializable {
         standingsTab.setDisable(true);
         mlbTeamsTab.setDisable(true);
     }    
-    
     
     private void initRadioBtns() {
         //Add to Toggle Group
@@ -195,54 +198,65 @@ public class MainGUI implements Initializable {
         //Set Events
         
         allRbtn.setOnAction(e ->{
-            setCurrentFilter("");
+            //setCurrentFilter("");
+            pitcherStatCol.setVisible(true);
+            hitterStatCol.setVisible(true);
         });
         
         firstBasemanRbtn.setOnAction(e ->{
-            setCurrentFilter("1B");
+            //setCurrentFilter("1B");
+            pitcherStatCol.setVisible(false);
+            hitterStatCol.setVisible(true);
         });
     
         secondBasemanRbtn.setOnAction(e -> {
-            setCurrentFilter("2B");
+            //setCurrentFilter("2B");
+            pitcherStatCol.setVisible(false);
+            hitterStatCol.setVisible(true);
         });
         thirdBasemanRbtn.setOnAction(e -> {
-            setCurrentFilter("3B");
+            //setCurrentFilter("3B");
+            pitcherStatCol.setVisible(false);
+            hitterStatCol.setVisible(true);
         });
         cornerInfielderRbtn.setOnAction(e -> {
-            setCurrentFilter("CI");
+            //setCurrentFilter("CI");
+            pitcherStatCol.setVisible(false);
+            hitterStatCol.setVisible(true);
         });
         catcherRbtn.setOnAction(e -> {
-            setCurrentFilter("C");
+            //setCurrentFilter("C_");
+            pitcherStatCol.setVisible(false);
+            hitterStatCol.setVisible(true);
         });
         shortStopRbtn.setOnAction(e ->{
-            setCurrentFilter("SS");
+            //setCurrentFilter("SS");
+            pitcherStatCol.setVisible(false);
+            hitterStatCol.setVisible(true);
         });
         middleInfieldRbtn.setOnAction(e -> {
-            setCurrentFilter("MI");
+            //setCurrentFilter("MI");
+            pitcherStatCol.setVisible(false);
+            hitterStatCol.setVisible(true);
         });
         outfielderRbtn.setOnAction(e -> {
-            setCurrentFilter("OF");
+            //setCurrentFilter("OF");
+            pitcherStatCol.setVisible(false);
+            hitterStatCol.setVisible(true);
         });
         utilityRbtn.setOnAction(e -> {
-            setCurrentFilter("U");
+            //setCurrentFilter("U");
+            pitcherStatCol.setVisible(false);
+            hitterStatCol.setVisible(true);
         });
         pitcherRbtn.setOnAction(e -> {
-            setCurrentFilter("P");
+            //setCurrentFilter("P");
+            pitcherStatCol.setVisible(true);
+            hitterStatCol.setVisible(false);
         });
         
         
     }   
-    
-    private void setCurrentFilter(String filter) {
-        FilteredList<BaseballPlayer> filteredData = new FilteredList<>(playerData, p -> true);
-        filteredData.setPredicate(player -> {
-            String lowerCaseFilter = filter.toLowerCase();
-            return player.getQP().toLowerCase().contains(lowerCaseFilter);
-        });
-        SortedList<BaseballPlayer> sortedData = new SortedList<>(filteredData);
-        sortedData.comparatorProperty().bind(playerTable.comparatorProperty());
-        playerTable.setItems(sortedData);
-    }
 
     private void initButtons(){
         //Main Buttons:
@@ -289,7 +303,16 @@ public class MainGUI implements Initializable {
         });
         headerSaveBtn.setOnAction(e -> {
             draftManager.saveRequest(this);
+            headerSaveBtn.setDisable(true);
         });
+        
+        playerData.addListener(new ListChangeListener() {
+            @Override
+            public void onChanged(ListChangeListener.Change c) {
+                headerSaveBtn.setDisable(false);
+            }
+        });
+        
         headerExportBtn.setOnAction(e ->{
             draftManager.exportRequest(this);
         });
@@ -303,15 +326,16 @@ public class MainGUI implements Initializable {
         });
     }
     
-    public void userStartsEditing(){
+    private void userStartsEditing(){
         startTab.getTabPane().getTabs().remove(startTab);
         playerTab.setDisable(false);
         draftTab.setDisable(false);
         fantasyTab.setDisable(false);
         standingsTab.setDisable(false);
         mlbTeamsTab.setDisable(false);
-        headerSaveBtn.setDisable(false);
         headerExportBtn.setDisable(false);
+        
+        tabPane.getSelectionModel().select(fantasyTab);
     }
     
     public void print(String input){
@@ -322,34 +346,85 @@ public class MainGUI implements Initializable {
     private void setUpTableSearchFilter() {
         FilteredList<BaseballPlayer> filteredData = new FilteredList<>(playerData, p -> true);
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredData.setPredicate(player -> {
-                if (newValue == null || newValue.isEmpty()) {
-                    return true;
-                }
-                String lowerCaseFilter = newValue.toLowerCase();
-                if (player.getFIRST_NAME().toLowerCase().contains(lowerCaseFilter)) {
-                    return true; // Filter matches first name.
-                } else if (player.getLAST_NAME().toLowerCase().contains(lowerCaseFilter)) {
-                    return true; // Filter matches last name.
-                }
-                return false; // Does not match.
-            });
+            setFilterPredicate(filteredData, newValue);
         });
-        SortedList<BaseballPlayer> sortedData = new SortedList<>(filteredData);
-        sortedData.comparatorProperty().bind(playerTable.comparatorProperty());
-        playerTable.setItems(sortedData);
+        group.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            setFilterPredicate(filteredData, newValue);
+        });
+//        SortedList<BaseballPlayer> sortedData = new SortedList<>(filteredData);
+//        sortedData.comparatorProperty().bind(playerTable.comparatorProperty());
+        playerTable.setItems(filteredData);
+    }
+
+    private void setFilterPredicate(FilteredList<BaseballPlayer> filteredData, String newValue) {
+        filteredData.setPredicate(player -> {
+            String pos = "";
+            Toggle t = group.getSelectedToggle();
+            
+            if(t == allRbtn)pos="";
+            if(t == firstBasemanRbtn)pos="1B";
+            if(t == secondBasemanRbtn)pos="2B";
+            if(t == thirdBasemanRbtn)pos="3B";
+            if(t == cornerInfielderRbtn)pos="CI";
+            if(t == catcherRbtn)pos="C_";
+            if(t == shortStopRbtn)pos="SS";
+            if(t == middleInfieldRbtn)pos="MI";
+            if(t == outfielderRbtn)pos="OF";
+            if(t == utilityRbtn)pos="U";
+            if(t == pitcherRbtn)pos="P";
+            
+            
+            
+            if (newValue == null || newValue.isEmpty())
+                return true;
+            
+            
+            String lowerCaseFilter = newValue.toLowerCase();
+            if (player.getFIRST_NAME().toLowerCase().startsWith(lowerCaseFilter) && player.getQP().contains(pos)) {
+                return true; // Filter matches first name.
+            } else if (player.getLAST_NAME().toLowerCase().startsWith(lowerCaseFilter) && player.getQP().contains(pos)) {
+                return true; // Filter matches last name.
+            }
+            return false; // Does not match.
+        });
+    }
+    
+    private void setFilterPredicate(FilteredList<BaseballPlayer> filteredData, Toggle newValue) {
+        filteredData.setPredicate(player -> {
+            String pos = "";
+            Toggle t = newValue;
+            
+            if(t == allRbtn)pos="";
+            if(t == firstBasemanRbtn)pos="1B";
+            if(t == secondBasemanRbtn)pos="2B";
+            if(t == thirdBasemanRbtn)pos="3B";
+            if(t == cornerInfielderRbtn)pos="CI";
+            if(t == catcherRbtn)pos="C_";
+            if(t == shortStopRbtn)pos="SS";
+            if(t == middleInfieldRbtn)pos="MI";
+            if(t == outfielderRbtn)pos="OF";
+            if(t == utilityRbtn)pos="U";
+            if(t == pitcherRbtn)pos="P";
+            
+            String lowerCaseFilter = searchField.getText().toLowerCase();
+            if (player.getFIRST_NAME().toLowerCase().startsWith(lowerCaseFilter) && player.getQP().contains(pos)) {
+                return true; // Filter matches first name.
+            } else if (player.getLAST_NAME().toLowerCase().startsWith(lowerCaseFilter) && player.getQP().contains(pos)) {
+                return true; // Filter matches last name.
+            }
+            return false; // Does not match.
+        });
     }
 
     private void setUpTable() {
-        superCol = new ArrayList<>();
-        subCol = new ArrayList<>();
-        hitterCol = new ArrayList<>();
-        pitcherCol = new ArrayList<>();
+
         
         playerTable.setEditable(true);
         
 
         lastNameCol.setCellValueFactory(new PropertyValueFactory("LAST_NAME"));
+        
+        
         firstNameCol.setCellValueFactory(new PropertyValueFactory("FIRST_NAME"));
         teamCol.setCellValueFactory(new PropertyValueFactory("TEAM"));
         positionsCol.setCellValueFactory(new PropertyValueFactory("QP"));
@@ -366,72 +441,33 @@ public class MainGUI implements Initializable {
             }
         });
         
-        superCol.add(R_WCol);
-        superCol.add(HR_SVCol);
-        superCol.add(RBI_KCol);
-        superCol.add(SB_ERACol);
-        superCol.add(BA_WHIPCol);
         
         RCol.setCellValueFactory(new PropertyValueFactory("R"));
         WCol.setCellValueFactory(new PropertyValueFactory("W"));
-        subCol.add(RCol);
-        hitterCol.add(RCol);
-        subCol.add(WCol);
-        pitcherCol.add(WCol);
+
 
         HRCol.setCellValueFactory(new PropertyValueFactory("HR"));
         SVCol.setCellValueFactory(new PropertyValueFactory("SV"));
-        subCol.add(HRCol);
-        hitterCol.add(HRCol);
-        subCol.add(SVCol);
-        pitcherCol.add(SVCol);
         
         
         RBICol.setCellValueFactory(new PropertyValueFactory("RBI"));
         KCol.setCellValueFactory(new PropertyValueFactory("K"));
-        subCol.add(RBICol);
-        hitterCol.add(RBICol);
-        subCol.add(KCol);
-        pitcherCol.add(KCol);
+
         
         SBCol.setCellValueFactory(new PropertyValueFactory("SB"));
         ERACol.setCellValueFactory(new PropertyValueFactory("ERA"));
-        subCol.add(SBCol);
-        hitterCol.add(SBCol);
-        subCol.add(ERACol);
-        pitcherCol.add(ERACol);
+
 
         BACol.setCellValueFactory(new PropertyValueFactory("BA"));
         WHIPCol.setCellValueFactory(new PropertyValueFactory("WHIP"));
-        subCol.add(BACol);
-        hitterCol.add(BACol);
-        subCol.add(WHIPCol);
-        pitcherCol.add(WHIPCol);
-        
+
         playerTable.setItems(playerData);
     }
 
-    private void setPositionTableFilter(String positionToFilter) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    private void hidePitcherColumns() {
-        pitcherCol.stream().forEach((tc) -> {
-            tc.setVisible(false);
-        });
+    public ObservableList<BaseballPlayer> getPlayerData() {
+        return playerData;
     }
     
-    private void hideHitterColumns() {
-        hitterCol.stream().forEach((tc) -> {
-            tc.setVisible(false);
-        });
-    }
     
-    private void showAllColumns() {
-        subCol.stream().forEach((tc) -> {
-            tc.setVisible(true);
-            //playerTable.getColumns().remove(tc);
-        });
-    }
     
 }

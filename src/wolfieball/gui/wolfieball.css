@@ -1,59 +1,49 @@
-/*
- * Empty Stylesheet file.
- */
 
-.mainFxmlClass {
-    -fx-background-color: #2A2642;
+/*Backgrounds*/
+AnchorPane{
+    -fx-background-color: linear-gradient(to bottom, #c5deea 0%,#8abbd7 31%,#066dab 100%);
 }
-.anchorPane {
-    -fx-background-color: #2A2642;
-}
-.headerClass{
-    -fx-background-color: #2A2642;
-}
-.menu-bar {
-    -fx-background-color: #2A2642;
-}
-
-.menu .label {
-    -fx-text-fill: #BA5062;
+VBox{
+    -fx-background-color: transparent;
 }
 
 .tab-pane .tab-header-area .tab-header-background {
-    -fx-background-color: #422a26;
+    -fx-background-color: linear-gradient(to bottom, #a90329 0%,#8f0222 78%,#6d0019 100%);
 }
 
-.tab-pane
-{
+
+/*Tabs*/
+.tab-pane{
+    -fx-tab-min-height: 30px;
+    -fx-tab-max-height: 40px;
     -fx-tab-min-width:140px;
 }
 
 .tab{
-    -fx-background-insets: 0 1 0 1,0,0;
-}
-.tab-pane .tab
-{
-    -fx-background-color: #8a7b7b;
-
-}
-
-.tab-pane .tab:selected
-{
-    -fx-background-color: #2A2642;
+    
+    -fx-background-color: linear-gradient(to bottom, #febbbb 0%,#fe9090 45%,#ff5c5c 100%);
+    -fx-background-insets: 1;
 }
 
 .tab .tab-label { 
     -fx-alignment: CENTER;
-    -fx-text-fill: #FFFFFF;
-    -fx-font-size: 12px;
+    -fx-text-fill: black;
+    -fx-font-size: 15px;
     -fx-font-weight: bold;
+    -fx-font-family:"Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 
 .tab:selected .tab-label { 
     -fx-alignment: CENTER;
-    -fx-text-fill: #BA5062;
+    -fx-text-fill: white;
+    
 }
 
+.tab:selected{ 
+    -fx-background-color:linear-gradient(to bottom, rgba(248,80,50,1) 0%,rgba(241,111,92,1) 24%,rgba(240,47,23,1) 71%,rgba(246,41,12,1) 91%,rgba(231,56,39,1) 100%);
+}
+
+/*ToolTips*/
 .tooltip {
     -fx-background-radius: 3 3 3 3;
     -fx-background-color: bisque;

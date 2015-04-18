@@ -11,20 +11,17 @@
 <?import javafx.scene.layout.*?>
 
 <AnchorPane id="AnchorPane" prefHeight="820.0" prefWidth="1245.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wolfieball.gui.MainGUI">
-    <stylesheets>
-        <URL value="@wolfieball.css" />
-    </stylesheets>
    <children>
       <VBox layoutX="65.0" layoutY="350.0" prefWidth="1359.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox prefHeight="64.0" prefWidth="1027.0" spacing="175.0" style="-fx-background-color: #2A2642;" styleClass="headerClass" stylesheets="@wolfieball.css">
+            <HBox prefHeight="64.0" prefWidth="1027.0" spacing="175.0">
                <children>
                   <ImageView fitHeight="64.0" fitWidth="753.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../images/Logo.png" />
                      </image>
                   </ImageView>
-                  <TextArea fx:id="infoArea" editable="false" layoutX="618.0" layoutY="7.0" prefHeight="54.0" prefWidth="335.0" styleClass="mainFxmlClass">
+                  <TextArea fx:id="infoArea" editable="false" layoutX="618.0" layoutY="7.0" opacity="0.4" prefHeight="54.0" prefWidth="335.0" wrapText="true">
                      <HBox.margin>
                         <Insets bottom="5.0" top="5.0" />
                      </HBox.margin>
@@ -34,7 +31,7 @@
                   <Insets right="70.0" />
                </padding>
             </HBox>
-            <FlowPane hgap="20.0" prefHeight="39.0" prefWidth="1156.0" style="-fx-background-color: #2A2642;">
+            <FlowPane hgap="20.0" prefHeight="39.0" prefWidth="1156.0">
                <children>
                   <Button fx:id="headerNewBtn" mnemonicParsing="false">
                      <graphic>
@@ -101,13 +98,13 @@
                   <Insets left="20.0" />
                </padding>
             </FlowPane>
-            <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+            <TabPane fx:id="tabPane" side="BOTTOM" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
               <tabs>
                   <Tab fx:id="startTab" text="Start Tab">
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <VBox alignment="CENTER" layoutX="561.0" layoutY="259.0" prefHeight="717.0" prefWidth="1359.0" spacing="50.0" styleClass="mainFxmlClass" stylesheets="@wolfieball.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <VBox alignment="CENTER" layoutX="561.0" layoutY="259.0" prefHeight="717.0" prefWidth="1359.0" spacing="50.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
                                     <Button fx:id="newDraftBtn" mnemonicParsing="false" text="Start New Draft">
                                        <font>
@@ -141,14 +138,21 @@
                   </Tab>
                 <Tab fx:id="fantasyTab" text="Fantasy Teams">
                   <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #2A2642;" />
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                   </content>
+                     <graphic>
+                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../images/home.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
                 </Tab>
-                <Tab fx:id="playerTab" text="Available Players">
+                <Tab fx:id="playerTab" text="Availible Players">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="687.0" prefWidth="1044.0">
                            <children>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="624.0" prefWidth="1293.0" style="-fx-background-color: #2A2642;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="624.0" prefWidth="1293.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
                                     <VBox layoutX="191.0" layoutY="236.0" prefHeight="684.0" prefWidth="706.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <children>
@@ -159,31 +163,24 @@
                                                 <TableColumn fx:id="teamCol" editable="false" prefWidth="93.0" text="Pro Team" />
                                                 <TableColumn fx:id="positionsCol" editable="false" prefWidth="78.0" text="Positions" />
                                                 <TableColumn fx:id="yearOfBirthCol" editable="false" prefWidth="71.0" text="Born" />
-                                                <TableColumn fx:id="R_WCol" editable="false" prefWidth="105.0" sortable="false" text="R / W">
+                                                <TableColumn fx:id="hitterStatCol" prefWidth="75.0" text="Hitter Stats">
                                                    <columns>
                                                       <TableColumn fx:id="RCol" editable="false" prefWidth="39.0" text="R" />
-                                                      <TableColumn fx:id="WCol" editable="false" prefWidth="47.0" text="W" />
-                                                   </columns></TableColumn>
-                                                <TableColumn fx:id="HR_SVCol" editable="false" prefWidth="159.0" sortable="false" text="HR/SV">
-                                                   <columns>
                                                       <TableColumn fx:id="HRCol" editable="false" prefWidth="45.0" text="HR" />
-                                                      <TableColumn fx:id="SVCol" editable="false" prefWidth="51.0" text="SV" />
-                                                   </columns></TableColumn>
-                                                <TableColumn fx:id="RBI_KCol" editable="false" prefWidth="125.0" sortable="false" text="RBI/K">
-                                                   <columns>
                                                       <TableColumn fx:id="RBICol" editable="false" prefWidth="43.0" text="RBI" />
-                                                      <TableColumn fx:id="KCol" editable="false" prefWidth="53.0" text="K" />
-                                                   </columns></TableColumn>
-                                                <TableColumn fx:id="SB_ERACol" editable="false" prefWidth="103.0" sortable="false" text="SB/ERA">
-                                                   <columns>
                                                       <TableColumn fx:id="SBCol" editable="false" prefWidth="43.0" text="SB" />
-                                                      <TableColumn fx:id="ERACol" editable="false" prefWidth="55.0" text="ERA" />
-                                                   </columns></TableColumn>
-                                                <TableColumn fx:id="BA_WHIPCol" editable="false" prefWidth="124.0" sortable="false" text="BA/WHIP">
-                                                   <columns>
                                                       <TableColumn fx:id="BACol" editable="false" prefWidth="47.0" text="BA" />
+                                                   </columns>
+                                                </TableColumn>
+                                                <TableColumn fx:id="pitcherStatCol" prefWidth="75.0" text="Pitcher Stats">
+                                                   <columns>
+                                                      <TableColumn fx:id="WCol" editable="false" prefWidth="47.0" text="W" />
+                                                      <TableColumn fx:id="SVCol" editable="false" prefWidth="51.0" text="SV" />
+                                                      <TableColumn fx:id="KCol" editable="false" prefWidth="53.0" text="K" />
+                                                      <TableColumn fx:id="ERACol" editable="false" prefWidth="55.0" text="ERA" />
                                                       <TableColumn fx:id="WHIPCol" editable="false" prefWidth="68.0" text="WHIP" />
-                                                   </columns></TableColumn>
+                                                   </columns>
+                                                </TableColumn>
                                                 <TableColumn fx:id="estimatedValueCol" editable="false" prefWidth="102.0" text="Estimated Value" />
                                                 <TableColumn fx:id="notesCol" prefWidth="138.0" text="Notes" />
                                             </columns>
@@ -227,25 +224,25 @@
                                                    <children>
                                                       <HBox spacing="10.0">
                                                          <children>
-                                                            <Label style="-fx-text-fill: #BA5062;" text="Player Positions:">
+                                                            <Label text="Player Positions:">
                                                                <font>
                                                                   <Font name="System Bold" size="14.0" />
                                                                </font></Label>
-                                                            <RadioButton fx:id="allRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="All">
+                                                            <RadioButton fx:id="allRbtn" mnemonicParsing="false" text="All">
                                                                <font>
                                                                   <Font name="System Bold" size="14.0" />
                                                                </font></RadioButton>
                                                          </children>
                                                       </HBox>
-                                                      <RadioButton fx:id="firstBasemanRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="First Baseman (1B)">
+                                                      <RadioButton fx:id="firstBasemanRbtn" mnemonicParsing="false" text="First Baseman (1B)">
                                                          <font>
                                                             <Font name="System Bold" size="14.0" />
                                                          </font></RadioButton>
-                                                      <RadioButton fx:id="secondBasemanRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="Second Baseman (2B)">
+                                                      <RadioButton fx:id="secondBasemanRbtn" mnemonicParsing="false" text="Second Baseman (2B)">
                                                          <font>
                                                             <Font name="System Bold" size="14.0" />
                                                          </font></RadioButton>
-                                                      <RadioButton fx:id="thirdBasemanRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="Third Baseman (3B)">
+                                                      <RadioButton fx:id="thirdBasemanRbtn" mnemonicParsing="false" text="Third Baseman (3B)">
                                                          <font>
                                                             <Font name="System Bold" size="14.0" />
                                                          </font></RadioButton>
@@ -253,15 +250,15 @@
                                                 </VBox>
                                                 <VBox prefHeight="110.0" prefWidth="167.0" spacing="10.0">
                                                    <children>
-                                                      <RadioButton fx:id="cornerInfielderRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="Corner Infielder (CI)">
+                                                      <RadioButton fx:id="cornerInfielderRbtn" mnemonicParsing="false" text="Corner Infielder (CI)">
                                                          <font>
                                                             <Font name="System Bold" size="14.0" />
                                                          </font></RadioButton>
-                                                      <RadioButton fx:id="catcherRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="Catcher (C)">
+                                                      <RadioButton fx:id="catcherRbtn" mnemonicParsing="false" text="Catcher (C)">
                                                          <font>
                                                             <Font name="System Bold" size="14.0" />
                                                          </font></RadioButton>
-                                                      <RadioButton fx:id="shortStopRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="Short Stop (SS)">
+                                                      <RadioButton fx:id="shortStopRbtn" mnemonicParsing="false" text="Short Stop (SS)">
                                                          <font>
                                                             <Font name="System Bold" size="14.0" />
                                                          </font></RadioButton>
@@ -272,15 +269,15 @@
                                                 </VBox>
                                                 <VBox prefHeight="110.0" prefWidth="162.0" spacing="10.0">
                                                    <children>
-                                                      <RadioButton fx:id="middleInfieldRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="Middle Infield (MI)">
+                                                      <RadioButton fx:id="middleInfieldRbtn" mnemonicParsing="false" text="Middle Infield (MI)">
                                                          <font>
                                                             <Font name="System Bold" size="14.0" />
                                                          </font></RadioButton>
-                                                      <RadioButton fx:id="outfielderRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="Outfielder (OF)">
+                                                      <RadioButton fx:id="outfielderRbtn" mnemonicParsing="false" text="Outfielder (OF)">
                                                          <font>
                                                             <Font name="System Bold" size="14.0" />
                                                          </font></RadioButton>
-                                                      <RadioButton fx:id="utilityRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="Utility (U)">
+                                                      <RadioButton fx:id="utilityRbtn" mnemonicParsing="false" text="Utility (U)">
                                                          <font>
                                                             <Font name="System Bold" size="14.0" />
                                                          </font></RadioButton>
@@ -291,7 +288,7 @@
                                                 </VBox>
                                                 <VBox prefHeight="105.0" prefWidth="149.0" spacing="10.0">
                                                    <children>
-                                                      <RadioButton fx:id="pitcherRbtn" mnemonicParsing="false" style="-fx-text-fill: #BA5062;" text="Pitcher (P)">
+                                                      <RadioButton fx:id="pitcherRbtn" mnemonicParsing="false" text="Pitcher (P)">
                                                          <font>
                                                             <Font name="System Bold" size="14.0" />
                                                          </font></RadioButton>
@@ -318,21 +315,49 @@
                            </children>
                         </AnchorPane>
                   </content>
+                     <graphic>
+                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../images/run.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
                 </Tab>
                   <Tab fx:id="standingsTab" text="Fantasy Standings">
                     <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #2A2642;" />
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                     </content>
+                     <graphic>
+                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../images/list.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
                   </Tab>
                   <Tab fx:id="draftTab" text="Draft Summary">
                     <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #2A2642;" />
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                     </content>
+                     <graphic>
+                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../images/shop.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
                   </Tab>
                   <Tab fx:id="mlbTeamsTab" text="MLB Teams">
                     <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #2A2642;" />
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                     </content>
+                     <graphic>
+                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../images/baseball-32.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
                   </Tab>
               </tabs>
             </TabPane>

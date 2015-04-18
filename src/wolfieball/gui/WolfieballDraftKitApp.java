@@ -25,6 +25,11 @@ public class WolfieballDraftKitApp extends Application {
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("WolfieBallDraftKitFXML.fxml"));
         Scene scene = new Scene(root);
+        
+        String css = WolfieballDraftKitApp.class.getResource("wolfieball.css").toExternalForm();
+        
+        scene.getStylesheets().add(css);
+        
         stage.setScene(scene);
         
         Screen screen = Screen.getPrimary();

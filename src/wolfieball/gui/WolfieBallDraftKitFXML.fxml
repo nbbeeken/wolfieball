@@ -10,25 +10,25 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="820.0" prefWidth="1245.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wolfieball.gui.MainGUI">
+<AnchorPane id="AnchorPane" fx:id="root" prefHeight="820.0" prefWidth="1245.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wolfieball.gui.MainGUI">
    <children>
       <VBox layoutX="65.0" layoutY="350.0" prefWidth="1359.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox prefHeight="64.0" prefWidth="1027.0" spacing="175.0">
+            <HBox prefHeight="64.0" prefWidth="1027.0" spacing="50.0">
                <children>
                   <ImageView fitHeight="64.0" fitWidth="753.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../images/Logo.png" />
                      </image>
                   </ImageView>
-                  <TextArea fx:id="infoArea" editable="false" layoutX="618.0" layoutY="7.0" opacity="0.4" prefHeight="54.0" prefWidth="335.0" wrapText="true">
+                  <TextArea fx:id="infoArea" editable="false" layoutX="618.0" layoutY="7.0" minWidth="-Infinity" opacity="0.4" prefHeight="54.0" prefWidth="423.0" wrapText="true">
                      <HBox.margin>
                         <Insets bottom="5.0" top="5.0" />
                      </HBox.margin>
                   </TextArea>
                </children>
                <padding>
-                  <Insets right="70.0" />
+                  <Insets right="5.0" top="3.0" />
                </padding>
             </HBox>
             <FlowPane hgap="20.0" prefHeight="39.0" prefWidth="1156.0">
@@ -104,41 +104,151 @@
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <VBox alignment="CENTER" layoutX="561.0" layoutY="259.0" prefHeight="717.0" prefWidth="1359.0" spacing="50.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                 <children>
-                                    <Button fx:id="newDraftBtn" mnemonicParsing="false" text="Start New Draft">
-                                       <font>
-                                          <Font size="23.0" />
-                                       </font>
-                                       <graphic>
-                                          <ImageView fitHeight="40.0" fitWidth="40.0">
-                                             <image>
-                                                <Image url="@../../images/add_file.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                    <Button fx:id="loadDraftBtn" mnemonicParsing="false" text="Load Existing Draft">
-                                       <font>
-                                          <Font size="23.0" />
-                                       </font>
-                                       <graphic>
-                                          <ImageView fitHeight="40.0" fitWidth="40.0">
-                                             <image>
-                                                <Image url="@../../images/folder.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
-                                 </children>
-                              </VBox>
+                              <ImageView fitHeight="820.0" fitWidth="1354.0" layoutX="-54.0" layoutY="-60.0" pickOnBounds="true">
+                                 <image>
+                                    <Image url="@../../images/baseball.gif" />
+                                 </image>
+                              </ImageView>
+                              <Button fx:id="loadDraftBtn" layoutX="948.0" layoutY="493.0" mnemonicParsing="false" text="Load Existing Draft">
+                                 <font>
+                                    <Font size="23.0" />
+                                 </font>
+                                 <graphic>
+                                    <ImageView fitHeight="40.0" fitWidth="40.0">
+                                       <image>
+                                          <Image url="@../../images/folder.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="newDraftBtn" layoutX="965.0" layoutY="407.0" mnemonicParsing="false" text="Start New Draft">
+                                 <font>
+                                    <Font size="23.0" />
+                                 </font>
+                                 <graphic>
+                                    <ImageView fitHeight="40.0" fitWidth="40.0">
+                                       <image>
+                                          <Image url="@../../images/add_file.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Hyperlink fx:id="hplink" layoutX="14.0" layoutY="20.0" text="Artist">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font></Hyperlink>
                            </children>
                         </AnchorPane>
                     </content>
                   </Tab>
                 <Tab fx:id="fantasyTab" text="Fantasy Teams">
                   <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <ScrollPane prefViewportHeight="682.0" prefViewportWidth="1245.0" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-2.0" AnchorPane.topAnchor="0.0">
+                                 <content>
+                                    <VBox fillWidth="false" layoutX="498.0" layoutY="259.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <children>
+                                          <VBox prefHeight="67.0" prefWidth="1225.0" spacing="10.0">
+                                             <children>
+                                                <HBox spacing="15.0">
+                                                   <children>
+                                                      <Label text="Draft Name: " textFill="WHITE">
+                                                         <font>
+                                                            <Font name="System Bold" size="14.0" />
+                                                         </font>
+                                                      </Label>
+                                                      <TextField fx:id="draftNameField" />
+                                                   </children>
+                                                </HBox>
+                                                <HBox spacing="15.0">
+                                                   <children>
+                                                      <Button fx:id="addFTeamBtn" mnemonicParsing="false">
+                                                         <graphic>
+                                                            <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../../images/plus.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic>
+                                                      </Button>
+                                                      <Button fx:id="deleteFTeamBtn" mnemonicParsing="false">
+                                                         <graphic>
+                                                            <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../../images/trash.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic>
+                                                      </Button>
+                                                      <Button fx:id="editFTeamBtn" mnemonicParsing="false">
+                                                         <graphic>
+                                                            <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                                               <image>
+                                                                  <Image url="@../../images/edit_user.png" />
+                                                               </image>
+                                                            </ImageView>
+                                                         </graphic>
+                                                      </Button>
+                                                      <Label text="Select Fantasy Team:" textFill="WHITE">
+                                                         <font>
+                                                            <Font name="System Bold" size="14.0" />
+                                                         </font>
+                                                         <HBox.margin>
+                                                            <Insets />
+                                                         </HBox.margin>
+                                                         <padding>
+                                                            <Insets left="20.0" />
+                                                         </padding>
+                                                      </Label>
+                                                      <ComboBox fx:id="fTeamCombo" prefHeight="25.0" prefWidth="89.0" />
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </VBox>
+                                          <TableView fx:id="fantasyPlayers" prefHeight="532.0" prefWidth="1201.0" VBox.vgrow="NEVER">
+                                             <columns>
+                                                <TableColumn fx:id="lastNameCol1" editable="false" prefWidth="128.0" text="Last Name" />
+                                                <TableColumn fx:id="firstNameCol1" editable="false" prefWidth="118.0" text="First Name" />
+                                                <TableColumn fx:id="teamCol1" editable="false" prefWidth="93.0" text="Pro Team" />
+                                                <TableColumn fx:id="positionsCol1" editable="false" prefWidth="78.0" text="Positions" />
+                                                <TableColumn fx:id="yearOfBirthCol1" editable="false" prefWidth="71.0" text="Born" />
+                                                <TableColumn fx:id="pitcherStatCol1" editable="false" prefWidth="75.0" text="Pitcher Stats">
+                                                   <columns>
+                                                      <TableColumn fx:id="WCol1" editable="false" prefWidth="47.0" text="W" />
+                                                      <TableColumn fx:id="SVCol1" editable="false" prefWidth="51.0" text="SV" />
+                                                      <TableColumn fx:id="KCol1" editable="false" prefWidth="53.0" text="K" />
+                                                      <TableColumn fx:id="ERACol1" editable="false" prefWidth="55.0" text="ERA" />
+                                                      <TableColumn fx:id="WHIPCol1" editable="false" prefWidth="68.0" text="WHIP" />
+                                                   </columns>
+                                                </TableColumn>
+                                                <TableColumn fx:id="hitterStatCol1" editable="false" prefWidth="75.0" text="Hitter Stats">
+                                                   <columns>
+                                                      <TableColumn fx:id="RCol1" editable="false" prefWidth="39.0" text="R" />
+                                                      <TableColumn fx:id="HRCol1" editable="false" prefWidth="45.0" text="HR" />
+                                                      <TableColumn fx:id="RBICol1" editable="false" prefWidth="43.0" text="RBI" />
+                                                      <TableColumn fx:id="SBCol1" editable="false" prefWidth="43.0" text="SB" />
+                                                      <TableColumn fx:id="BACol1" editable="false" prefWidth="47.0" text="BA" />
+                                                   </columns>
+                                                </TableColumn>
+                                                <TableColumn prefWidth="75.0" text="Contract" />
+                                                <TableColumn prefWidth="75.0" text="Salary" />
+                                             </columns>
+                                          </TableView>
+                                          <Label text="Taxi Squad">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <TableView fx:id="taxiSquad" prefHeight="403.0" prefWidth="1204.0" />
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+                                       </padding>
+                                    </VBox>
+                                 </content>
+                              </ScrollPane>
+                           </children></AnchorPane>
                   </content>
                      <graphic>
                         <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
@@ -156,14 +266,14 @@
                                  <children>
                                     <VBox layoutX="191.0" layoutY="236.0" prefHeight="684.0" prefWidth="706.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <children>
-                                          <TableView fx:id="playerTable" prefHeight="571.0" prefWidth="804.0" tableMenuButtonVisible="true" VBox.vgrow="NEVER">
+                                          <TableView fx:id="playerTable" prefHeight="571.0" prefWidth="804.0" VBox.vgrow="NEVER">
                                             <columns>
                                               <TableColumn fx:id="lastNameCol" editable="false" prefWidth="128.0" text="Last Name" />
                                               <TableColumn fx:id="firstNameCol" editable="false" prefWidth="118.0" text="First Name" />
                                                 <TableColumn fx:id="teamCol" editable="false" prefWidth="93.0" text="Pro Team" />
                                                 <TableColumn fx:id="positionsCol" editable="false" prefWidth="78.0" text="Positions" />
                                                 <TableColumn fx:id="yearOfBirthCol" editable="false" prefWidth="71.0" text="Born" />
-                                                <TableColumn fx:id="hitterStatCol" prefWidth="75.0" text="Hitter Stats">
+                                                <TableColumn fx:id="hitterStatCol" editable="false" prefWidth="75.0" text="Hitter Stats">
                                                    <columns>
                                                       <TableColumn fx:id="RCol" editable="false" prefWidth="39.0" text="R" />
                                                       <TableColumn fx:id="HRCol" editable="false" prefWidth="45.0" text="HR" />
@@ -172,7 +282,7 @@
                                                       <TableColumn fx:id="BACol" editable="false" prefWidth="47.0" text="BA" />
                                                    </columns>
                                                 </TableColumn>
-                                                <TableColumn fx:id="pitcherStatCol" prefWidth="75.0" text="Pitcher Stats">
+                                                <TableColumn fx:id="pitcherStatCol" editable="false" prefWidth="75.0" text="Pitcher Stats">
                                                    <columns>
                                                       <TableColumn fx:id="WCol" editable="false" prefWidth="47.0" text="W" />
                                                       <TableColumn fx:id="SVCol" editable="false" prefWidth="51.0" text="SV" />
@@ -224,7 +334,7 @@
                                                    <children>
                                                       <HBox spacing="10.0">
                                                          <children>
-                                                            <Label text="Player Positions:">
+                                                            <Label text="Player Positions:" textFill="WHITE">
                                                                <font>
                                                                   <Font name="System Bold" size="14.0" />
                                                                </font></Label>

@@ -8,6 +8,7 @@ package wolfieball.gui;
 
 
 import javafx.application.Application;
+import javafx.application.HostServices;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
@@ -21,8 +22,18 @@ import javafx.stage.Stage;
  */
 public class WolfieballDraftKitApp extends Application {
     
+    private static HostServices host;
+
+    public static HostServices getHost() {
+        return host;
+    }
+    
+    
+    
+    
     @Override
     public void start(Stage stage) throws Exception {
+        host = getHostServices();
         Parent root = FXMLLoader.load(getClass().getResource("WolfieBallDraftKitFXML.fxml"));
         Scene scene = new Scene(root);
         
@@ -40,6 +51,8 @@ public class WolfieballDraftKitApp extends Application {
         //stage.setFullScreen(true);
         
         stage.show();
+        
+        
     }
 
     /**

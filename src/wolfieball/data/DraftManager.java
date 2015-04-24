@@ -78,8 +78,19 @@ public class DraftManager {
      */
     public void saveAndQuitRequest(MainGUI gui) {
         gui.print("Save and Quit Draft"); 
+        Alert saveConfirm = new Alert(Alert.AlertType.CONFIRMATION);
+        saveConfirm.setTitle("Save");
+        saveConfirm.setContentText("Save current work before continuing?");
         
-        System.exit(0);
+        Optional<ButtonType> result = saveConfirm.showAndWait();
+        
+        if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
+            jsonManager.saveDraft(draft);
+            System.exit(0);
+        }
+        if((result.isPresent()) && (result.get() == ButtonType.CANCEL)){
+            gui.print("Continued Working");
+        }
     }
 
     /**

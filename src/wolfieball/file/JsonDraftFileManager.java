@@ -22,14 +22,13 @@ import wolfieball.data.Draft;
  */
 public class JsonDraftFileManager implements PlayerFileManager {
 
-    private final String HITTER_FILE = JsonDraftFileManager.class.getResource("Hitters.json").toExternalForm();
-    private final String PITCHER_FILE = JsonDraftFileManager.class.getResource("Pitchers.json").toExternalForm();
+    private final String HITTER_FILE = "src\\wolfieball\\gui\\hitters.json";
+    private final String PITCHER_FILE = "src\\wolfieball\\gui\\pitchers.json";
 
     /**
      * Saves Draft to JSON
      *
      * @param draft
-     * @throws IOException
      */
     public void saveDraft(Draft draft) {
         throw new UnsupportedOperationException("Not supported yet."); 

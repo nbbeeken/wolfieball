@@ -12,12 +12,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -40,6 +44,8 @@ import wolfieball.data.DraftManager;
  * @author Neal
  */
 public class MainGUI implements Initializable {
+    @FXML
+    private Parent root;
     @FXML
     private TextArea infoArea;
     @FXML
@@ -144,6 +150,31 @@ public class MainGUI implements Initializable {
     private Button headerExportBtn;
     @FXML
     private Button headerQuitBtn;
+    @FXML
+    private Hyperlink hplink;
+    
+    /* Fantasy Team Tab FX:id's*/
+    
+    @FXML
+    private Button addFTeamBtn;
+    @FXML
+    private Button deleteFTeamBtn;
+    @FXML
+    private Button editFTeamBtn;
+    @FXML
+    private ComboBox fTeamCombo;
+    @FXML
+    private TextField draftNameField;
+    @FXML
+    private TableView<BaseballPlayer> fantasyPlayers;
+    @FXML
+    private TableView<BaseballPlayer> taxiSquad;
+    
+    
+    
+    
+    
+    
     
     //My Fields
     private final ToggleGroup group = new ToggleGroup();
@@ -159,19 +190,40 @@ public class MainGUI implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.draftManager = new DraftManager();
+        playersTabInit();
+        fantasyTabInit();
+        standingTabInit();
+        draftTabInit();
+        mlbTabInit();
+        infoArea.setText("Start Program");
+    }     
+
+    
+    private void fantasyTabInit(){
+        initFantasyHeader();
+    }
+    
+    private void playersTabInit() {
         initRadioBtns();
         initTabs();
         initButtons();
         setUpTable();
         setUpTableSearchFilter();
-        
-        searchField.setOnAction(e -> {
-            setUpTableSearchFilter();
-        });
-        
-        infoArea.setText("Start Program");
     }     
 
+    private void standingTabInit(){
+        
+    }
+    
+    private void draftTabInit(){
+        
+    }
+    
+    private void mlbTabInit(){
+        
+    }
+    
+    
     private void initTabs() {
         //Start Tabs Off until New or Load selected
         playerTab.setDisable(true);
@@ -255,13 +307,16 @@ public class MainGUI implements Initializable {
             hitterStatCol.setVisible(false);
         });
         
-        
+       
     }   
 
     private void initButtons(){
         //Main Buttons:
         headerSaveBtn.setDisable(true);
         headerExportBtn.setDisable(true);
+        hplink.setOnAction(e -> {
+            WolfieballDraftKitApp.getHost().showDocument("http://www.rebeccamock.com/");
+        });
         
         //Set Events
         headerQuitBtn.setOnAction((ActionEvent e) ->{
@@ -309,6 +364,9 @@ public class MainGUI implements Initializable {
         playerData.addListener(new ListChangeListener() {
             @Override
             public void onChanged(ListChangeListener.Change c) {
+                
+                //TODO: fix this
+                
                 headerSaveBtn.setDisable(false);
             }
         });
@@ -324,6 +382,7 @@ public class MainGUI implements Initializable {
         removeBtn.setOnAction(e -> {
             draftManager.removePlayerRequest(this);
         });
+        
     }
     
     private void userStartsEditing(){
@@ -338,22 +397,30 @@ public class MainGUI implements Initializable {
         tabPane.getSelectionModel().select(fantasyTab);
     }
     
+    /**
+     *  Prints to developer Field
+     * @param input
+     */
     public void print(String input){
         infoArea.appendText("\n");
         infoArea.appendText(input);
     }
 
     private void setUpTableSearchFilter() {
-        FilteredList<BaseballPlayer> filteredData = new FilteredList<>(playerData, p -> true);
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            FilteredList<BaseballPlayer> filteredData = new FilteredList<>(playerData, p -> true);
             setFilterPredicate(filteredData, newValue);
+            SortedList<BaseballPlayer> sortedData = new SortedList<>(filteredData);
+            sortedData.comparatorProperty().bind(playerTable.comparatorProperty());
+            playerTable.setItems(filteredData);
         });
         group.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            FilteredList<BaseballPlayer> filteredData = new FilteredList<>(playerData, p -> true);
             setFilterPredicate(filteredData, newValue);
+            SortedList<BaseballPlayer> sortedData = new SortedList<>(filteredData);
+            sortedData.comparatorProperty().bind(playerTable.comparatorProperty());
+            playerTable.setItems(filteredData);
         });
-//        SortedList<BaseballPlayer> sortedData = new SortedList<>(filteredData);
-//        sortedData.comparatorProperty().bind(playerTable.comparatorProperty());
-        playerTable.setItems(filteredData);
     }
 
     private void setFilterPredicate(FilteredList<BaseballPlayer> filteredData, String newValue) {
@@ -464,8 +531,34 @@ public class MainGUI implements Initializable {
         playerTable.setItems(playerData);
     }
 
+    /**
+     *  Returns current playerData
+     * @return
+     */
     public ObservableList<BaseballPlayer> getPlayerData() {
         return playerData;
+    }
+
+    private void initFantasyHeader() {
+        addFTeamBtn.setOnAction(e -> {
+        
+        });
+        
+        deleteFTeamBtn.setOnAction(e -> {
+        
+        });
+        
+        editFTeamBtn.setOnAction(e -> {
+        
+        });
+        
+        draftNameField.textProperty().addListener((observable, oldValue, newValue) -> {
+        
+        });
+        
+        fTeamCombo.getSelectionModel().clearSelection();
+        
+        
     }
     
     

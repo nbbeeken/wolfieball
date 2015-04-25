@@ -15,12 +15,11 @@ import javafx.collections.ObservableList;
  */
 public class Draft {
     ObservableList<BaseballPlayer> mlb;
-    ObservableList<BaseballPlayer> fantasy;
+    ObservableList<Team> teams;
     String name;
 
     public Draft(String name) {
         this.mlb = FXCollections.observableArrayList();
-        this.fantasy = FXCollections.observableArrayList();
         this.name = name;
     }
     
@@ -34,14 +33,6 @@ public class Draft {
         this.mlb = mlb;
     }
 
-    public ObservableList<BaseballPlayer> getFantasy() {
-        return fantasy;
-    }
-
-    public void setFantasy(ObservableList<BaseballPlayer> fantasy) {
-        this.fantasy = fantasy;
-    }
-
     public String getName() {
         return name;
     }
@@ -49,6 +40,17 @@ public class Draft {
     public void setName(String name) {
         this.name = name;
     }
+
+    public ObservableList<Team> getTeams() {
+        return teams;
+    }
+
+    public void setTeams(ObservableList<Team> teams) {
+        this.teams = teams;
+    }
+    
+    
+    
     
     
 }

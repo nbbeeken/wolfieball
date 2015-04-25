@@ -42,7 +42,8 @@ public class BaseballPlayer{
     private final StringProperty NATION_OF_BIRTH = new SimpleStringProperty();
     private final DoubleProperty estimatedValue = new SimpleDoubleProperty();
 
-    public BaseballPlayer() {  
+    public BaseballPlayer() {
+        
     }
     
     public double getEstimatedValue() {
@@ -376,6 +377,22 @@ public class BaseballPlayer{
     public DoubleProperty IPProperty() {
         return IP;
     }
+    
+    
+    private final StringProperty fantasyTeam = new SimpleStringProperty();
+
+    public String getFantasyTeam() {
+        return fantasyTeam.get();
+    }
+
+    public void setFantasyTeam(String value) {
+        fantasyTeam.set(value);
+    }
+
+    public StringProperty fantasyTeamProperty() {
+        return fantasyTeam;
+    }
  
+    
     
 }

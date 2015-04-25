@@ -6,8 +6,11 @@
  */
 package wolfieball.gui;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -16,12 +19,15 @@ import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -34,9 +40,14 @@ import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.stage.Window;
 import wolfieball.data.BaseballPlayer;
 import wolfieball.data.DraftManager;
+import wolfieball.data.Team;
 
 /**
  * FXML Controller class
@@ -45,7 +56,9 @@ import wolfieball.data.DraftManager;
  */
 public class MainGUI implements Initializable {
     @FXML
-    private Parent root;
+    private AnchorPane startRoot;
+    @FXML
+    private ImageView splash;
     @FXML
     private TextArea infoArea;
     @FXML
@@ -162,7 +175,7 @@ public class MainGUI implements Initializable {
     @FXML
     private Button editFTeamBtn;
     @FXML
-    private ComboBox fTeamCombo;
+    private ComboBox<String> fTeamCombo;
     @FXML
     private TextField draftNameField;
     @FXML
@@ -170,7 +183,18 @@ public class MainGUI implements Initializable {
     @FXML
     private TableView<BaseballPlayer> taxiSquad;
     
-    
+    /*Team create Dialog*/
+  
+    @FXML
+    private TextField teamOwnerFld;
+    @FXML
+    private TextField teamNameFld;
+    @FXML
+    private Button teamCreateBtn;
+    @FXML
+    private Button teamCancelBtn;
+    @FXML
+    private Label teamErrorLbl;
     
     
     
@@ -189,7 +213,13 @@ public class MainGUI implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        this.draftManager = new DraftManager();
+        this.draftManager = DraftManager.getDraftManager();
+        
+//        splash.fitWidthProperty().bind(startRoot.widthProperty());
+//        splash.fitHeightProperty().bind(startRoot.heightProperty());
+//        splash.setFitWidth(1354);
+//        splash.setFitHeight(820);
+        
         playersTabInit();
         fantasyTabInit();
         standingTabInit();
@@ -421,6 +451,14 @@ public class MainGUI implements Initializable {
             sortedData.comparatorProperty().bind(playerTable.comparatorProperty());
             playerTable.setItems(filteredData);
         });
+        fTeamCombo.selectionModelProperty().addListener((observable, oldValue, newValue) -> {
+            String selectedTeam = newValue.getSelectedItem();
+            FilteredList<BaseballPlayer> filteredData = new FilteredList<>(playerData, p -> true);
+            setFilterPredicateFantasy(filteredData, selectedTeam);
+            SortedList<BaseballPlayer> sortedData = new SortedList<>(filteredData);
+            sortedData.comparatorProperty().bind(playerTable.comparatorProperty());
+            fantasyPlayers.setItems(filteredData);
+        });
     }
 
     private void setFilterPredicate(FilteredList<BaseballPlayer> filteredData, String newValue) {
@@ -447,9 +485,9 @@ public class MainGUI implements Initializable {
             
             
             String lowerCaseFilter = newValue.toLowerCase();
-            if (player.getFIRST_NAME().toLowerCase().startsWith(lowerCaseFilter) && player.getQP().contains(pos)) {
+            if (player.getFIRST_NAME().toLowerCase().startsWith(lowerCaseFilter) && player.getQP().contains(pos) && player.getFantasyTeam().contains("Free Agent")) {
                 return true; // Filter matches first name.
-            } else if (player.getLAST_NAME().toLowerCase().startsWith(lowerCaseFilter) && player.getQP().contains(pos)) {
+            } else if (player.getLAST_NAME().toLowerCase().startsWith(lowerCaseFilter) && player.getQP().contains(pos) && player.getFantasyTeam().contains("Free Agent")) {
                 return true; // Filter matches last name.
             }
             return false; // Does not match.
@@ -474,12 +512,18 @@ public class MainGUI implements Initializable {
             if(t == pitcherRbtn)pos="P";
             
             String lowerCaseFilter = searchField.getText().toLowerCase();
-            if (player.getFIRST_NAME().toLowerCase().startsWith(lowerCaseFilter) && player.getQP().contains(pos)) {
+            if (player.getFIRST_NAME().toLowerCase().startsWith(lowerCaseFilter) && player.getQP().contains(pos) && player.getFantasyTeam().contains("Free Agent")) {
                 return true; // Filter matches first name.
-            } else if (player.getLAST_NAME().toLowerCase().startsWith(lowerCaseFilter) && player.getQP().contains(pos)) {
+            } else if (player.getLAST_NAME().toLowerCase().startsWith(lowerCaseFilter) && player.getQP().contains(pos) && player.getFantasyTeam().contains("Free Agent")) {
                 return true; // Filter matches last name.
             }
             return false; // Does not match.
+        });
+    }
+    
+    private void setFilterPredicateFantasy(FilteredList<BaseballPlayer> filteredData, String newValue){
+        filteredData.setPredicate(player -> {
+            return player.getFantasyTeam().contains(newValue); 
         });
     }
 
@@ -529,6 +573,8 @@ public class MainGUI implements Initializable {
         WHIPCol.setCellValueFactory(new PropertyValueFactory("WHIP"));
 
         playerTable.setItems(playerData);
+        fantasyPlayers.setItems(playerData);
+        taxiSquad.setItems(playerData);
     }
 
     /**
@@ -540,25 +586,78 @@ public class MainGUI implements Initializable {
     }
 
     private void initFantasyHeader() {
+        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("newFantasyTeamDialogFXML.fxml"));
         addFTeamBtn.setOnAction(e -> {
-        
+
+            try {
+                
+                Parent dialogPane;
+                dialogPane = (Parent) fxmlLoader.load();
+                Scene sc = new Scene(dialogPane);
+                Stage st = new Stage();
+                st.setScene(sc);
+                Window window = ((Node) e.getTarget()).getScene().getWindow();
+
+                st.initModality(Modality.WINDOW_MODAL);
+                st.initOwner(window);
+                teamCreateBtn.setOnAction(e1 -> {
+                    Stage w =(Stage) ((Node)e1.getTarget()).getScene().getWindow();
+                    if(!teamNameFld.getText().isEmpty() && !teamOwnerFld.getText().isEmpty()){
+                        Team t = new Team();
+                        t.setName(teamNameFld.getText());
+                        t.setOwner(teamOwnerFld.getText());
+                        w.close();
+                        draftManager.getDraft().getTeams().add(t);
+                    }else{
+                        teamErrorLbl.setText("Please enter values or press cancel.");
+                    }
+                });
+                
+                teamCancelBtn.setOnAction(e2 -> {
+                    Stage w =(Stage) ((Node)e2.getTarget()).getScene().getWindow();
+                    w.close();
+                });
+                
+
+                st.showAndWait();
+            } catch (IOException ex) {
+                Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
         });
         
         deleteFTeamBtn.setOnAction(e -> {
-        
+            
         });
         
         editFTeamBtn.setOnAction(e -> {
-        
+            
+            
         });
         
         draftNameField.textProperty().addListener((observable, oldValue, newValue) -> {
-        
+            draftManager.getDraft().setName(newValue);
         });
         
         fTeamCombo.getSelectionModel().clearSelection();
         
+    }
+
+    private Team prepAddFanTeamDialog(ActionEvent e) throws IOException {
+        Team team = new Team();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("newFantasyTeamDialogFXML.fxml"));
+        Parent dialogPane = (Parent)fxmlLoader.load();
+        Scene sc = new Scene(dialogPane);
+        Stage st = new Stage();
+        st.setScene(sc);
+        Window window = ((Node)e.getTarget()).getScene().getWindow();
         
+        st.initModality(Modality.WINDOW_MODAL);
+        st.initOwner(window);
+        st.showAndWait();
+        
+        
+        return team;
     }
     
     

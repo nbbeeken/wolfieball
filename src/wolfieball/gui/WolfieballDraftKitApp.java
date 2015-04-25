@@ -49,9 +49,8 @@ public class WolfieballDraftKitApp extends Application {
         stage.setWidth(bounds.getWidth() / 1.5);
         stage.setHeight(bounds.getHeight() / 1.2);
         //stage.setFullScreen(true);
-        
+        stage.setTitle("Wolfieball Draft Kit");
         stage.show();
-        
         
     }
 

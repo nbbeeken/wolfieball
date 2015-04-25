@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="202.0" prefWidth="319.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wolfieball.gui.NewFantasyTeamDialogController">
+    <stylesheets>
+        <URL value="@wolfieball.css" />
+    </stylesheets>
+   <children>
+      <VBox alignment="TOP_CENTER" layoutX="97.0" layoutY="18.0" prefHeight="218.0" prefWidth="319.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label prefHeight="36.0" prefWidth="182.0" text="Fantasy Team Details" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <HBox alignment="CENTER" prefHeight="52.0" prefWidth="100.0" spacing="30.0">
+               <children>
+                  <Label text="Name:" textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="teamNameFld" promptText="Name" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="56.0" prefWidth="319.0" spacing="30.0">
+               <children>
+                  <Label text="Owner:" textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="teamOwnerFld" promptText="Owner" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_RIGHT" prefHeight="49.0" prefWidth="319.0" spacing="30.0">
+               <children>
+                  <Label fx:id="teamErrorLbl" textFill="RED" />
+                  <Button fx:id="teamCreateBtn" mnemonicParsing="false" text="Create" />
+                  <Button fx:id="teamCancelBtn" mnemonicParsing="false" text="Cancel" />
+               </children>
+               <padding>
+                  <Insets right="15.0" />
+               </padding>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

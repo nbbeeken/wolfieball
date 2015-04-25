@@ -26,9 +26,10 @@ public class DraftManager {
     private final JsonDraftFileManager jsonManager;
     private final Draft draft;
     public Draft getDraft() {return draft;}
+    public static final DraftManager dm = new DraftManager();
 
-    public DraftManager() {
-        this.draft = new Draft("");
+    private DraftManager() {
+        this.draft = new Draft("DEFAULT");
         this.jsonManager = new JsonDraftFileManager();
     }
 
@@ -63,12 +64,14 @@ public class DraftManager {
         FileChooser fc = new FileChooser();
         fc.setInitialDirectory(new File("..\\Wolfieball Draft Kit\\drafts"));
         fc.setTitle("Choose Draft File");
-        File loadedDraft = fc.showOpenDialog(window);
-        if (loadedDraft != null) {
-            jsonManager.loadExistingDraft(draft, loadedDraft);
-        } else {
-            //Show error dialog
+        File draftFile = fc.showOpenDialog(window);
+        
+        try {
+            jsonManager.loadExistingDraft(draft, draftFile);
+        } catch (IOException ex) {
+            Logger.getLogger(DraftManager.class.getName()).log(Level.SEVERE, null, ex);
         }
+  
         gui.print("Load Draft"); 
     }
 
@@ -85,8 +88,13 @@ public class DraftManager {
         Optional<ButtonType> result = saveConfirm.showAndWait();
         
         if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
-            jsonManager.saveDraft(draft);
-            System.exit(0);
+            try {
+                jsonManager.saveDraft(draft);
+                System.exit(0);
+            } catch (IOException ex) {
+                Logger.getLogger(DraftManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
         }
         if((result.isPresent()) && (result.get() == ButtonType.CANCEL)){
             gui.print("Continued Working");
@@ -105,7 +113,11 @@ public class DraftManager {
         Optional<ButtonType> result = saveConfirm.showAndWait();
         
         if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
-            jsonManager.saveDraft(draft);
+            try {
+                jsonManager.saveDraft(draft);
+            } catch (IOException ex) {
+                Logger.getLogger(DraftManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         if((result.isPresent()) && (result.get() == ButtonType.CANCEL)){
             gui.print("Continued Working");
@@ -138,5 +150,7 @@ public class DraftManager {
         gui.print("removePlayerRequest"); 
     }
     
-    
+    public static DraftManager getDraftManager(){
+        return dm;
+    }
 }

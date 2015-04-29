@@ -25,8 +25,8 @@ import wolfieball.data.Team;
  */
 public class JsonDraftFileManager implements PlayerFileManager {
 
-    private final String HITTER_FILE = "src\\wolfieball\\gui\\hitters.json";
-    private final String PITCHER_FILE = "src\\wolfieball\\gui\\pitchers.json";
+    private final String HITTER_FILE = "src\\wolfieball\\data\\hitters.json";
+    private final String PITCHER_FILE = "src\\wolfieball\\data\\pitchers.json";
 
     /**
      * Saves Draft to JSON
@@ -93,9 +93,9 @@ public class JsonDraftFileManager implements PlayerFileManager {
             bp.setTEAM(hitter.getString("TEAM"));
             String positions = hitter.getString("QP");
             
-            if(positions.contains("SS") || positions.contains("2B") || !positions.contains("MI"))
+            if(positions.contains("SS") || positions.contains("2B") && !positions.contains("MI"))
                 positions += "_MI";
-            if(positions.contains("1B") || positions.contains("3B") || !positions.contains("CI"))
+            if(positions.contains("1B") || positions.contains("3B") && !positions.contains("CI"))
                 positions += "_CI";
             
             bp.setQP(positions+(positions.contains("U")?"":"_U"));

@@ -27,7 +27,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
-import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -48,6 +47,7 @@ import javafx.stage.Window;
 import wolfieball.data.BaseballPlayer;
 import wolfieball.data.DraftManager;
 import wolfieball.data.Team;
+import wolfieball.gui.dialog.EditPlayerDialogFXMLController;
 
 /**
  * FXML Controller class
@@ -165,6 +165,8 @@ public class MainGUI implements Initializable {
     private Button headerQuitBtn;
     @FXML
     private Hyperlink hplink;
+    @FXML
+    private Window window;
     
     /* Fantasy Team Tab FX:id's*/
     
@@ -182,20 +184,6 @@ public class MainGUI implements Initializable {
     private TableView<BaseballPlayer> fantasyPlayers;
     @FXML
     private TableView<BaseballPlayer> taxiSquad;
-    
-    /*Team create Dialog*/
-  
-    @FXML
-    private TextField teamOwnerFld;
-    @FXML
-    private TextField teamNameFld;
-    @FXML
-    private Button teamCreateBtn;
-    @FXML
-    private Button teamCancelBtn;
-    @FXML
-    private Label teamErrorLbl;
-    
     
     
     
@@ -354,6 +342,7 @@ public class MainGUI implements Initializable {
         });
         //New Buttons Pair
         headerNewBtn.setOnAction((ActionEvent e) ->{
+            window = ((Node)e.getTarget()).getScene().getWindow();
             draftManager.newDraftRequest(this);
             playerData.setAll(draftManager.getDraft().getMlb());
             if(clickCount <= 0){
@@ -362,6 +351,7 @@ public class MainGUI implements Initializable {
             }
         });
         newDraftBtn.setOnAction((ActionEvent e) ->{
+            window = ((Node)e.getTarget()).getScene().getWindow();
             draftManager.newDraftRequest(this);
             playerData.setAll(draftManager.getDraft().getMlb());
             if(clickCount <= 0){
@@ -371,7 +361,7 @@ public class MainGUI implements Initializable {
         });
         //Load Buttons Pair
         headerLoadBtn.setOnAction((ActionEvent e) ->{
-            Window window = ((Node)e.getTarget()).getScene().getWindow();
+            window = ((Node)e.getTarget()).getScene().getWindow();
             draftManager.loadDraftRequest(this, window);
             if(clickCount <= 0){
                 userStartsEditing();
@@ -379,7 +369,7 @@ public class MainGUI implements Initializable {
             }
         });
         loadDraftBtn.setOnAction((ActionEvent e) ->{
-            Window window = ((Node)e.getTarget()).getScene().getWindow();
+            window = ((Node)e.getTarget()).getScene().getWindow();
             draftManager.loadDraftRequest(this, window);
             if(clickCount <= 0){
                 userStartsEditing();
@@ -391,14 +381,9 @@ public class MainGUI implements Initializable {
             headerSaveBtn.setDisable(true);
         });
         
-        playerData.addListener(new ListChangeListener() {
-            @Override
-            public void onChanged(ListChangeListener.Change c) {
-                
-                //TODO: fix this
-                
+        playerData.addListener((ListChangeListener.Change<? extends BaseballPlayer> c) -> {
+                c.next();
                 headerSaveBtn.setDisable(false);
-            }
         });
         
         headerExportBtn.setOnAction(e ->{
@@ -451,14 +436,28 @@ public class MainGUI implements Initializable {
             sortedData.comparatorProperty().bind(playerTable.comparatorProperty());
             playerTable.setItems(filteredData);
         });
-        fTeamCombo.selectionModelProperty().addListener((observable, oldValue, newValue) -> {
-            String selectedTeam = newValue.getSelectedItem();
+        
+        fTeamCombo.setOnAction(e -> {
+            String selection = fTeamCombo.getSelectionModel().getSelectedItem();
             FilteredList<BaseballPlayer> filteredData = new FilteredList<>(playerData, p -> true);
-            setFilterPredicateFantasy(filteredData, selectedTeam);
+            
+            setFilterPredicateFantasy(filteredData, "");
+    
             SortedList<BaseballPlayer> sortedData = new SortedList<>(filteredData);
-            sortedData.comparatorProperty().bind(playerTable.comparatorProperty());
+            sortedData.comparatorProperty().bind(fantasyPlayers.comparatorProperty());
             fantasyPlayers.setItems(filteredData);
         });
+        
+//        fTeamCombo.selectionModelProperty().addListener((observable, oldValue, newValue) -> {
+//            //String selectedTeam = observable.getSelectedItem();
+//            FilteredList<BaseballPlayer> filteredData = new FilteredList<>(playerData, p -> true);
+//            
+//            setFilterPredicateFantasy(filteredData, "Astros");
+//            
+//            SortedList<BaseballPlayer> sortedData = new SortedList<>(filteredData);
+//            sortedData.comparatorProperty().bind(fantasyPlayers.comparatorProperty());
+//            fantasyPlayers.setItems(filteredData);
+//        });
     }
 
     private void setFilterPredicate(FilteredList<BaseballPlayer> filteredData, String newValue) {
@@ -523,7 +522,7 @@ public class MainGUI implements Initializable {
     
     private void setFilterPredicateFantasy(FilteredList<BaseballPlayer> filteredData, String newValue){
         filteredData.setPredicate(player -> {
-            return player.getFantasyTeam().contains(newValue); 
+            return player.getFantasyTeam().equals(newValue); 
         });
     }
 
@@ -575,6 +574,13 @@ public class MainGUI implements Initializable {
         playerTable.setItems(playerData);
         fantasyPlayers.setItems(playerData);
         taxiSquad.setItems(playerData);
+        
+        playerTable.setOnMouseClicked(e -> {
+            if(e.getClickCount() == 2){
+                BaseballPlayer bp = playerTable.getSelectionModel().getSelectedItem();
+                editPlayerDialog(bp);
+            }
+        });
     }
 
     /**
@@ -586,44 +592,9 @@ public class MainGUI implements Initializable {
     }
 
     private void initFantasyHeader() {
-        FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("newFantasyTeamDialogFXML.fxml"));
+        
         addFTeamBtn.setOnAction(e -> {
-
-            try {
-                
-                Parent dialogPane;
-                dialogPane = (Parent) fxmlLoader.load();
-                Scene sc = new Scene(dialogPane);
-                Stage st = new Stage();
-                st.setScene(sc);
-                Window window = ((Node) e.getTarget()).getScene().getWindow();
-
-                st.initModality(Modality.WINDOW_MODAL);
-                st.initOwner(window);
-                teamCreateBtn.setOnAction(e1 -> {
-                    Stage w =(Stage) ((Node)e1.getTarget()).getScene().getWindow();
-                    if(!teamNameFld.getText().isEmpty() && !teamOwnerFld.getText().isEmpty()){
-                        Team t = new Team();
-                        t.setName(teamNameFld.getText());
-                        t.setOwner(teamOwnerFld.getText());
-                        w.close();
-                        draftManager.getDraft().getTeams().add(t);
-                    }else{
-                        teamErrorLbl.setText("Please enter values or press cancel.");
-                    }
-                });
-                
-                teamCancelBtn.setOnAction(e2 -> {
-                    Stage w =(Stage) ((Node)e2.getTarget()).getScene().getWindow();
-                    w.close();
-                });
-                
-
-                st.showAndWait();
-            } catch (IOException ex) {
-                Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
+            newFanTeamDialog();
         });
         
         deleteFTeamBtn.setOnAction(e -> {
@@ -639,25 +610,49 @@ public class MainGUI implements Initializable {
             draftManager.getDraft().setName(newValue);
         });
         
-        fTeamCombo.getSelectionModel().clearSelection();
+        //fTeamCombo.getSelectionModel().clearSelection();
+        draftManager.getDraft().getTeams().addListener((ListChangeListener.Change<? extends Team> c) -> {
+            c.next();
+            String newTeamName = c.getAddedSubList().get(0).getName();
+            fTeamCombo.getItems().add(newTeamName);
+            fTeamCombo.getSelectionModel().select(newTeamName);
+        });
         
     }
 
-    private Team prepAddFanTeamDialog(ActionEvent e) throws IOException {
-        Team team = new Team();
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("newFantasyTeamDialogFXML.fxml"));
-        Parent dialogPane = (Parent)fxmlLoader.load();
-        Scene sc = new Scene(dialogPane);
-        Stage st = new Stage();
-        st.setScene(sc);
-        Window window = ((Node)e.getTarget()).getScene().getWindow();
+    private void newFanTeamDialog() {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("dialog/newFantasyTeamDialogFXML.fxml"));
+            Parent dialogPane;
+            dialogPane = (Parent) fxmlLoader.load();
+            Scene sc = new Scene(dialogPane);
+            Stage st = new Stage();
+            st.setScene(sc);
+            st.initModality(Modality.WINDOW_MODAL);
+            st.initOwner(window);
+            st.showAndWait();
+        } catch (IOException ex) {
+            Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void editPlayerDialog(BaseballPlayer bp) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("dialog/editPlayerDialogFXML.fxml"));
+            Parent dialogPane = (Parent) fxmlLoader.load();
+            EditPlayerDialogFXMLController controller = fxmlLoader.getController();
+            controller.setPlayerToEdit(bp);
+            controller.initControls();
+            Scene sc = new Scene(dialogPane);
+            Stage st = new Stage();
+            st.setScene(sc);
+            st.initModality(Modality.WINDOW_MODAL);
+            st.initOwner(window);
+            st.showAndWait();
+        } catch (IOException ex) {
+            Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
-        st.initModality(Modality.WINDOW_MODAL);
-        st.initOwner(window);
-        st.showAndWait();
-        
-        
-        return team;
     }
     
     

@@ -380,7 +380,49 @@ public class BaseballPlayer{
     
     
     private final StringProperty fantasyTeam = new SimpleStringProperty();
+    private final DoubleProperty salary = new SimpleDoubleProperty();
+    private final StringProperty contract = new SimpleStringProperty();
+    private final StringProperty fantasyPosition = new SimpleStringProperty();
 
+    public String getFantasyPosition() {
+        return fantasyPosition.get();
+    }
+
+    public void setFantasyPosition(String value) {
+        fantasyPosition.set(value);
+    }
+
+    public StringProperty fantasyPositionProperty() {
+        return fantasyPosition;
+    }
+    
+
+    public String getContract() {
+        return contract.get();
+    }
+
+    public void setContract(String value) {
+        contract.set(value);
+    }
+
+    public StringProperty contractProperty() {
+        return contract;
+    }
+    
+    
+    public double getSalary() {
+        return salary.get();
+    }
+
+    public void setSalary(double value) {
+        salary.set(value);
+    }
+
+    public DoubleProperty salaryProperty() {
+        return salary;
+    }
+    
+    
     public String getFantasyTeam() {
         return fantasyTeam.get();
     }

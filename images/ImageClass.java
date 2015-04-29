@@ -4,15 +4,12 @@
  * CSE 219 Stony Brook
  * Prof.  Richard McKenna
  */
-package res_src;
+package images;
 
 /**
  *
  * @author Neal
  */
-public class ResourceLoader {
-    static ResourceLoader resourceLoader = new ResourceLoader();
-    
-
+public class ImageClass {
     
 }

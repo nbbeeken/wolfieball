@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="399.0" prefWidth="376.0" style="-fx-background-color: #1D2C42;" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wolfieball.gui.dialog.EditPlayerDialogFXMLController">
+    <stylesheets>
+        <URL value="@/wolfieball/gui/wolfieball.css" />
+    </stylesheets>
+   <children>
+      <VBox alignment="TOP_CENTER" layoutX="101.0" layoutY="75.0" prefHeight="399.0" prefWidth="376.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label style="-fx-text-fill: white; -fx-font-size: 20; -fx-font-weight: bold;" text="Edit Player" />
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="60.0">
+               <children>
+                  <ImageView fx:id="playerPic" fitHeight="135.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../images/dialog/players/AAA-defaultPlayer.png" />
+                     </image></ImageView>
+                  <VBox prefHeight="150.0" prefWidth="138.0" spacing="20.0">
+                     <children>
+                        <ImageView fx:id="nationFlag" fitHeight="33.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../images/dialog/flags/earth.png" />
+                           </image></ImageView>
+                        <Label fx:id="nameLbl" style="-fx-text-fill: white; -fx-font-size: 14; -fx-font-weight: bold;" text="player_name" />
+                        <Label fx:id="positionsLbl" style="-fx-text-fill: white; -fx-font-size: 14; -fx-font-weight: bold;" text="positions" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="39.0" prefWidth="223.0" spacing="40.0">
+               <children>
+                  <VBox spacing="18.0">
+                     <children>
+                        <Label style="-fx-text-fill: white; -fx-font-size: 14; -fx-font-weight: bold;" text="Fantasy Team:" />
+                        <Label style="-fx-text-fill: white; -fx-font-size: 14; -fx-font-weight: bold;" text="Position:" />
+                        <Label style="-fx-text-fill: white; -fx-font-size: 14; -fx-font-weight: bold;" text="Contract:" />
+                        <Label style="-fx-text-fill: white; -fx-font-size: 14; -fx-font-weight: bold;" text="Salary ($):" />
+                     </children>
+                  </VBox>
+                  <VBox spacing="15.0">
+                     <children>
+                        <ComboBox fx:id="fantasyTeamCombo" prefWidth="150.0" />
+                        <ComboBox fx:id="positionCombo" prefWidth="150.0" />
+                        <ComboBox fx:id="contractCombo" prefWidth="150.0" />
+                        <TextField fx:id="salaryField" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_RIGHT" prefHeight="57.0" prefWidth="376.0" spacing="30.0">
+               <children>
+                  <VBox fx:id="errorLbls" alignment="CENTER" visible="false">
+                     <children>
+                        <Label text="Make sure you've made " textAlignment="CENTER" textFill="RED" />
+                        <Label text="selections in each field" textAlignment="CENTER" textFill="RED" />
+                     </children>
+                  </VBox>
+                  <Button fx:id="okBtn" mnemonicParsing="false" text="Okay" />
+                  <Button fx:id="cancelBtn" mnemonicParsing="false" text="Cancel" />
+               </children>
+               <padding>
+                  <Insets right="40.0" />
+               </padding>
+            </HBox>
+         </children>
+         <padding>
+            <Insets top="15.0" />
+         </padding>
+      </VBox>
+   </children>
+</AnchorPane>

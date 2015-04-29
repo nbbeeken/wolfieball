@@ -20,6 +20,7 @@ public class Draft {
 
     public Draft(String name) {
         this.mlb = FXCollections.observableArrayList();
+        this.teams = FXCollections.observableArrayList();
         this.name = name;
     }
     

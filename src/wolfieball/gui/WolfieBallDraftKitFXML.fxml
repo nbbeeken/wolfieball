@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.effect.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
@@ -18,7 +19,7 @@
                <children>
                   <ImageView fitHeight="64.0" fitWidth="753.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../images/Logo.png" />
+                        <Image url="@../../../images/Logo.png" />
                      </image>
                   </ImageView>
                   <TextArea fx:id="infoArea" editable="false" layoutX="618.0" layoutY="7.0" minWidth="-Infinity" opacity="0.4" prefHeight="54.0" prefWidth="423.0" wrapText="true">
@@ -37,7 +38,7 @@
                      <graphic>
                         <ImageView fitHeight="20.0" fitWidth="20.0">
                            <image>
-                              <Image url="@../../images/add_file.png" />
+                              <Image url="@../../../images/add_file.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -49,7 +50,7 @@
                      <graphic>
                         <ImageView fitHeight="20.0" fitWidth="20.0">
                            <image>
-                              <Image url="@../../images/folder.png" />
+                              <Image url="@../../../images/folder.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -61,7 +62,7 @@
                      <graphic>
                         <ImageView fitHeight="20.0" fitWidth="20.0">
                            <image>
-                              <Image url="@../../images/ico_save.png" />
+                              <Image url="@../../../images/ico_save.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -73,7 +74,7 @@
                      <graphic>
                         <ImageView fitHeight="20.0" fitWidth="20.0">
                            <image>
-                              <Image url="@../../images/external_link.png" />
+                              <Image url="@../../../images/external_link.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -85,7 +86,7 @@
                      <graphic>
                         <ImageView fitHeight="20.0" fitWidth="20.0">
                            <image>
-                              <Image url="@../../images/close_window.png" />
+                              <Image url="@../../../images/close_window.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -104,36 +105,39 @@
                     <content>
                       <AnchorPane fx:id="startRoot" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <ImageView fx:id="splash" fitHeight="820.0" fitWidth="1354.0" layoutX="-54.0" layoutY="-60.0" pickOnBounds="true">
+                              <ImageView fx:id="splash" fitHeight="772.0" fitWidth="1294.0" layoutX="-17.0" layoutY="-21.0" pickOnBounds="true">
                                  <image>
-                                    <Image url="@../../images/baseball.gif" />
+                                    <Image url="@../../../images/baseball.gif" />
                                  </image>
+                                 <rotationAxis>
+                                    <Point3D />
+                                 </rotationAxis>
                               </ImageView>
-                              <Button fx:id="loadDraftBtn" layoutX="948.0" layoutY="493.0" mnemonicParsing="false" text="Load Existing Draft">
+                              <Button fx:id="loadDraftBtn" layoutX="948.0" layoutY="565.0" mnemonicParsing="false" text="Load Existing Draft">
                                  <font>
                                     <Font size="23.0" />
                                  </font>
                                  <graphic>
                                     <ImageView fitHeight="40.0" fitWidth="40.0">
                                        <image>
-                                          <Image url="@../../images/folder.png" />
+                                          <Image url="@../../../images/folder.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
                               </Button>
-                              <Button fx:id="newDraftBtn" layoutX="965.0" layoutY="407.0" mnemonicParsing="false" text="Start New Draft">
+                              <Button fx:id="newDraftBtn" layoutX="948.0" layoutY="493.0" mnemonicParsing="false" text="Start New Draft">
                                  <font>
                                     <Font size="23.0" />
                                  </font>
                                  <graphic>
                                     <ImageView fitHeight="40.0" fitWidth="40.0">
                                        <image>
-                                          <Image url="@../../images/add_file.png" />
+                                          <Image url="@../../../images/add_file.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
                               </Button>
-                              <Hyperlink fx:id="hplink" layoutX="14.0" layoutY="20.0" text="Artist">
+                              <Hyperlink fx:id="hplink" layoutX="14.0" layoutY="640.0" text="Artist">
                                  <font>
                                     <Font name="System Bold" size="14.0" />
                                  </font></Hyperlink>
@@ -165,7 +169,7 @@
                                                    <graphic>
                                                       <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                                          <image>
-                                                            <Image url="@../../images/plus.png" />
+                                                            <Image url="@../../../images/plus.png" />
                                                          </image>
                                                       </ImageView>
                                                    </graphic>
@@ -174,7 +178,7 @@
                                                    <graphic>
                                                       <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                                          <image>
-                                                            <Image url="@../../images/trash.png" />
+                                                            <Image url="@../../../images/trash.png" />
                                                          </image>
                                                       </ImageView>
                                                    </graphic>
@@ -183,7 +187,7 @@
                                                    <graphic>
                                                       <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
                                                          <image>
-                                                            <Image url="@../../images/edit_user.png" />
+                                                            <Image url="@../../../images/edit_user.png" />
                                                          </image>
                                                       </ImageView>
                                                    </graphic>
@@ -277,7 +281,7 @@
                      <graphic>
                         <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../images/home.png" />
+                              <Image url="@../../../images/home.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -330,7 +334,7 @@
                                                    <graphic>
                                                       <ImageView fitHeight="25.0" fitWidth="25.0">
                                                          <image>
-                                                            <Image url="@../../images/add.png" />
+                                                            <Image url="@../../../images/add.png" />
                                                          </image>
                                                       </ImageView>
                                                    </graphic>
@@ -342,7 +346,7 @@
                                                    <graphic>
                                                       <ImageView fitHeight="25.0" fitWidth="25.0">
                                                          <image>
-                                                            <Image url="@../../images/remove.png" />
+                                                            <Image url="@../../../images/remove.png" />
                                                          </image>
                                                       </ImageView>
                                                    </graphic>
@@ -452,7 +456,7 @@
                      <graphic>
                         <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../images/run.png" />
+                              <Image url="@../../../images/run.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -464,7 +468,7 @@
                      <graphic>
                         <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../images/list.png" />
+                              <Image url="@../../../images/list.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -476,7 +480,7 @@
                      <graphic>
                         <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../images/shop.png" />
+                              <Image url="@../../../images/shop.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -488,7 +492,7 @@
                      <graphic>
                         <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../images/baseball-32.png" />
+                              <Image url="@../../../images/baseball-32.png" />
                            </image>
                         </ImageView>
                      </graphic>

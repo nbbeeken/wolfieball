@@ -46,8 +46,12 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import wolfieball.data.BaseballPlayer;
 import wolfieball.data.DraftManager;
+import wolfieball.data.FantasyTeamPositionComparator;
 import wolfieball.data.Team;
+import wolfieball.gui.dialog.AddNewPlayerDialogFXMLController;
+import wolfieball.gui.dialog.ConfirmFXMLController;
 import wolfieball.gui.dialog.EditPlayerDialogFXMLController;
+import wolfieball.gui.dialog.NewFantasyTeamDialogController;
 
 /**
  * FXML Controller class
@@ -111,6 +115,54 @@ public class MainGUI implements Initializable {
     private TableColumn estimatedValueCol;
     @FXML
     private TableColumn yearOfBirthCol;
+    
+    
+    @FXML
+    private TableColumn lastNameFanCol;
+    @FXML
+    private TableColumn firstNameFanCol;
+    @FXML
+    private TableColumn teamFanCol;
+    @FXML
+    private TableColumn positionsFanCol;
+    
+        @FXML
+        private TableColumn RFanCol;
+        @FXML
+        private TableColumn WFanCol;   
+    
+        @FXML
+        private TableColumn HRFanCol;
+        @FXML
+        private TableColumn SVFanCol;
+
+        @FXML
+        private TableColumn RBIFanCol;
+        @FXML
+        private TableColumn KFanCol;
+
+        @FXML
+        private TableColumn SBFanCol;
+        @FXML
+        private TableColumn ERAFanCol;
+
+        @FXML
+        private TableColumn BAFanCol;
+        @FXML
+        private TableColumn WHIPFanCol;   
+        
+    @FXML
+    private TableColumn hitterStatFanCol;
+    @FXML
+    private TableColumn pitcherStatFanCol;
+    @FXML
+    private TableColumn yearOfBirthFanCol;
+    @FXML
+    private TableColumn contractFanCol;
+    @FXML
+    private TableColumn salaryFanCol;
+    
+    
     @FXML
     private TableColumn notesCol; 
     @FXML
@@ -177,7 +229,7 @@ public class MainGUI implements Initializable {
     @FXML
     private Button editFTeamBtn;
     @FXML
-    private ComboBox<String> fTeamCombo;
+    private ComboBox<Team> fTeamCombo;
     @FXML
     private TextField draftNameField;
     @FXML
@@ -191,7 +243,7 @@ public class MainGUI implements Initializable {
     //My Fields
     private final ToggleGroup group = new ToggleGroup();
     private DraftManager draftManager;
-    private final ObservableList<BaseballPlayer> playerData = FXCollections.observableArrayList();
+    private ObservableList<BaseballPlayer> playerData = FXCollections.observableArrayList();
     private int clickCount;
 
     /**
@@ -216,6 +268,14 @@ public class MainGUI implements Initializable {
         infoArea.setText("Start Program");
     }     
 
+    private void initTabs() {
+        //Start Tabs Off until New or Load selected
+        playerTab.setDisable(true);
+        draftTab.setDisable(true);
+        fantasyTab.setDisable(true);
+        standingsTab.setDisable(true);
+        mlbTeamsTab.setDisable(true);
+    }    
     
     private void fantasyTabInit(){
         initFantasyHeader();
@@ -242,14 +302,7 @@ public class MainGUI implements Initializable {
     }
     
     
-    private void initTabs() {
-        //Start Tabs Off until New or Load selected
-        playerTab.setDisable(true);
-        draftTab.setDisable(true);
-        fantasyTab.setDisable(true);
-        standingsTab.setDisable(true);
-        mlbTeamsTab.setDisable(true);
-    }    
+    
     
     private void initRadioBtns() {
         //Add to Toggle Group
@@ -330,7 +383,7 @@ public class MainGUI implements Initializable {
 
     private void initButtons(){
         //Main Buttons:
-        headerSaveBtn.setDisable(true);
+        //headerSaveBtn.setDisable(true);
         headerExportBtn.setDisable(true);
         hplink.setOnAction(e -> {
             WolfieballDraftKitApp.getHost().showDocument("http://www.rebeccamock.com/");
@@ -344,7 +397,8 @@ public class MainGUI implements Initializable {
         headerNewBtn.setOnAction((ActionEvent e) ->{
             window = ((Node)e.getTarget()).getScene().getWindow();
             draftManager.newDraftRequest(this);
-            playerData.setAll(draftManager.getDraft().getMlb());
+            playerData = draftManager.getDraft().getFreeAgents().getPlayers();
+            playerTable.setItems(playerData);
             if(clickCount <= 0){
                 userStartsEditing();
                 clickCount++;
@@ -353,7 +407,8 @@ public class MainGUI implements Initializable {
         newDraftBtn.setOnAction((ActionEvent e) ->{
             window = ((Node)e.getTarget()).getScene().getWindow();
             draftManager.newDraftRequest(this);
-            playerData.setAll(draftManager.getDraft().getMlb());
+            playerData = draftManager.getDraft().getFreeAgents().getPlayers();
+            playerTable.setItems(playerData);
             if(clickCount <= 0){
                 userStartsEditing();
                 clickCount++;
@@ -392,10 +447,11 @@ public class MainGUI implements Initializable {
         
         //BaseballPlayers Tab:
         addBtn.setOnAction(e ->{
-            draftManager.addPlayerRequest(this);
+            addNewPlayerDialog();
         });
         removeBtn.setOnAction(e -> {
-            draftManager.removePlayerRequest(this);
+            //Check
+            draftManager.getDraft().getFreeAgents().getPlayers().remove(playerTable.getSelectionModel().getSelectedItem());
         });
         
     }
@@ -407,7 +463,7 @@ public class MainGUI implements Initializable {
         fantasyTab.setDisable(false);
         standingsTab.setDisable(false);
         mlbTeamsTab.setDisable(false);
-        headerExportBtn.setDisable(false);
+        //headerExportBtn.setDisable(false);
         
         tabPane.getSelectionModel().select(fantasyTab);
     }
@@ -420,14 +476,37 @@ public class MainGUI implements Initializable {
         infoArea.appendText("\n");
         infoArea.appendText(input);
     }
+    
+    private void setUpTable() {
+
+        
+        playerTable.setEditable(true);
+        
+
+        setUpAvailiblePlayerTableColTypes();
+        setUpFantasyTeamTableColTypes();
+        //setUpTaxiSquadTableColTypes();
+
+
+        
+        playerTable.setOnMouseClicked(e -> {
+            if(e.getClickCount() == 2){
+                BaseballPlayer bp = playerTable.getSelectionModel().getSelectedItem();
+                editPlayerDialog(bp);
+            }
+        });
+        
+        fantasyPlayers.setOnMouseClicked(e -> {
+            if(e.getClickCount() == 2){
+                BaseballPlayer bp = fantasyPlayers.getSelectionModel().getSelectedItem();
+                editPlayerDialog(bp);
+            }
+        });
+    }
 
     private void setUpTableSearchFilter() {
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            FilteredList<BaseballPlayer> filteredData = new FilteredList<>(playerData, p -> true);
-            setFilterPredicate(filteredData, newValue);
-            SortedList<BaseballPlayer> sortedData = new SortedList<>(filteredData);
-            sortedData.comparatorProperty().bind(playerTable.comparatorProperty());
-            playerTable.setItems(filteredData);
+            setFilterPredicate(newValue);
         });
         group.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
             FilteredList<BaseballPlayer> filteredData = new FilteredList<>(playerData, p -> true);
@@ -436,31 +515,15 @@ public class MainGUI implements Initializable {
             sortedData.comparatorProperty().bind(playerTable.comparatorProperty());
             playerTable.setItems(filteredData);
         });
-        
-        fTeamCombo.setOnAction(e -> {
-            String selection = fTeamCombo.getSelectionModel().getSelectedItem();
-            FilteredList<BaseballPlayer> filteredData = new FilteredList<>(playerData, p -> true);
-            
-            setFilterPredicateFantasy(filteredData, "");
-    
-            SortedList<BaseballPlayer> sortedData = new SortedList<>(filteredData);
-            sortedData.comparatorProperty().bind(fantasyPlayers.comparatorProperty());
-            fantasyPlayers.setItems(filteredData);
+        fTeamCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue != null){
+                setFantasyTableData(newValue.getPlayers());
+            }
         });
-        
-//        fTeamCombo.selectionModelProperty().addListener((observable, oldValue, newValue) -> {
-//            //String selectedTeam = observable.getSelectedItem();
-//            FilteredList<BaseballPlayer> filteredData = new FilteredList<>(playerData, p -> true);
-//            
-//            setFilterPredicateFantasy(filteredData, "Astros");
-//            
-//            SortedList<BaseballPlayer> sortedData = new SortedList<>(filteredData);
-//            sortedData.comparatorProperty().bind(fantasyPlayers.comparatorProperty());
-//            fantasyPlayers.setItems(filteredData);
-//        });
     }
 
-    private void setFilterPredicate(FilteredList<BaseballPlayer> filteredData, String newValue) {
+    public void setFilterPredicate(String newValue) {
+        FilteredList<BaseballPlayer> filteredData = new FilteredList<>(playerData, p -> true);
         filteredData.setPredicate(player -> {
             String pos = "";
             Toggle t = group.getSelectedToggle();
@@ -479,7 +542,7 @@ public class MainGUI implements Initializable {
             
             
             
-            if (newValue == null || newValue.isEmpty())
+            if ((newValue == null || newValue.isEmpty()) && player.getFantasyTeam().contains("Free Agent"))
                 return true;
             
             
@@ -491,6 +554,9 @@ public class MainGUI implements Initializable {
             }
             return false; // Does not match.
         });
+        SortedList<BaseballPlayer> sortedData = new SortedList<>(filteredData);
+        sortedData.comparatorProperty().bind(playerTable.comparatorProperty());
+        playerTable.setItems(filteredData);
     }
     
     private void setFilterPredicate(FilteredList<BaseballPlayer> filteredData, Toggle newValue) {
@@ -511,27 +577,16 @@ public class MainGUI implements Initializable {
             if(t == pitcherRbtn)pos="P";
             
             String lowerCaseFilter = searchField.getText().toLowerCase();
-            if (player.getFIRST_NAME().toLowerCase().startsWith(lowerCaseFilter) && player.getQP().contains(pos) && player.getFantasyTeam().contains("Free Agent")) {
+            if (player.getFIRST_NAME().toLowerCase().startsWith(lowerCaseFilter) && player.getQP().contains(pos) && player.getFantasyTeam().equals("Free Agent")) {
                 return true; // Filter matches first name.
-            } else if (player.getLAST_NAME().toLowerCase().startsWith(lowerCaseFilter) && player.getQP().contains(pos) && player.getFantasyTeam().contains("Free Agent")) {
+            } else if (player.getLAST_NAME().toLowerCase().startsWith(lowerCaseFilter) && player.getQP().contains(pos) && player.getFantasyTeam().equals("Free Agent")) {
                 return true; // Filter matches last name.
             }
             return false; // Does not match.
         });
     }
-    
-    private void setFilterPredicateFantasy(FilteredList<BaseballPlayer> filteredData, String newValue){
-        filteredData.setPredicate(player -> {
-            return player.getFantasyTeam().equals(newValue); 
-        });
-    }
-
-    private void setUpTable() {
-
-        
-        playerTable.setEditable(true);
-        
-
+      
+    private void setUpAvailiblePlayerTableColTypes() {
         lastNameCol.setCellValueFactory(new PropertyValueFactory("LAST_NAME"));
         
         
@@ -554,35 +609,53 @@ public class MainGUI implements Initializable {
         
         RCol.setCellValueFactory(new PropertyValueFactory("R"));
         WCol.setCellValueFactory(new PropertyValueFactory("W"));
-
-
+        
+        
         HRCol.setCellValueFactory(new PropertyValueFactory("HR"));
         SVCol.setCellValueFactory(new PropertyValueFactory("SV"));
         
         
         RBICol.setCellValueFactory(new PropertyValueFactory("RBI"));
         KCol.setCellValueFactory(new PropertyValueFactory("K"));
-
+        
         
         SBCol.setCellValueFactory(new PropertyValueFactory("SB"));
         ERACol.setCellValueFactory(new PropertyValueFactory("ERA"));
-
-
+        
+        
         BACol.setCellValueFactory(new PropertyValueFactory("BA"));
         WHIPCol.setCellValueFactory(new PropertyValueFactory("WHIP"));
-
-        playerTable.setItems(playerData);
-        fantasyPlayers.setItems(playerData);
-        taxiSquad.setItems(playerData);
-        
-        playerTable.setOnMouseClicked(e -> {
-            if(e.getClickCount() == 2){
-                BaseballPlayer bp = playerTable.getSelectionModel().getSelectedItem();
-                editPlayerDialog(bp);
-            }
-        });
     }
-
+    
+    private void setUpFantasyTeamTableColTypes() {
+        lastNameFanCol.setCellValueFactory(new PropertyValueFactory("LAST_NAME"));
+        firstNameFanCol.setCellValueFactory(new PropertyValueFactory("FIRST_NAME"));
+        teamFanCol.setCellValueFactory(new PropertyValueFactory("TEAM"));
+        positionsFanCol.setCellValueFactory(new PropertyValueFactory("fantasyPosition"));
+        RFanCol.setCellValueFactory(new PropertyValueFactory("R"));
+        
+        WFanCol.setCellValueFactory(new PropertyValueFactory("W"));
+        HRFanCol.setCellValueFactory(new PropertyValueFactory("HR"));
+        SVFanCol.setCellValueFactory(new PropertyValueFactory("SV"));
+        RBIFanCol.setCellValueFactory(new PropertyValueFactory("RBI"));
+        KFanCol.setCellValueFactory(new PropertyValueFactory("K"));
+        SBFanCol.setCellValueFactory(new PropertyValueFactory("SB"));
+        ERAFanCol.setCellValueFactory(new PropertyValueFactory("ERA"));
+        BAFanCol.setCellValueFactory(new PropertyValueFactory("BA"));
+        WHIPFanCol.setCellValueFactory(new PropertyValueFactory("WHIP"));
+//        hitterStatFanCol.setCellValueFactory(new PropertyValueFactory(""));
+//        pitcherStatFanCol.setCellValueFactory(new PropertyValueFactory(""));
+        yearOfBirthFanCol.setCellValueFactory(new PropertyValueFactory("YEAR_OF_BIRTH"));
+        contractFanCol.setCellValueFactory(new PropertyValueFactory("contract"));
+        salaryFanCol.setCellValueFactory(new PropertyValueFactory("salary"));
+        
+        positionsFanCol.setComparator(new FantasyTeamPositionComparator());
+    }
+     
+    private void setUpTaxiSquadTableColTypes() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
     /**
      *  Returns current playerData
      * @return
@@ -592,39 +665,54 @@ public class MainGUI implements Initializable {
     }
 
     private void initFantasyHeader() {
-        
-        addFTeamBtn.setOnAction(e -> {
-            newFanTeamDialog();
-        });
-        
-        deleteFTeamBtn.setOnAction(e -> {
-            
-        });
-        
-        editFTeamBtn.setOnAction(e -> {
-            
-            
-        });
-        
         draftNameField.textProperty().addListener((observable, oldValue, newValue) -> {
             draftManager.getDraft().setName(newValue);
         });
-        
-        //fTeamCombo.getSelectionModel().clearSelection();
-        draftManager.getDraft().getTeams().addListener((ListChangeListener.Change<? extends Team> c) -> {
-            c.next();
-            String newTeamName = c.getAddedSubList().get(0).getName();
-            fTeamCombo.getItems().add(newTeamName);
-            fTeamCombo.getSelectionModel().select(newTeamName);
+
+        addFTeamBtn.setOnAction(e -> {
+            newFanTeamDialog(false);
+        });
+        deleteFTeamBtn.setOnAction(e -> {
+            Team team = fTeamCombo.getSelectionModel().getSelectedItem();
+            boolean confirmDialog = confirmDialog("Are you sure you want to delete the " + team + " team?");
+        });
+
+        editFTeamBtn.setOnAction(e -> {
+            newFanTeamDialog(true);
+        });
+
+        ObservableList list = FXCollections.observableArrayList();
+        DraftManager.getDraftManager().getDraft().getTeams().entrySet().stream().map((teamIT) -> (Team) teamIT.getValue()).forEach((value) -> {
+            list.add(value);
         });
         
+        fTeamCombo.setItems(list);
+        fTeamCombo.getItems().remove(draftManager.getDraft().getFreeAgents());
     }
 
-    private void newFanTeamDialog() {
+    public void deleteTeamDialog() {
+        Team team = fTeamCombo.getSelectionModel().getSelectedItem();
+        draftManager.getDraft().removeTeam(team.getName());
+        fTeamCombo.getItems().clear();
+        
+        
+        ObservableList list = FXCollections.observableArrayList();
+        DraftManager.getDraftManager().getDraft().getTeams().entrySet().stream().map((teamIT) -> (Team) teamIT.getValue()).forEach((value) -> {
+            list.add(value);
+        });
+        
+        
+        fTeamCombo.setItems(list);
+    }
+
+    private void newFanTeamDialog(boolean isEditing) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("dialog/newFantasyTeamDialogFXML.fxml"));
             Parent dialogPane;
             dialogPane = (Parent) fxmlLoader.load();
+            NewFantasyTeamDialogController controller = fxmlLoader.getController();
+            Team t = fTeamCombo.getSelectionModel().getSelectedItem();
+            controller.initControls(isEditing, t, this);
             Scene sc = new Scene(dialogPane);
             Stage st = new Stage();
             st.setScene(sc);
@@ -641,8 +729,7 @@ public class MainGUI implements Initializable {
             FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("dialog/editPlayerDialogFXML.fxml"));
             Parent dialogPane = (Parent) fxmlLoader.load();
             EditPlayerDialogFXMLController controller = fxmlLoader.getController();
-            controller.setPlayerToEdit(bp);
-            controller.initControls();
+            controller.initControls(bp, this);
             Scene sc = new Scene(dialogPane);
             Stage st = new Stage();
             st.setScene(sc);
@@ -655,6 +742,70 @@ public class MainGUI implements Initializable {
         
     }
     
+    private boolean confirmDialog(String message){
+        try{
+            FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("dialog/confirmFXML.fxml"));
+            Parent dialogPane = (Parent) fxmlLoader.load();
+            ConfirmFXMLController controller = fxmlLoader.getController();
+            boolean userChoice = controller.initControls(message, this);
+            Scene sc = new Scene(dialogPane);
+            Stage st = new Stage();
+            st.setScene(sc);
+            st.initModality(Modality.WINDOW_MODAL);
+            st.initOwner(window);
+            st.showAndWait();
+            return userChoice;
+        }catch(IOException ex){
+            Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
     
+
+    public void setSelectedFantasyTeam(Team s) {
+        fTeamCombo.getSelectionModel().select(s);
+    }
+
+    public TableView<BaseballPlayer> getFantasyPlayers() {
+        return fantasyPlayers;
+    }
+
+    public TableView<BaseballPlayer> getTaxiSquad() {
+        return taxiSquad;
+    }
+
+    public ComboBox<Team> getfTeamCombo() {
+        return fTeamCombo;
+    }
+
+    public void setFantasyTableData(ObservableList<BaseballPlayer> players) {
+        fantasyPlayers.setItems(players);
+    }
     
+    public void refreshTables(){
+        playerTable.setVisible(false);
+        fantasyPlayers.setVisible(false);
+        taxiSquad.setVisible(false);
+        
+        playerTable.setVisible(true);
+        fantasyPlayers.setVisible(true);
+        taxiSquad.setVisible(true);
+    }
+
+    private void addNewPlayerDialog() {
+        try{
+            FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("dialog/addNewPlayerDialogFXML.fxml"));
+            Parent dialogPane = (Parent) fxmlLoader.load();
+            AddNewPlayerDialogFXMLController controller = fxmlLoader.getController();
+            controller.initControls();
+            Scene sc = new Scene(dialogPane);
+            Stage st = new Stage();
+            st.setScene(sc);
+            st.initModality(Modality.WINDOW_MODAL);
+            st.initOwner(window);
+            st.showAndWait();
+        }catch(IOException ex){
+            Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

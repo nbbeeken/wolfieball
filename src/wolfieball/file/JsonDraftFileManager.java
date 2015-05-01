@@ -41,14 +41,14 @@ public class JsonDraftFileManager implements PlayerFileManager {
 
         
         
-        JsonArray mlbJsonArray = makeMLBJsonArray(draft.getMlb());
+        //JsonArray mlbJsonArray = makeMLBJsonArray(draft.getMlb());
         
-        JsonArray teamsJsonArray = makeTeamsJsonArray(draft.getTeams());
+        //JsonArray teamsJsonArray = makeTeamsJsonArray(draft.getTeams());
         
         JsonObject draftJsonObject = Json.createObjectBuilder()
                 .add("NAME", draft.getName())
-                .add("MLB", mlbJsonArray)
-                .add("TEAMS", teamsJsonArray)
+                //.add("MLB", mlbJsonArray)
+                //.add("TEAMS", teamsJsonArray)
                 .build();
         
         
@@ -110,7 +110,8 @@ public class JsonDraftFileManager implements PlayerFileManager {
             bp.setNATION_OF_BIRTH(hitter.getString("NATION_OF_BIRTH"));
             bp.setIsHitter(true);
             bp.setFantasyTeam("Free Agent");
-            draft.getMlb().add(bp);
+            draft.getFreeAgents().addPlayer(bp);
+            //draft.getMlb().add(bp);
         }
         
         for(int i = 0; i < pitchers.size(); i++){
@@ -132,7 +133,8 @@ public class JsonDraftFileManager implements PlayerFileManager {
             bp.setNATION_OF_BIRTH(pitcher.getString("NATION_OF_BIRTH"));
             bp.setIsHitter(false);
             bp.setFantasyTeam("Free Agent");
-            draft.getMlb().add(bp);
+            draft.getFreeAgents().addPlayer(bp);
+            //draft.getMlb().add(bp);
         }
     }
 
@@ -224,7 +226,8 @@ public class JsonDraftFileManager implements PlayerFileManager {
             bp.setNATION_OF_BIRTH(player.getString("NATION_OF_BIRTH"));
             bp.setFantasyTeam(player.getString("FANTASY_TEAM"));
             
-            draft.getMlb().add(bp);
+            //draft.getMlb().add(bp);
+            //BROKENNNNNNNNNNNNNNNNNNNNNNNNNN
         }
         
     
@@ -245,11 +248,11 @@ public class JsonDraftFileManager implements PlayerFileManager {
         JsonArray teamsJson = jsonTeams.getJsonArray("TEAMS");
         
         for(int i = 0; i < teamsJson.size(); i++){
-            Team team = new Team();
+            Team team = new Team("");
             JsonObject jsoTeam = teamsJson.getJsonObject(i);
             team.setName(jsoTeam.getString("NAME"));
             team.setOwner(jsoTeam.getString("OWNER"));
-            draft.getTeams().add(team);
+            //draft.getTeams().add(team);
         }
     }
 

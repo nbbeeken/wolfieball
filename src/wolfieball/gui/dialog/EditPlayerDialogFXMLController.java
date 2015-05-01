@@ -9,7 +9,8 @@ package wolfieball.gui.dialog;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.ResourceBundle;
-import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -24,17 +25,16 @@ import javafx.stage.Stage;
 import wolfieball.data.BaseballPlayer;
 import wolfieball.data.DraftManager;
 import wolfieball.data.Team;
+import wolfieball.gui.MainGUI;
 
 /**
  * FXML Controller class
  *
  * @author Neal
  */
-public class EditPlayerDialogFXMLController implements Initializable {
-    private BaseballPlayer bp;
-    
+public class EditPlayerDialogFXMLController implements Initializable {    
     @FXML
-    private ComboBox<String> fantasyTeamCombo;
+    private ComboBox<Team> fantasyTeamCombo;
     @FXML
     private ComboBox<String> positionCombo;
     @FXML
@@ -79,15 +79,10 @@ public class EditPlayerDialogFXMLController implements Initializable {
     
     
     
-    public BaseballPlayer getPlayerToEdit() {
-        return bp;
-    }
 
-    public void setPlayerToEdit(BaseballPlayer playerToEdit) {
-        this.bp = playerToEdit;
-    }
 
-    public void initControls() {
+
+    public void initControls(BaseballPlayer bp, MainGUI gui) {
                 
         
         nameLbl.setText(bp.getFIRST_NAME() + " " + bp.getLAST_NAME());
@@ -96,15 +91,71 @@ public class EditPlayerDialogFXMLController implements Initializable {
         contractCombo.getItems().addAll("S1", "S2", "X");
         contractCombo.getSelectionModel().selectFirst();
         
-        ObservableList<Team> teams = DraftManager.getDraftManager().getDraft().getTeams();
-        teams.stream().forEach((team) -> {
-            fantasyTeamCombo.getItems().add(team.getName());
+        fantasyTeamCombo.getItems().clear();
+        
+
+        
+        DraftManager.getDraftManager().getDraft().getTeams().entrySet().stream().map((team) -> (Team) team.getValue()).forEach((value) -> {
+            fantasyTeamCombo.getItems().add(value);
         });
-        fantasyTeamCombo.getItems().add("Free Agent");
-        fantasyTeamCombo.getSelectionModel().selectLast();
+        
+        fantasyTeamCombo.getSelectionModel().select(DraftManager.getDraftManager().getDraft().getFreeAgents());
         
         String [] pos = bp.getQP().split("_");
         positionCombo.getItems().addAll(Arrays.asList(pos));
+        
+        
+        
+        
+        
+        fantasyTeamCombo.setOnAction(e -> {
+            Team selectTeam = fantasyTeamCombo.getValue();
+            if (!selectTeam.equals(DraftManager.getDraftManager().getDraft().getFreeAgents())) {
+                if (selectTeam.getNumberOfCatchers() == 2 && positionCombo.getItems().contains("C")) {
+                    positionCombo.getItems().remove("C");
+                }
+
+                if (selectTeam.getNumberOfCornerInfielder() == 1 && positionCombo.getItems().contains("CI")) {
+                    positionCombo.getItems().remove("CI");
+                }
+
+                if (selectTeam.getNumberOfFirstbasemen() == 1 && positionCombo.getItems().contains("1B")) {
+                    positionCombo.getItems().remove("1B");
+                }
+
+                if (selectTeam.getNumberOfSecondbasemen() == 1 && positionCombo.getItems().contains("2B")) {
+                    positionCombo.getItems().remove("2B");
+                }
+
+                if (selectTeam.getNumberOfThirdbasemen() == 1 && positionCombo.getItems().contains("3B")) {
+                    positionCombo.getItems().remove("3B");
+                }
+
+                if (selectTeam.getNumberOfPitchers() == 9 && positionCombo.getItems().contains("P")) {
+                    positionCombo.getItems().remove("P");
+                }
+
+                if (selectTeam.getNumberOfSS() == 1 && positionCombo.getItems().contains("SS")) {
+                    positionCombo.getItems().remove("SS");
+                }
+
+                if (selectTeam.getNumberOfMI() == 1 && positionCombo.getItems().contains("MI")) {
+                    positionCombo.getItems().remove("MI");
+                }
+
+                if (selectTeam.getNumberOfU() == 1 && positionCombo.getItems().contains("U")) {
+                    positionCombo.getItems().remove("U");
+                }
+
+                if (selectTeam.getNumberOfOF() == 1 && positionCombo.getItems().contains("OF")) {
+                    positionCombo.getItems().remove("OF");
+                }
+
+                if (selectTeam.getNumberOfPlayer() == 23) {
+                    positionCombo.getItems().clear();
+                }
+            }
+        });
         
         
         String defaultPlayerimg = "file:./images/dialog/players/AAA-defaultPlayer.png";
@@ -132,16 +183,7 @@ public class EditPlayerDialogFXMLController implements Initializable {
         nationFlag.setImage(new Image(imgFlagPath));
         
         okBtn.setOnAction(e -> {
-            Stage window = (Stage)((Node)e.getTarget()).getScene().getWindow();
-            if(!fantasyTeamCombo.getSelectionModel().isEmpty() && !positionCombo.getSelectionModel().isEmpty() && !salaryField.getText().isEmpty()){
-                bp.setFantasyTeam(fantasyTeamCombo.getSelectionModel().getSelectedItem());
-                bp.setFantasyPosition(positionCombo.getSelectionModel().getSelectedItem());
-                bp.setContract(contractCombo.getSelectionModel().getSelectedItem());
-                bp.setSalary(Double.parseDouble(salaryField.getText()));
-                window.close();
-            }else{
-                errorLbls.setVisible(true);
-            }
+            okAction(e, bp, gui);
             
         });
         
@@ -150,6 +192,50 @@ public class EditPlayerDialogFXMLController implements Initializable {
             window.close();
         });
         
+    }
+
+    private void okAction(ActionEvent e, BaseballPlayer bp, MainGUI gui) throws NumberFormatException {
+        Stage window = (Stage)((Node)e.getTarget()).getScene().getWindow();
+        
+        if(!fantasyTeamCombo.getSelectionModel().isEmpty() && !positionCombo.getSelectionModel().isEmpty() && !salaryField.getText().isEmpty()){
+            Team selectedTeam = fantasyTeamCombo.getSelectionModel().getSelectedItem();
+            
+            ObservableMap<String, Team> teams = DraftManager.getDraftManager().getDraft().getTeams();
+            System.out.println(bp.getFantasyTeam());
+            Team currentTeam = teams.get(bp.getFantasyTeam());
+            if(currentTeam != null){
+                currentTeam.removePlayer(bp);
+            }
+            
+            
+            bp.setFantasyTeam(selectedTeam.getName());
+            
+            
+            bp.setFantasyPosition(positionCombo.getSelectionModel().getSelectedItem());
+            bp.setContract(contractCombo.getSelectionModel().getSelectedItem());
+            bp.setSalary(Double.parseDouble(salaryField.getText()));
+            
+            if(fantasyTeamCombo.getValue().getName().equals("Free Agent")){
+                bp.setContract("");
+                bp.setFantasyPosition("");
+                bp.setSalary(0);
+            }
+            
+            selectedTeam.addPlayer(bp);
+            
+            window.close();
+            
+            
+            gui.setFantasyTableData(fantasyTeamCombo.getValue().getPlayers());
+            
+            if(!fantasyTeamCombo.getValue().getName().equals("Free Agent")){
+                gui.setSelectedFantasyTeam(fantasyTeamCombo.getValue());
+            }
+            
+            gui.getFantasyPlayers().sort();
+        }else{
+            errorLbls.setVisible(true);
+        }
     }
     
 }

@@ -26,7 +26,7 @@ public class DraftManager {
     private final JsonDraftFileManager jsonManager;
     private final Draft draft;
     public Draft getDraft() {return draft;}
-    public static final DraftManager dm = new DraftManager();
+    private static final DraftManager dm = new DraftManager();
 
     private DraftManager() {
         this.draft = new Draft("DEFAULT");

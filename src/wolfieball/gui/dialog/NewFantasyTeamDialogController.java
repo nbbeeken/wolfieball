@@ -8,6 +8,8 @@ package wolfieball.gui.dialog;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -17,6 +19,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import wolfieball.data.DraftManager;
 import wolfieball.data.Team;
+import wolfieball.gui.MainGUI;
 
 /**
  *
@@ -38,14 +41,33 @@ public class NewFantasyTeamDialogController implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+    }
+
+    public void initControls(boolean isEditing, Team team, MainGUI gui) {
+        String originalTeam = team.getName();
+        if(isEditing){
+            teamOwnerFld.setText(team.getOwner());
+            teamNameFld.setText(team.getName());
+        }
         teamCreateBtn.setOnAction(e1 -> {
+            Team t = new Team("");
             Stage w = (Stage) ((Node) e1.getTarget()).getScene().getWindow();
+            if(isEditing) t = DraftManager.getDraftManager().getDraft().getTeams().get(originalTeam);
             if (!teamNameFld.getText().trim().isEmpty() && !teamOwnerFld.getText().trim().isEmpty()) {
-                Team t = new Team();
                 t.setName(teamNameFld.getText());
                 t.setOwner(teamOwnerFld.getText());
                 w.close();
-                DraftManager.getDraftManager().getDraft().getTeams().add(t);
+                DraftManager.getDraftManager().getDraft().getTeams().put(teamNameFld.getText(),t);
+                
+                ObservableList list = FXCollections.observableArrayList();
+                DraftManager.getDraftManager().getDraft().getTeams().entrySet().stream().map((teamIT) -> (Team) teamIT.getValue()).forEach((value) -> {
+                    list.add(value);
+                });
+                
+                gui.getfTeamCombo().setItems(list);
+                gui.getfTeamCombo().getItems().remove(DraftManager.getDraftManager().getDraft().getFreeAgents());
+                
             } else {
                 teamErrorLbl.setText("Please Enter Values");
             }
@@ -55,5 +77,5 @@ public class NewFantasyTeamDialogController implements Initializable{
             w.close();
         });
     }
-    
+
 }

@@ -7,32 +7,35 @@
 package wolfieball.data;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 
 /**
  *
  * @author Neal
  */
 public class Draft {
-    ObservableList<BaseballPlayer> mlb;
-    ObservableList<Team> teams;
+    //ObservableList<BaseballPlayer> mlb;
+    ObservableMap<String, Team> teams;
     String name;
+    private final Team freeAgents = new Team("Free Agent");
+    String FREEAGENTS = "Free Agent";
 
     public Draft(String name) {
-        this.mlb = FXCollections.observableArrayList();
-        this.teams = FXCollections.observableArrayList();
+        //this.mlb = FXCollections.observableArrayList();
+        this.teams = FXCollections.observableHashMap();
+        this.teams.put(FREEAGENTS, freeAgents);
         this.name = name;
     }
     
     
-
-    public ObservableList<BaseballPlayer> getMlb() {
-        return mlb;
-    }
-
-    public void setMlb(ObservableList<BaseballPlayer> mlb) {
-        this.mlb = mlb;
-    }
+//
+//    public ObservableList<BaseballPlayer> getMlb() {
+//        return mlb;
+//    }
+//
+//    public void setMlb(ObservableList<BaseballPlayer> mlb) {
+//        this.mlb = mlb;
+//    }
 
     public String getName() {
         return name;
@@ -42,14 +45,26 @@ public class Draft {
         this.name = name;
     }
 
-    public ObservableList<Team> getTeams() {
+    public ObservableMap<String, Team> getTeams() {
         return teams;
     }
 
-    public void setTeams(ObservableList<Team> teams) {
+    public void setTeams(ObservableMap<String, Team> teams) {
         this.teams = teams;
     }
-    
+
+    public void removeTeam(String team) {
+        Team get = teams.get(team);
+        get.getPlayers().stream().forEach((player) -> {
+            player.setFantasyTeam(FREEAGENTS);
+            freeAgents.addPlayer(player);
+        });
+        teams.remove(team);
+    }
+
+    public Team getFreeAgents() {
+        return freeAgents;
+    }
     
     
     

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="166.0" prefWidth="542.0" style="-fx-background-color: #1d2c42;" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wolfieball.gui.dialog.ConfirmFXMLController">
+    <stylesheets>
+        <URL value="@/wolfieball/gui/wolfieball.css" />
+    </stylesheets>
+   <children>
+      <VBox layoutX="24.0" layoutY="38.0" prefHeight="166.0" prefWidth="315.0" spacing="45.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label fx:id="mssg" layoutX="24.0" layoutY="38.0" text="Are you sure you" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <HBox layoutX="201.0" layoutY="127.0" nodeOrientation="RIGHT_TO_LEFT" spacing="15.0">
+               <children>
+                  <Button fx:id="cancelBtn" layoutX="249.0" layoutY="127.0" mnemonicParsing="false" text="Cancel" />
+                  <Button fx:id="yesBtn" layoutX="201.0" layoutY="127.0" mnemonicParsing="false" text="Yes" />
+               </children>
+               <padding>
+                  <Insets right="10.0" />
+               </padding>
+            </HBox>
+         </children>
+         <padding>
+            <Insets left="15.0" right="15.0" top="40.0" />
+         </padding>
+      </VBox>
+   </children>
+</AnchorPane>

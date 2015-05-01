@@ -113,7 +113,7 @@
                                     <Point3D />
                                  </rotationAxis>
                               </ImageView>
-                              <Button fx:id="loadDraftBtn" layoutX="948.0" layoutY="565.0" mnemonicParsing="false" text="Load Existing Draft">
+                              <Button fx:id="loadDraftBtn" layoutX="947.0" layoutY="544.0" mnemonicParsing="false" text="Load Existing Draft">
                                  <font>
                                     <Font size="23.0" />
                                  </font>
@@ -125,7 +125,7 @@
                                     </ImageView>
                                  </graphic>
                               </Button>
-                              <Button fx:id="newDraftBtn" layoutX="948.0" layoutY="493.0" mnemonicParsing="false" text="Start New Draft">
+                              <Button fx:id="newDraftBtn" layoutX="947.0" layoutY="472.0" mnemonicParsing="false" text="Start New Draft">
                                  <font>
                                     <Font size="23.0" />
                                  </font>
@@ -210,31 +210,31 @@
                                     </VBox>
                                     <TableView fx:id="fantasyPlayers" prefHeight="330.0" prefWidth="1201.0" VBox.vgrow="NEVER">
                                        <columns>
-                                          <TableColumn fx:id="positionsCol1" editable="false" prefWidth="78.0" text="Position" />
-                                          <TableColumn fx:id="lastNameCol1" editable="false" prefWidth="128.0" text="Last Name" />
-                                          <TableColumn fx:id="firstNameCol1" editable="false" prefWidth="118.0" text="First Name" />
-                                          <TableColumn fx:id="teamCol1" editable="false" prefWidth="93.0" text="Pro Team" />
-                                          <TableColumn fx:id="yearOfBirthCol1" editable="false" prefWidth="71.0" text="Born" />
-                                          <TableColumn fx:id="pitcherStatCol1" editable="false" prefWidth="75.0" text="Pitcher Stats">
+                                          <TableColumn fx:id="positionsFanCol" editable="false" prefWidth="78.0" sortable="false" text="Position" />
+                                          <TableColumn fx:id="lastNameFanCol" editable="false" prefWidth="128.0" sortable="false" text="Last Name" />
+                                          <TableColumn fx:id="firstNameFanCol" editable="false" prefWidth="118.0" sortable="false" text="First Name" />
+                                          <TableColumn fx:id="teamFanCol" editable="false" prefWidth="93.0" sortable="false" text="Pro Team" />
+                                          <TableColumn fx:id="yearOfBirthFanCol" editable="false" prefWidth="71.0" sortable="false" text="Born" />
+                                          <TableColumn fx:id="pitcherStatFanCol" editable="false" prefWidth="75.0" sortable="false" text="Pitcher Stats">
                                              <columns>
-                                                <TableColumn fx:id="WCol1" editable="false" prefWidth="47.0" text="W" />
-                                                <TableColumn fx:id="SVCol1" editable="false" prefWidth="51.0" text="SV" />
-                                                <TableColumn fx:id="KCol1" editable="false" prefWidth="53.0" text="K" />
-                                                <TableColumn fx:id="ERACol1" editable="false" prefWidth="55.0" text="ERA" />
-                                                <TableColumn fx:id="WHIPCol1" editable="false" prefWidth="68.0" text="WHIP" />
+                                                <TableColumn fx:id="WFanCol" editable="false" prefWidth="47.0" sortable="false" text="W" />
+                                                <TableColumn fx:id="SVFanCol" editable="false" prefWidth="51.0" sortable="false" text="SV" />
+                                                <TableColumn fx:id="KFanCol" editable="false" prefWidth="53.0" sortable="false" text="K" />
+                                                <TableColumn fx:id="ERAFanCol" editable="false" prefWidth="55.0" sortable="false" text="ERA" />
+                                                <TableColumn fx:id="WHIPFanCol" editable="false" prefWidth="68.0" sortable="false" text="WHIP" />
                                              </columns>
                                           </TableColumn>
-                                          <TableColumn fx:id="hitterStatCol1" editable="false" prefWidth="75.0" text="Hitter Stats">
+                                          <TableColumn fx:id="hitterStatFanCol" editable="false" prefWidth="75.0" sortable="false" text="Hitter Stats">
                                              <columns>
-                                                <TableColumn fx:id="RCol1" editable="false" prefWidth="39.0" text="R" />
-                                                <TableColumn fx:id="HRCol1" editable="false" prefWidth="45.0" text="HR" />
-                                                <TableColumn fx:id="RBICol1" editable="false" prefWidth="43.0" text="RBI" />
-                                                <TableColumn fx:id="SBCol1" editable="false" prefWidth="43.0" text="SB" />
-                                                <TableColumn fx:id="BACol1" editable="false" prefWidth="47.0" text="BA" />
+                                                <TableColumn fx:id="RFanCol" editable="false" prefWidth="39.0" sortable="false" text="R" />
+                                                <TableColumn fx:id="HRFanCol" editable="false" prefWidth="45.0" sortable="false" text="HR" />
+                                                <TableColumn fx:id="RBIFanCol" editable="false" prefWidth="43.0" sortable="false" text="RBI" />
+                                                <TableColumn fx:id="SBFanCol" editable="false" prefWidth="43.0" sortable="false" text="SB" />
+                                                <TableColumn fx:id="BAFanCol" editable="false" prefWidth="47.0" sortable="false" text="BA" />
                                              </columns>
                                           </TableColumn>
-                                          <TableColumn prefWidth="75.0" text="Contract" />
-                                          <TableColumn prefWidth="75.0" text="Salary" />
+                                          <TableColumn fx:id="contractFanCol" editable="false" prefWidth="75.0" sortable="false" text="Contract" />
+                                          <TableColumn fx:id="salaryFanCol" editable="false" prefWidth="75.0" sortable="false" text="Salary" />
                                        </columns>
                                     </TableView>
                                     <Label text="Taxi Squad" textFill="WHITE">
@@ -286,7 +286,7 @@
                         </ImageView>
                      </graphic>
                 </Tab>
-                <Tab fx:id="playerTab" text="Availible Players">
+                <Tab fx:id="playerTab" text="Available Players">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="687.0" prefWidth="1044.0">
                            <children>

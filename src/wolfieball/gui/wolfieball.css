@@ -26,7 +26,6 @@ RadioButton{
     -fx-font-weight: bold;
 }
 
-
 /*Tabs*/
 .tab-pane{
     -fx-tab-min-height: 30px;

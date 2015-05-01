@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="327.0" prefWidth="353.0" style="-fx-background-color: #1D2C42;" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="wolfieball.gui.dialog.AddNewPlayerDialogFXMLController">
+    <stylesheets>
+        <URL value="@/wolfieball/gui/wolfieball.css" />
+    </stylesheets>
+   <children>
+      <VBox alignment="TOP_CENTER" layoutX="58.0" layoutY="47.0" prefHeight="444.0" prefWidth="385.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label layoutX="58.0" layoutY="47.0" text="Player Details" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Label>
+            <HBox alignment="CENTER" prefHeight="52.0" prefWidth="353.0" spacing="30.0">
+               <children>
+                  <Label text="First Name:" textFill="WHITE" />
+                  <TextField fx:id="firstNameFld" promptText="First Name" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="44.0" prefWidth="353.0" spacing="30.0">
+               <children>
+                  <Label text="Last Name:" textFill="WHITE" />
+                  <TextField fx:id="lastNameFld" promptText="Last Name" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="52.0" prefWidth="353.0" spacing="30.0">
+               <children>
+                  <Label text="Pro Team:  " textFill="WHITE" />
+                  <ComboBox fx:id="proTeamCombo" prefWidth="150.0" promptText="Select a Pro Team" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="15.0">
+               <children>
+                  <CheckBox fx:id="chkC" mnemonicParsing="false" text="C" textFill="WHITE" />
+                  <CheckBox fx:id="chk1B" mnemonicParsing="false" text="1B" textFill="WHITE" />
+                  <CheckBox fx:id="chk2B" mnemonicParsing="false" text="2B" textFill="WHITE" />
+                  <CheckBox fx:id="chk3B" mnemonicParsing="false" text="3B" textFill="WHITE" />
+                  <CheckBox fx:id="chkSS" mnemonicParsing="false" text="SS" textFill="WHITE" />
+                  <CheckBox fx:id="chkOF" mnemonicParsing="false" text="OF" textFill="WHITE" />
+                  <CheckBox fx:id="chkP" mnemonicParsing="false" text="P" textFill="WHITE" />
+               </children>
+            </HBox>
+            <HBox alignment="BOTTOM_RIGHT" prefHeight="53.0" prefWidth="353.0" spacing="30.0">
+               <children>
+                  <Button fx:id="addPlayerBtn" mnemonicParsing="false" text="Add Player" />
+                  <Button fx:id="cancelBtn" mnemonicParsing="false" text="Cancel" />
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <padding>
+                  <Insets bottom="20.0" right="20.0" />
+               </padding>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

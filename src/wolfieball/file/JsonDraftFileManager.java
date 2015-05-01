@@ -8,7 +8,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
@@ -41,14 +43,15 @@ public class JsonDraftFileManager implements PlayerFileManager {
 
         
         
-        //JsonArray mlbJsonArray = makeMLBJsonArray(draft.getMlb());
+        JsonArray teamsMapJsonArray = makeTeamsMapToArray(draft.getTeams());
         
-        //JsonArray teamsJsonArray = makeTeamsJsonArray(draft.getTeams());
+        JsonObject freeAgentsJson = makeFreeAgentsArray(draft.getFreeAgents());
+        
         
         JsonObject draftJsonObject = Json.createObjectBuilder()
                 .add("NAME", draft.getName())
-                //.add("MLB", mlbJsonArray)
-                //.add("TEAMS", teamsJsonArray)
+                .add("TEAMS_MAP", teamsMapJsonArray)
+                .add("FREE_AGENTS", freeAgentsJson)
                 .build();
         
         
@@ -73,8 +76,10 @@ public class JsonDraftFileManager implements PlayerFileManager {
      * @throws IOException
      */
     public void loadExistingDraft(Draft draft, File draftFile) throws IOException {
-        loadFantasyMlb(draft, draftFile);
-        loadFantasyTeams(draft, draftFile);
+        JsonObject allData = loadJSONFile(draftFile.getAbsolutePath());
+        draft.setName(allData.getString("NAME"));
+        draft.setTeams(buildTeamsMap(allData.getJsonArray("TEAMS_MAP")));
+        draft.setFreeAgents(buildFreeAgentsTeam(allData.getJsonObject("FREE_AGENTS")));
     }
     
     
@@ -110,6 +115,7 @@ public class JsonDraftFileManager implements PlayerFileManager {
             bp.setNATION_OF_BIRTH(hitter.getString("NATION_OF_BIRTH"));
             bp.setIsHitter(true);
             bp.setFantasyTeam("Free Agent");
+            bp.setFantasyPosition("");
             draft.getFreeAgents().addPlayer(bp);
             //draft.getMlb().add(bp);
         }
@@ -133,6 +139,7 @@ public class JsonDraftFileManager implements PlayerFileManager {
             bp.setNATION_OF_BIRTH(pitcher.getString("NATION_OF_BIRTH"));
             bp.setIsHitter(false);
             bp.setFantasyTeam("Free Agent");
+            bp.setFantasyPosition("");
             draft.getFreeAgents().addPlayer(bp);
             //draft.getMlb().add(bp);
         }
@@ -148,6 +155,8 @@ public class JsonDraftFileManager implements PlayerFileManager {
     
     private JsonObject makeJsonPlayer(BaseballPlayer player) {
         JsonObject jsonPlayer;
+        String contract = player.getContract();
+        if(contract == null) contract = "";
             jsonPlayer = Json.createObjectBuilder()
                 .add("TEAM", player.getTEAM())
                 .add("LAST_NAME", player.getLAST_NAME())
@@ -169,34 +178,110 @@ public class JsonDraftFileManager implements PlayerFileManager {
                 .add("RBI", player.getRBI() + "")
                 .add("SB", player.getSB() + "")
                     
-                .add("NOTES", player.getNOTES() + "")
-                .add("YEAR_OF_BIRTH", player.getYEAR_OF_BIRTH() + "")
+                .add("NOTES", player.getNOTES())
+                .add("YEAR_OF_BIRTH", player.getYEAR_OF_BIRTH())
                 .add("NATION_OF_BIRTH", player.getNATION_OF_BIRTH())
                 
                 .add("FANTASY_TEAM", player.getFantasyTeam())
+                .add("SALARY", player.getSalary() + "")
+                .add("CONTRACT",  contract  )
+                .add("FANTASY_POSITION", player.getFantasyPosition())
                 .build();
         
 
         return jsonPlayer;
     }
 
-    private JsonArray makeMLBJsonArray(ObservableList<BaseballPlayer> mlb) {
+    private Team loadFantasyTeams(JsonObject teamJson){
+        Team team = new Team("");
+
+        team.setName(teamJson.getString("NAME"));
+        team.setOwner(teamJson.getString("OWNER"));
+        team.setNumberOfPlayer(teamJson.getInt("NUM_PLAYERS"));
+        team.setNumberOfCatchers(teamJson.getInt("NUM_C"));
+        team.setNumberOfPitchers(teamJson.getInt("NUM_P"));
+        team.setNumberOfFirstbasemen(teamJson.getInt("NUM_1B"));
+        team.setNumberOfSecondbasemen(teamJson.getInt("NUM_2B"));
+        team.setNumberOfThirdbasemen(teamJson.getInt("NUM_3B"));
+        team.setNumberOfCornerInfielder(teamJson.getInt("NUM_CI"));
+        team.setNumberOfSS(teamJson.getInt("NUM_SS"));
+        team.setNumberOfMI(teamJson.getInt("NUM_MI"));
+        team.setNumberOfOF(teamJson.getInt("NUM_OF"));
+        team.setNumberOfU(teamJson.getInt("NUM_U"));
+        team.setNumberOfTaxi(teamJson.getInt("NUM_TAXI"));
+        team.setPlayers(buildPlayersArray(teamJson.getJsonArray("PLAYERS")));
+        
+        
+        
+
+        return team;
+    }
+
+    private JsonObject makeFantasyTeam(Team team) {
+        JsonObject jso = Json.createObjectBuilder()
+                .add("NAME", team.getName())
+                .add("OWNER", team.getOwner())
+                .add("NUM_PLAYERS", team.getNumberOfPlayer())
+                .add("NUM_C", team.getNumberOfCatchers())
+                .add("NUM_P", team.getNumberOfPitchers())
+                .add("NUM_1B", team.getNumberOfFirstbasemen())
+                .add("NUM_2B", team.getNumberOfSecondbasemen())
+                .add("NUM_3B", team.getNumberOfThirdbasemen())
+                .add("NUM_CI", team.getNumberOfCornerInfielder())
+                .add("NUM_SS", team.getNumberOfSS())
+                .add("NUM_MI", team.getNumberOfMI())
+                .add("NUM_OF", team.getNumberOfOF())
+                .add("NUM_U", team.getNumberOfU())
+                .add("NUM_TAXI", team.getNumberOfU())
+                .add("PLAYERS", makePlayersArray(team.getPlayers()))
+                .build();
+        return jso;
+    }
+
+    private JsonArray makeTeamsMapToArray(ObservableMap<String, Team> teams) {
         JsonArrayBuilder jsb = Json.createArrayBuilder();
         
-        mlb.stream().forEach((bp) -> {
-            jsb.add(makeJsonPlayer(bp));
+        teams.entrySet().stream().map((team) -> (Team) team.getValue()).forEach((value) -> {
+            jsb.add(makeFantasyTeam(value));
         });
-
+        
         return jsb.build();
     }
 
-    private void loadFantasyMlb(Draft draft, File hitterFile) throws IOException {
-        JsonObject jsonHitters = loadJSONFile(hitterFile.getAbsolutePath());
-        JsonArray mlbJson = jsonHitters.getJsonArray("MLB");
+    private JsonObject makeFreeAgentsArray(Team freeAgents) {
+        return makeFantasyTeam(freeAgents);
+    }
+
+    private JsonArray makePlayersArray(ObservableList<BaseballPlayer> players) {
+        JsonArrayBuilder jsb = Json.createArrayBuilder();
         
-        for(int i = 0; i < mlbJson.size(); i++){
+        players.stream().forEach(player -> {
+            jsb.add(makeJsonPlayer(player));
+        });
+        
+        return jsb.build();
+    }
+
+    private ObservableMap<String, Team> buildTeamsMap(JsonArray jsonArray) {
+        ObservableMap<String, Team> map = FXCollections.observableHashMap();
+        for(int i =0; i < jsonArray.size(); i++){
+            JsonObject get = jsonArray.getJsonObject(i);
+            Team team = loadFantasyTeams(get);
+            map.put(team.getName(), team);
+        }
+        
+        return map;
+    }
+
+    private Team buildFreeAgentsTeam(JsonObject teamJson) {
+        return loadFantasyTeams(teamJson);
+    }
+
+    private ObservableList<BaseballPlayer> buildPlayersArray(JsonArray jsonArray) {
+        ObservableList<BaseballPlayer> list = FXCollections.observableArrayList();
+        for(int i = 0; i < jsonArray.size(); i++){
             BaseballPlayer bp = new BaseballPlayer();
-            JsonObject player = mlbJson.getJsonObject(i);
+            JsonObject player = jsonArray.getJsonObject(i);
             
             bp.setFIRST_NAME(player.getString("FIRST_NAME"));
             bp.setLAST_NAME(player.getString("LAST_NAME"));
@@ -204,20 +289,20 @@ public class JsonDraftFileManager implements PlayerFileManager {
             String positions = player.getString("QP");
             bp.setQP(positions);
             
-            bp.setAB(player.getInt("AB"));
-            bp.setR(player.getInt("R"));
-            bp.setHR(player.getInt("HR"));
-            bp.setRBI(player.getInt("RBI"));
-            bp.setSB(player.getInt("SB"));
-            bp.setH(player.getInt("H"));
+            bp.setAB(Double.parseDouble(player.getString("AB")));
+            bp.setR(Double.parseDouble(player.getString("R")));
+            bp.setHR(Double.parseDouble(player.getString("HR")));
+            bp.setRBI(Double.parseDouble(player.getString("RBI")));
+            bp.setSB(Double.parseDouble(player.getString("SB")));
+            bp.setH(Double.parseDouble(player.getString("H")));
             
             bp.setIP(Double.parseDouble(player.getString("IP")));
-            bp.setER(Integer.parseInt(player.getString("ER")));
-            bp.setW(Integer.parseInt(player.getString("W")));
-            bp.setSV(Integer.parseInt(player.getString("SV")));
-            bp.setH_P(Integer.parseInt(player.getString("H_P")));
-            bp.setBB(Integer.parseInt(player.getString("BB")));
-            bp.setK(Integer.parseInt(player.getString("K")));
+            bp.setER(Double.parseDouble(player.getString("ER")));
+            bp.setW(Double.parseDouble(player.getString("W")));
+            bp.setSV(Double.parseDouble(player.getString("SV")));
+            bp.setH_P(Double.parseDouble(player.getString("H_P")));
+            bp.setBB(Double.parseDouble(player.getString("BB")));
+            bp.setK(Double.parseDouble(player.getString("K")));
             
             
             
@@ -225,43 +310,13 @@ public class JsonDraftFileManager implements PlayerFileManager {
             bp.setYEAR_OF_BIRTH(player.getInt("YEAR_OF_BIRTH"));
             bp.setNATION_OF_BIRTH(player.getString("NATION_OF_BIRTH"));
             bp.setFantasyTeam(player.getString("FANTASY_TEAM"));
+            bp.setSalary(Double.parseDouble(player.getString("SALARY")));
+            bp.setContract(player.getString("CONTRACT"));
+            bp.setFantasyPosition(player.getString("FANTASY_POSITION"));
             
-            //draft.getMlb().add(bp);
-            //BROKENNNNNNNNNNNNNNNNNNNNNNNNNN
+            list.add(bp);
         }
-        
-    
-    }
-
-    private JsonArray makeTeamsJsonArray(ObservableList<Team> teams) {
-        JsonArrayBuilder jsb = Json.createArrayBuilder();
-        
-        teams.stream().forEach((team)-> {
-            jsb.add(makeFantasyTeam(team));
-        });
-        
-        return jsb.build();
-    }
-
-    private void loadFantasyTeams(Draft draft, File draftFile) throws IOException {
-        JsonObject jsonTeams = loadJSONFile(draftFile.getAbsolutePath());
-        JsonArray teamsJson = jsonTeams.getJsonArray("TEAMS");
-        
-        for(int i = 0; i < teamsJson.size(); i++){
-            Team team = new Team("");
-            JsonObject jsoTeam = teamsJson.getJsonObject(i);
-            team.setName(jsoTeam.getString("NAME"));
-            team.setOwner(jsoTeam.getString("OWNER"));
-            //draft.getTeams().add(team);
-        }
-    }
-
-    private JsonObject makeFantasyTeam(Team team) {
-        JsonObject jso = Json.createObjectBuilder()
-                .add("NAME", team.getName())
-                .add("OWNER", team.getOwner())
-                .build();
-        return jso;
+        return list;
     }
 
 }

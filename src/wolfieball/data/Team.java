@@ -32,7 +32,7 @@ public class Team {
     private final IntegerProperty numberOfOF = new SimpleIntegerProperty(); // 5
     private final IntegerProperty numberOfU = new SimpleIntegerProperty(); // 1
     private final IntegerProperty numberOfTaxi = new SimpleIntegerProperty(); // 8
-    private final ObservableList<BaseballPlayer> players = FXCollections.observableArrayList();;
+    private ObservableList<BaseballPlayer> players = FXCollections.observableArrayList();;
 
     public Team(String teamName) {
         name.setValue(teamName);
@@ -42,6 +42,11 @@ public class Team {
     public ObservableList<BaseballPlayer> getPlayers() {
         return players;
     }
+
+    public void setPlayers(ObservableList<BaseballPlayer> players) {
+        this.players = players;
+    }
+    
 
     public void addPlayer(BaseballPlayer player) {
         String fantasyPosition = player.getFantasyPosition();

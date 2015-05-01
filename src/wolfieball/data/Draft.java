@@ -17,11 +17,12 @@ public class Draft {
     //ObservableList<BaseballPlayer> mlb;
     ObservableMap<String, Team> teams;
     String name;
-    private final Team freeAgents = new Team("Free Agent");
+    private Team freeAgents = new Team("Free Agent");
     String FREEAGENTS = "Free Agent";
 
     public Draft(String name) {
         //this.mlb = FXCollections.observableArrayList();
+        freeAgents.setOwner("MLB");
         this.teams = FXCollections.observableHashMap();
         this.teams.put(FREEAGENTS, freeAgents);
         this.name = name;
@@ -64,6 +65,18 @@ public class Draft {
 
     public Team getFreeAgents() {
         return freeAgents;
+    }
+
+    public void setFreeAgents(Team freeAgents) {
+        this.freeAgents = freeAgents;
+    }
+
+    void clear() {
+        setName("DEFAULT NAME");
+        setTeams(FXCollections.observableHashMap());
+        Team newFreeAgents = new Team(FREEAGENTS);
+        newFreeAgents.setOwner("MLB");
+        setFreeAgents(newFreeAgents);
     }
     
     

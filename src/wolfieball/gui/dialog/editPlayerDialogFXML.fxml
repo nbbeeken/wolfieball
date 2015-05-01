@@ -47,10 +47,10 @@
                   </VBox>
                   <VBox spacing="15.0">
                      <children>
-                        <ComboBox fx:id="fantasyTeamCombo" prefWidth="150.0" />
-                        <ComboBox fx:id="positionCombo" prefWidth="150.0" />
-                        <ComboBox fx:id="contractCombo" prefWidth="150.0" />
-                        <TextField fx:id="salaryField" />
+                        <ComboBox fx:id="fantasyTeamCombo" prefWidth="150.0" promptText="Select Fantasy Team" />
+                        <ComboBox fx:id="positionCombo" prefWidth="150.0" promptText="Select Position" />
+                        <ComboBox fx:id="contractCombo" prefWidth="150.0" promptText="Sign Contract" />
+                        <TextField fx:id="salaryField" promptText="Enter Salary" />
                      </children>
                   </VBox>
                </children>

@@ -24,6 +24,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import wolfieball.data.BaseballPlayer;
 import wolfieball.data.DraftManager;
+import wolfieball.data.FantasyTeamPositionComparator;
 import wolfieball.data.Team;
 import wolfieball.gui.MainGUI;
 
@@ -92,14 +93,12 @@ public class EditPlayerDialogFXMLController implements Initializable {
         contractCombo.getSelectionModel().selectFirst();
         
         fantasyTeamCombo.getItems().clear();
-        
 
-        
         DraftManager.getDraftManager().getDraft().getTeams().entrySet().stream().map((team) -> (Team) team.getValue()).forEach((value) -> {
             fantasyTeamCombo.getItems().add(value);
         });
-        
-        fantasyTeamCombo.getSelectionModel().select(DraftManager.getDraftManager().getDraft().getFreeAgents());
+        fantasyTeamCombo.getItems().add(DraftManager.getDraftManager().getDraft().getFreeAgents());
+        fantasyTeamCombo.getSelectionModel().selectLast();
         
         String [] pos = bp.getQP().split("_");
         positionCombo.getItems().addAll(Arrays.asList(pos));
@@ -202,12 +201,13 @@ public class EditPlayerDialogFXMLController implements Initializable {
             
             ObservableMap<String, Team> teams = DraftManager.getDraftManager().getDraft().getTeams();
             System.out.println(bp.getFantasyTeam());
-            Team currentTeam = teams.get(bp.getFantasyTeam());
-            if(currentTeam != null){
+            if(bp.getFantasyTeam().equals("Free Agent")){
+                DraftManager.getDraftManager().getDraft().getFreeAgents().removePlayer(bp);
+            }else{
+                Team currentTeam = teams.get(bp.getFantasyTeam());
                 currentTeam.removePlayer(bp);
             }
-            
-            
+
             bp.setFantasyTeam(selectedTeam.getName());
             
             
@@ -215,24 +215,27 @@ public class EditPlayerDialogFXMLController implements Initializable {
             bp.setContract(contractCombo.getSelectionModel().getSelectedItem());
             bp.setSalary(Double.parseDouble(salaryField.getText()));
             
-            if(fantasyTeamCombo.getValue().getName().equals("Free Agent")){
+            if(selectedTeam.getName().equals("Free Agent")){
                 bp.setContract("");
                 bp.setFantasyPosition("");
                 bp.setSalary(0);
+                DraftManager.getDraftManager().getDraft().getFreeAgents().addPlayer(bp);
+            }else{
+                selectedTeam.addPlayer(bp);
             }
-            
-            selectedTeam.addPlayer(bp);
             
             window.close();
             
             
-            gui.setFantasyTableData(fantasyTeamCombo.getValue().getPlayers());
+            
             
             if(!fantasyTeamCombo.getValue().getName().equals("Free Agent")){
                 gui.setSelectedFantasyTeam(fantasyTeamCombo.getValue());
+                gui.setFantasyTableData(fantasyTeamCombo.getValue().getPlayers());
             }
             
-            gui.getFantasyPlayers().sort();
+            gui.getPlayerTable().setItems(DraftManager.getDraftManager().getDraft().getFreeAgents().getPlayers());
+            gui.getFantasyPlayers().getItems().sort(new FantasyTeamPositionComparator());
         }else{
             errorLbls.setVisible(true);
         }

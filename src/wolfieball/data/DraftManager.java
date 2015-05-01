@@ -8,11 +8,8 @@ package wolfieball.data;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import wolfieball.file.JsonDraftFileManager;
@@ -41,6 +38,8 @@ public class DraftManager {
     public void newDraftRequest(MainGUI gui) {
         try {
             if(gui.getPlayerData().isEmpty()){
+                draft.clear();
+                
                 jsonManager.loadNewDraft(draft);
                 gui.print("New Draft");
             }else{
@@ -67,6 +66,7 @@ public class DraftManager {
         File draftFile = fc.showOpenDialog(window);
         
         try {
+            draft.clear();
             jsonManager.loadExistingDraft(draft, draftFile);
         } catch (IOException ex) {
             Logger.getLogger(DraftManager.class.getName()).log(Level.SEVERE, null, ex);
@@ -80,25 +80,10 @@ public class DraftManager {
      * @param gui
      */
     public void saveAndQuitRequest(MainGUI gui) {
-        gui.print("Save and Quit Draft"); 
-        Alert saveConfirm = new Alert(Alert.AlertType.CONFIRMATION);
-        saveConfirm.setTitle("Save");
-        saveConfirm.setContentText("Save current work before continuing?");
+        gui.print("Save and Quit Draft");
+        saveDialog(gui, true);
+        gui.print("Continued Working");
         
-        Optional<ButtonType> result = saveConfirm.showAndWait();
-        
-        if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
-            try {
-                jsonManager.saveDraft(draft);
-                System.exit(0);
-            } catch (IOException ex) {
-                Logger.getLogger(DraftManager.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-        }
-        if((result.isPresent()) && (result.get() == ButtonType.CANCEL)){
-            gui.print("Continued Working");
-        }
     }
 
     /**
@@ -106,24 +91,14 @@ public class DraftManager {
      * @param gui
      */
     public void saveRequest(MainGUI gui){
-        Alert saveConfirm = new Alert(Alert.AlertType.CONFIRMATION);
-        saveConfirm.setTitle("Save");
-        saveConfirm.setContentText("Save current work before continuing?");
+        gui.print("Save Draft");
         
-        Optional<ButtonType> result = saveConfirm.showAndWait();
+        saveDialog(gui, false);
         
-        if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
-            try {
-                jsonManager.saveDraft(draft);
-            } catch (IOException ex) {
-                Logger.getLogger(DraftManager.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        if((result.isPresent()) && (result.get() == ButtonType.CANCEL)){
-            gui.print("Continued Working");
-        }
-        
-        gui.print("saveRequest");
+    }
+
+    private void saveDialog(MainGUI gui, boolean wantsQuit) {
+        gui.saveDialog(jsonManager, wantsQuit);
     }
 
     /**
@@ -132,22 +107,6 @@ public class DraftManager {
      */
     public void exportRequest(MainGUI gui) {
         gui.print("exportRequest"); 
-    }
-
-    /**
-     *
-     * @param gui
-     */
-    public void addPlayerRequest(MainGUI gui) {
-        gui.print("addPlayerRequest"); 
-    }
-
-    /**
-     *
-     * @param gui
-     */
-    public void removePlayerRequest(MainGUI gui) {
-        gui.print("removePlayerRequest"); 
     }
     
     public static DraftManager getDraftManager(){

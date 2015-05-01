@@ -45,7 +45,7 @@ public class NewFantasyTeamDialogController implements Initializable{
     }
 
     public void initControls(boolean isEditing, Team team, MainGUI gui) {
-        String originalTeam = team.getName();
+        String originalTeam = isEditing?team.getName():"";
         if(isEditing){
             teamOwnerFld.setText(team.getOwner());
             teamNameFld.setText(team.getName());
@@ -53,20 +53,27 @@ public class NewFantasyTeamDialogController implements Initializable{
         teamCreateBtn.setOnAction(e1 -> {
             Team t = new Team("");
             Stage w = (Stage) ((Node) e1.getTarget()).getScene().getWindow();
-            if(isEditing) t = DraftManager.getDraftManager().getDraft().getTeams().get(originalTeam);
+            if(isEditing){
+                t = DraftManager.getDraftManager().getDraft().getTeams().get(originalTeam);
+                DraftManager.getDraftManager().getDraft().getTeams().remove(originalTeam);
+            }
             if (!teamNameFld.getText().trim().isEmpty() && !teamOwnerFld.getText().trim().isEmpty()) {
                 t.setName(teamNameFld.getText());
                 t.setOwner(teamOwnerFld.getText());
                 w.close();
                 DraftManager.getDraftManager().getDraft().getTeams().put(teamNameFld.getText(),t);
                 
+              
+                
                 ObservableList list = FXCollections.observableArrayList();
                 DraftManager.getDraftManager().getDraft().getTeams().entrySet().stream().map((teamIT) -> (Team) teamIT.getValue()).forEach((value) -> {
                     list.add(value);
                 });
                 
+                gui.getfTeamCombo().getItems().clear();
                 gui.getfTeamCombo().setItems(list);
                 gui.getfTeamCombo().getItems().remove(DraftManager.getDraftManager().getDraft().getFreeAgents());
+                gui.getfTeamCombo().getSelectionModel().clearSelection();
                 
             } else {
                 teamErrorLbl.setText("Please Enter Values");

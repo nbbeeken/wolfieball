@@ -12,7 +12,6 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -48,11 +47,13 @@ import wolfieball.data.BaseballPlayer;
 import wolfieball.data.DraftManager;
 import wolfieball.data.FantasyTeamPositionComparator;
 import wolfieball.data.Team;
+import wolfieball.file.JsonDraftFileManager;
 import wolfieball.gui.dialog.AddNewPlayerDialogFXMLController;
 import wolfieball.gui.dialog.ConfirmFXMLController;
 import wolfieball.gui.dialog.ConfirmType;
 import wolfieball.gui.dialog.EditPlayerDialogFXMLController;
 import wolfieball.gui.dialog.NewFantasyTeamDialogController;
+import wolfieball.gui.dialog.SaveDialogController;
 
 /**
  * FXML Controller class
@@ -417,9 +418,21 @@ public class MainGUI implements Initializable {
         });
         //Load Buttons Pair
         headerLoadBtn.setOnAction((ActionEvent e) ->{
-            window = ((Node)e.getTarget()).getScene().getWindow();
+            window = ((Node) e.getTarget()).getScene().getWindow();
             draftManager.loadDraftRequest(this, window);
-            if(clickCount <= 0){
+            
+            playerData = draftManager.getDraft().getFreeAgents().getPlayers();
+            playerTable.setItems(playerData);
+            fantasyPlayers.setItems(FXCollections.observableArrayList());
+            ObservableList list = FXCollections.observableArrayList();
+            DraftManager.getDraftManager().getDraft().getTeams().entrySet().stream().map((teamIT) -> (Team) teamIT.getValue()).forEach((value) -> {
+                list.add(value);
+            });
+            fTeamCombo.setItems(list);
+            fTeamCombo.getItems().remove(draftManager.getDraft().getFreeAgents());
+            fTeamCombo.getSelectionModel().clearSelection();
+            
+            if (clickCount <= 0) {
                 userStartsEditing();
                 clickCount++;
             }
@@ -427,6 +440,20 @@ public class MainGUI implements Initializable {
         loadDraftBtn.setOnAction((ActionEvent e) ->{
             window = ((Node)e.getTarget()).getScene().getWindow();
             draftManager.loadDraftRequest(this, window);
+            
+            
+            playerData = draftManager.getDraft().getFreeAgents().getPlayers();
+            playerTable.setItems(playerData);
+            fantasyPlayers.setItems(FXCollections.observableArrayList());
+            ObservableList list = FXCollections.observableArrayList();
+            DraftManager.getDraftManager().getDraft().getTeams().entrySet().stream().map((teamIT) -> (Team) teamIT.getValue()).forEach((value) -> {
+                list.add(value);
+            });
+            fTeamCombo.setItems(list);
+            fTeamCombo.getItems().remove(draftManager.getDraft().getFreeAgents());
+            fTeamCombo.getSelectionModel().clearSelection();
+            
+            
             if(clickCount <= 0){
                 userStartsEditing();
                 clickCount++;
@@ -434,12 +461,7 @@ public class MainGUI implements Initializable {
         });
         headerSaveBtn.setOnAction(e -> {
             draftManager.saveRequest(this);
-            headerSaveBtn.setDisable(true);
-        });
-        
-        playerData.addListener((ListChangeListener.Change<? extends BaseballPlayer> c) -> {
-                c.next();
-                headerSaveBtn.setDisable(false);
+            
         });
         
         headerExportBtn.setOnAction(e ->{
@@ -483,7 +505,8 @@ public class MainGUI implements Initializable {
 
         
         playerTable.setEditable(true);
-        
+        positionsFanCol.setComparator(new FantasyTeamPositionComparator());
+        positionsCol.setSortType(TableColumn.SortType.ASCENDING);
 
         setUpAvailiblePlayerTableColTypes();
         setUpFantasyTeamTableColTypes();
@@ -806,6 +829,27 @@ public class MainGUI implements Initializable {
             Parent dialogPane = (Parent) fxmlLoader.load();
             AddNewPlayerDialogFXMLController controller = fxmlLoader.getController();
             controller.initControls();
+            Scene sc = new Scene(dialogPane);
+            Stage st = new Stage();
+            st.setScene(sc);
+            st.initModality(Modality.WINDOW_MODAL);
+            st.initOwner(window);
+            st.showAndWait();
+        }catch(IOException ex){
+            Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public Window getWindow() {
+        return window;
+    }
+    
+    public void saveDialog(JsonDraftFileManager jsonManager, boolean wantsQuit){
+        try{
+            FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("dialog/saveDialog.fxml"));
+            Parent dialogPane = (Parent) fxmlLoader.load();
+            SaveDialogController controller = fxmlLoader.getController();
+            controller.initControls(jsonManager, wantsQuit);
             Scene sc = new Scene(dialogPane);
             Stage st = new Stage();
             st.setScene(sc);

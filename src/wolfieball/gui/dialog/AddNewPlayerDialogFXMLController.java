@@ -90,6 +90,7 @@ public class AddNewPlayerDialogFXMLController implements Initializable {
                 newPlayer.setFIRST_NAME(firstNameFld.getText());
                 newPlayer.setLAST_NAME(lastNameFld.getText());
                 newPlayer.setTEAM(proTeamCombo.getValue());
+                newPlayer.setFantasyTeam("Free Agent");
                 String pos = "";
                 for(CheckBox chk : checks){
                     if(chk.isSelected()){

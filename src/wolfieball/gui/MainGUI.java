@@ -50,6 +50,7 @@ import wolfieball.data.FantasyTeamPositionComparator;
 import wolfieball.data.Team;
 import wolfieball.gui.dialog.AddNewPlayerDialogFXMLController;
 import wolfieball.gui.dialog.ConfirmFXMLController;
+import wolfieball.gui.dialog.ConfirmType;
 import wolfieball.gui.dialog.EditPlayerDialogFXMLController;
 import wolfieball.gui.dialog.NewFantasyTeamDialogController;
 
@@ -450,8 +451,9 @@ public class MainGUI implements Initializable {
             addNewPlayerDialog();
         });
         removeBtn.setOnAction(e -> {
-            //Check
-            draftManager.getDraft().getFreeAgents().getPlayers().remove(playerTable.getSelectionModel().getSelectedItem());
+            BaseballPlayer bp = playerTable.getSelectionModel().getSelectedItem();
+            confirmDialog("Are you sure you want to delete "+ bp.getFIRST_NAME() + " " + bp.getLAST_NAME() +"?", ConfirmType.deletePlayer);
+            
         });
         
     }
@@ -674,7 +676,7 @@ public class MainGUI implements Initializable {
         });
         deleteFTeamBtn.setOnAction(e -> {
             Team team = fTeamCombo.getSelectionModel().getSelectedItem();
-            boolean confirmDialog = confirmDialog("Are you sure you want to delete the " + team + " team?");
+            boolean confirmDialog = confirmDialog("Are you sure you want to delete the " + team + " team?", ConfirmType.deleteFTeam);
         });
 
         editFTeamBtn.setOnAction(e -> {
@@ -742,12 +744,12 @@ public class MainGUI implements Initializable {
         
     }
     
-    private boolean confirmDialog(String message){
+    private boolean confirmDialog(String message, ConfirmType cT){
         try{
             FXMLLoader fxmlLoader = new FXMLLoader(this.getClass().getResource("dialog/confirmFXML.fxml"));
             Parent dialogPane = (Parent) fxmlLoader.load();
             ConfirmFXMLController controller = fxmlLoader.getController();
-            boolean userChoice = controller.initControls(message, this);
+            boolean userChoice = controller.initControls(message, this, cT);
             Scene sc = new Scene(dialogPane);
             Stage st = new Stage();
             st.setScene(sc);
@@ -774,6 +776,12 @@ public class MainGUI implements Initializable {
         return taxiSquad;
     }
 
+    public TableView<BaseballPlayer> getPlayerTable() {
+        return playerTable;
+    }
+    
+    
+    
     public ComboBox<Team> getfTeamCombo() {
         return fTeamCombo;
     }

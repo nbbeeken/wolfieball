@@ -15,6 +15,8 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import wolfieball.data.BaseballPlayer;
+import wolfieball.data.DraftManager;
 import wolfieball.gui.MainGUI;
 
 /**
@@ -42,7 +44,7 @@ public class ConfirmFXMLController implements Initializable {
         // TODO
     }    
     
-    public boolean initControls(String message, MainGUI gui){
+    public boolean initControls(String message, MainGUI gui, ConfirmType cT){
         
         
         mssg.setText(message);
@@ -50,7 +52,11 @@ public class ConfirmFXMLController implements Initializable {
         
         yesBtn.setOnAction((ActionEvent e) -> {
             Stage window = (Stage)((Node)e.getTarget()).getScene().getWindow();
-            gui.deleteTeamDialog();
+            if(cT.equals(ConfirmType.deleteFTeam))gui.deleteTeamDialog();
+            if(cT.equals(ConfirmType.deletePlayer)){
+                BaseballPlayer selectedItem = gui.getPlayerTable().getSelectionModel().getSelectedItem();
+                DraftManager.getDraftManager().getDraft().getFreeAgents().getPlayers().remove(selectedItem);
+            }
             gui.refreshTables();
             setUsrInput(true);
             window.close();

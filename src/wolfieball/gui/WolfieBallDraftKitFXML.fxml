@@ -160,7 +160,7 @@
                                                       <Font name="System Bold" size="14.0" />
                                                    </font>
                                                 </Label>
-                                                <TextField fx:id="draftNameField" />
+                                                <TextField fx:id="draftNameField" promptText="Name your Draft" />
                                              </children>
                                           </HBox>
                                           <HBox spacing="15.0">
@@ -203,7 +203,7 @@
                                                       <Insets left="20.0" />
                                                    </padding>
                                                 </Label>
-                                                <ComboBox fx:id="fTeamCombo" prefHeight="25.0" prefWidth="164.0" />
+                                                <ComboBox fx:id="fTeamCombo" prefHeight="25.0" prefWidth="164.0" promptText="Select a Fantasy Team" />
                                              </children>
                                           </HBox>
                                        </children>

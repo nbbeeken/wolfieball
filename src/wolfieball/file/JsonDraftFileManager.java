@@ -19,6 +19,7 @@ import javax.json.JsonReader;
 import javax.json.JsonWriter;
 import wolfieball.data.BaseballPlayer;
 import wolfieball.data.Draft;
+import wolfieball.data.MLBPlayer;
 import wolfieball.data.Team;
 
 /**
@@ -27,8 +28,10 @@ import wolfieball.data.Team;
  */
 public class JsonDraftFileManager implements PlayerFileManager {
 
-    private final String HITTER_FILE = "src\\wolfieball\\data\\hitters.json";
-    private final String PITCHER_FILE = "src\\wolfieball\\data\\pitchers.json";
+    private static final String HITTER_FILE = "src\\wolfieball\\data\\hitters.json";
+    private static final String PITCHER_FILE = "src\\wolfieball\\data\\pitchers.json";
+    
+    
 
     /**
      * Saves Draft to JSON
@@ -66,7 +69,7 @@ public class JsonDraftFileManager implements PlayerFileManager {
      * @throws IOException
      */
     public void loadNewDraft(Draft draft) throws FileNotFoundException, IOException {
-        loadMLB(draft, HITTER_FILE, PITCHER_FILE);
+        loadAllDefaultPlayers(draft, HITTER_FILE, PITCHER_FILE);
     }
 
         /**
@@ -84,7 +87,7 @@ public class JsonDraftFileManager implements PlayerFileManager {
     
     
     
-    private void loadMLB(Draft draft, String hitterFile, String pitcherFile) throws IOException, NumberFormatException {
+    private void loadAllDefaultPlayers(Draft draft, String hitterFile, String pitcherFile) throws IOException, NumberFormatException {
         JsonObject jsonHitters = loadJSONFile(hitterFile);
         JsonArray hitters = jsonHitters.getJsonArray("Hitters");
         JsonObject jsonPitchers = loadJSONFile(pitcherFile);
@@ -145,6 +148,45 @@ public class JsonDraftFileManager implements PlayerFileManager {
         }
     }
 
+    public static ObservableList<MLBPlayer> loadMLB() throws IOException{
+        ObservableList<MLBPlayer> mlb = FXCollections.observableArrayList();
+        JsonObject jsonHitters = loadJSONFile(HITTER_FILE);
+        JsonArray hitters = jsonHitters.getJsonArray("Hitters");
+        JsonObject jsonPitchers = loadJSONFile(PITCHER_FILE);
+        JsonArray pitchers = jsonPitchers.getJsonArray("Pitchers");
+        
+        for(int i = 0; i < hitters.size(); i++){
+            MLBPlayer bp = new MLBPlayer();
+            JsonObject hitter = hitters.getJsonObject(i);
+            bp.setFirstName(hitter.getString("FIRST_NAME"));
+            bp.setLastName(hitter.getString("LAST_NAME"));
+            bp.setProTeam(hitter.getString("TEAM"));
+            String positions = hitter.getString("QP");
+            
+            if(positions.contains("SS") || positions.contains("2B") && !positions.contains("MI"))
+                positions += "_MI";
+            if(positions.contains("1B") || positions.contains("3B") && !positions.contains("CI"))
+                positions += "_CI";
+            
+            bp.setPositions(positions+(positions.contains("U")?"":"_U"));
+            
+            mlb.add(bp);
+        }
+        
+        for(int i = 0; i < pitchers.size(); i++){
+            MLBPlayer bp = new MLBPlayer();
+            JsonObject pitcher = pitchers.getJsonObject(i);
+             bp.setFirstName(pitcher.getString("FIRST_NAME"));
+            bp.setLastName(pitcher.getString("LAST_NAME"));
+            bp.setProTeam(pitcher.getString("TEAM"));
+            bp.setPositions("P");
+
+            mlb.add(bp);
+        }
+        
+        return mlb;
+    }
+    
     private static JsonObject loadJSONFile(String jsonFilePath) throws IOException {
         JsonObject json;
         try (InputStream is = new FileInputStream(jsonFilePath); JsonReader jsonReader = Json.createReader(is)) {

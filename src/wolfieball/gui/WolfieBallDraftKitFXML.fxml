@@ -11,7 +11,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" fx:id="root" prefHeight="820.0" prefWidth="1245.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wolfieball.gui.MainGUI">
+<AnchorPane id="AnchorPane" fx:id="root" maxHeight="820.0" maxWidth="1245.0" minHeight="820.0" minWidth="1245.0" prefHeight="820.0" prefWidth="1245.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wolfieball.gui.MainGUI">
    <children>
       <VBox layoutX="65.0" layoutY="350.0" prefWidth="1359.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -463,7 +463,38 @@
                 </Tab>
                   <Tab fx:id="standingsTab" text="Fantasy Standings">
                     <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <VBox layoutX="153.0" layoutY="84.0" prefHeight="682.0" prefWidth="1245.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <TableView fx:id="standingsTable" layoutX="143.0" layoutY="74.0" prefHeight="641.0" prefWidth="1215.0" AnchorPane.bottomAnchor="74.0" AnchorPane.leftAnchor="143.0" AnchorPane.rightAnchor="143.0" AnchorPane.topAnchor="74.0">
+                                      <columns>
+                                        <TableColumn prefWidth="150.0" text="Team Name" />
+                                        <TableColumn prefWidth="150.0" text="Players Needed" />
+                                          <TableColumn minWidth="7.0" prefWidth="150.0" text="\$ Left" />
+                                          <TableColumn prefWidth="150.0" text="\$ PerPlayer" />
+                                          <TableColumn prefWidth="40.0" text="R" />
+                                          <TableColumn prefWidth="40.0" text="HR" />
+                                          <TableColumn prefWidth="40.0" text="RBI" />
+                                          <TableColumn prefWidth="40.0" text="SB" />
+                                          <TableColumn prefWidth="40.0" text="BA" />
+                                          <TableColumn prefWidth="40.0" text="W" />
+                                          <TableColumn prefWidth="40.0" text="SV" />
+                                          <TableColumn prefWidth="40.0" text="K" />
+                                          <TableColumn prefWidth="40.0" text="ERA" />
+                                          <TableColumn prefWidth="40.0" text="WHIP" />
+                                          <TableColumn prefWidth="150.0" text="Total Points" />
+                                      </columns>
+                                    </TableView>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                              </VBox>
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding></AnchorPane>
                     </content>
                      <graphic>
                         <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
@@ -475,7 +506,69 @@
                   </Tab>
                   <Tab fx:id="draftTab" text="Draft Summary">
                     <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <VBox fillWidth="false" layoutX="368.0" layoutY="186.0" prefHeight="682.0" prefWidth="1245.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <HBox prefHeight="36.0" prefWidth="1225.0" spacing="10.0">
+                                       <children>
+                                          <Button fx:id="bestPlayerBtn" mnemonicParsing="false" text="Draft Best Player">
+                                             <graphic>
+                                                <ImageView fitHeight="20.0" fitWidth="20.0">
+                                                   <image>
+                                                      <Image url="@../../../images/star.png" />
+                                                   </image>
+                                                </ImageView>
+                                             </graphic></Button>
+                                          <Button fx:id="startAutoDraftBtn" mnemonicParsing="false" text="Start Auto Draft">
+                                             <graphic>
+                                                <ImageView fitHeight="20.0" fitWidth="20.0">
+                                                   <image>
+                                                      <Image url="@../../../images/play.png" />
+                                                   </image>
+                                                </ImageView>
+                                             </graphic></Button>
+                                          <Button fx:id="stopAutoDraftBtn" mnemonicParsing="false" text="Pause Auto Draft">
+                                             <graphic>
+                                                <ImageView fitHeight="20.0" fitWidth="20.0">
+                                                   <image>
+                                                      <Image url="@../../../images/pause.png" />
+                                                   </image>
+                                                </ImageView>
+                                             </graphic></Button>
+                                       </children>
+                                       <padding>
+                                          <Insets top="5.0" />
+                                       </padding>
+                                    </HBox>
+                                    <HBox alignment="CENTER_LEFT" prefHeight="603.0" prefWidth="1205.0" spacing="100.0">
+                                       <children>
+                                          <TableView fx:id="draftPickTable" maxWidth="-Infinity" prefHeight="603.0" prefWidth="740.0">
+                                             <columnResizePolicy>
+                                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                             </columnResizePolicy>
+                                             <columns>
+                                                <TableColumn fx:id="pickNumCol" prefWidth="55.0" text="Pick #" />
+                                                <TableColumn fx:id="firstNameDraftSumCol" prefWidth="183.0" text="First Name" />
+                                                <TableColumn fx:id="lastNameDraftSumCol" prefWidth="152.0" text="Last Name" />
+                                                <TableColumn fx:id="fantasyTeamCol" prefWidth="235.0" text="Fantasy Team" />
+                                                <TableColumn fx:id="contractDraftSumCol" prefWidth="75.0" text="Contract" />
+                                                <TableColumn fx:id="salaryDraftSumCol" prefWidth="75.0" text="Salary" />
+                                             </columns>
+                                          </TableView>
+                                          <ImageView fitHeight="295.0" fitWidth="393.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../../images/baseball.png" />
+                                             </image>
+                                          </ImageView>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+                                 </padding>
+                              </VBox>
+                           </children></AnchorPane>
                     </content>
                      <graphic>
                         <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
@@ -487,7 +580,36 @@
                   </Tab>
                   <Tab fx:id="mlbTeamsTab" text="MLB Teams">
                     <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <VBox layoutX="233.0" layoutY="217.0" prefHeight="682.0" prefWidth="1245.0" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <ComboBox fx:id="mlbCombo" prefWidth="150.0" />
+                                    <HBox alignment="CENTER_LEFT" spacing="150.0">
+                                       <children>
+                                          <TableView fx:id="mlbPlayersTable" maxWidth="-Infinity" prefHeight="603.0" prefWidth="604.0">
+                                            <columns>
+                                              <TableColumn fx:id="lastNameMlbCol" prefWidth="152.0" text="Last Name" />
+                                              <TableColumn fx:id="firstNameMlbCol" prefWidth="130.0" text="First Name" />
+                                                <TableColumn fx:id="positionsMlbCol" prefWidth="235.0" text="Positions" />
+                                            </columns>
+                                             <columnResizePolicy>
+                                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                             </columnResizePolicy>
+                                          </TableView>
+                                          <ImageView fitHeight="295.0" fitWidth="393.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../../images/bats.png" />
+                                             </image>
+                                          </ImageView>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                 </padding>
+                              </VBox>
+                           </children></AnchorPane>
                     </content>
                      <graphic>
                         <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">

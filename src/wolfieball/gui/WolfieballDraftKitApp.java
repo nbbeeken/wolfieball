@@ -33,6 +33,9 @@ public class WolfieballDraftKitApp extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
+        
+        
+        
         host = getHostServices();
         Parent root = FXMLLoader.load(getClass().getResource("WolfieBallDraftKitFXML.fxml"));
         Scene scene = new Scene(root);

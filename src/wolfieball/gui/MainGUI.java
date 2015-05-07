@@ -11,11 +11,13 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -46,6 +48,7 @@ import javafx.stage.Window;
 import wolfieball.data.BaseballPlayer;
 import wolfieball.data.DraftManager;
 import wolfieball.data.FantasyTeamPositionComparator;
+import wolfieball.data.MLBPlayer;
 import wolfieball.data.Team;
 import wolfieball.file.JsonDraftFileManager;
 import wolfieball.gui.dialog.AddNewPlayerDialogFXMLController;
@@ -239,7 +242,48 @@ public class MainGUI implements Initializable {
     @FXML
     private TableView<BaseballPlayer> taxiSquad;
     
+    /* Fantasy Standings Tab */
     
+    @FXML
+    private TableView<Team> standingsTable;
+    
+    
+    
+    /* Draft Summary Tab */
+    
+    @FXML
+    private Button bestPlayerBtn;
+    @FXML
+    private Button startAutoDraftBtn;
+    @FXML
+    private Button stopAutoDraftBtn;
+    @FXML
+    private TableView draftPickTable;
+    @FXML
+    private TableColumn pickNumCol;
+    @FXML
+    private TableColumn firstNameDraftSumCol;
+    @FXML
+    private TableColumn lastNameDraftSumCol;
+    @FXML
+    private TableColumn fantasyTeamCol;
+    @FXML
+    private TableColumn contractDraftSumCol;
+    @FXML
+    private TableColumn salaryDraftSumCol;
+    
+    /* MLB Teams Tab */
+    
+    @FXML
+    private ComboBox<String> mlbCombo;
+    @FXML
+    private TableView<MLBPlayer> mlbPlayersTable;
+    @FXML
+    private TableColumn lastNameMlbCol;
+    @FXML
+    private TableColumn firstNameMlbCol;
+    @FXML
+    private TableColumn positionsMlbCol;
     
     
     //My Fields
@@ -256,12 +300,6 @@ public class MainGUI implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.draftManager = DraftManager.getDraftManager();
-        
-//        splash.fitWidthProperty().bind(startRoot.widthProperty());
-//        splash.fitHeightProperty().bind(startRoot.heightProperty());
-//        splash.setFitWidth(1354);
-//        splash.setFitHeight(820);
-        
         playersTabInit();
         fantasyTabInit();
         standingTabInit();
@@ -292,6 +330,33 @@ public class MainGUI implements Initializable {
     }     
 
     private void standingTabInit(){
+        standingsTab.setOnSelectionChanged((Event e) -> {
+            ObservableList list = FXCollections.observableArrayList();
+            DraftManager.getDraftManager().getDraft().getTeams().entrySet().stream().map((teamIT) -> (Team) teamIT.getValue()).forEach((value) -> {
+                value.recalculate();
+                list.add(value);
+            });
+            standingsTable.setItems(list);
+        });
+        
+        ObservableList<TableColumn<Team, ?>> columns = standingsTable.getColumns();
+        columns.get(0).setCellValueFactory(new PropertyValueFactory("name"));
+        columns.get(1).setCellValueFactory(new PropertyValueFactory("neededPlayers"));
+        columns.get(2).setCellValueFactory(new PropertyValueFactory("money"));
+        columns.get(3).setCellValueFactory(new PropertyValueFactory("moneyPerPlayer"));
+        columns.get(4).setCellValueFactory(new PropertyValueFactory("R"));
+        columns.get(5).setCellValueFactory(new PropertyValueFactory("HR"));
+        columns.get(6).setCellValueFactory(new PropertyValueFactory("RBI"));
+        columns.get(7).setCellValueFactory(new PropertyValueFactory("SB"));
+        columns.get(8).setCellValueFactory(new PropertyValueFactory("BA"));
+        columns.get(9).setCellValueFactory(new PropertyValueFactory("W"));
+        columns.get(10).setCellValueFactory(new PropertyValueFactory("SV"));
+        columns.get(11).setCellValueFactory(new PropertyValueFactory("K"));
+        columns.get(12).setCellValueFactory(new PropertyValueFactory("ERA"));
+        columns.get(13).setCellValueFactory(new PropertyValueFactory("WHIP"));
+        columns.get(14).setCellValueFactory(new PropertyValueFactory("totalPoints"));
+        
+        
         
     }
     
@@ -300,7 +365,32 @@ public class MainGUI implements Initializable {
     }
     
     private void mlbTabInit(){
-        
+        try {
+            mlbCombo.getItems().addAll( "ATL",  "AZ", "CHC", "CIN",
+                    "COL", "LAD", "MIA", "MIL",
+                    "NYM", "PHI", "PIT", "SD" ,
+                    "SF" , "STL", "WAS");
+            final ObservableList<MLBPlayer> ob = JsonDraftFileManager.loadMLB();
+            
+            
+            lastNameMlbCol.setCellValueFactory(new PropertyValueFactory("lastName"));
+            firstNameMlbCol.setCellValueFactory(new PropertyValueFactory("firstName"));
+            positionsMlbCol.setCellValueFactory(new PropertyValueFactory("positions"));
+            
+            mlbCombo.valueProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+                mlbPlayersTable.setItems(ob);
+                FilteredList<MLBPlayer> filteredData = new FilteredList<>(mlbPlayersTable.getItems(), p -> true);
+                filteredData.setPredicate((MLBPlayer player) -> {
+                    return player.getProTeam().equals(newValue);
+                });
+                SortedList<MLBPlayer> sortedData = new SortedList<>(filteredData);
+                sortedData.comparatorProperty().bind(mlbPlayersTable.comparatorProperty());
+                mlbPlayersTable.setItems(filteredData);
+            });
+            
+        } catch (IOException ex) {
+            Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     
@@ -538,7 +628,7 @@ public class MainGUI implements Initializable {
             setFilterPredicate(filteredData, newValue);
             SortedList<BaseballPlayer> sortedData = new SortedList<>(filteredData);
             sortedData.comparatorProperty().bind(playerTable.comparatorProperty());
-            playerTable.setItems(filteredData);
+            playerTable.setItems(sortedData);
         });
         fTeamCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue != null){
@@ -581,7 +671,7 @@ public class MainGUI implements Initializable {
         });
         SortedList<BaseballPlayer> sortedData = new SortedList<>(filteredData);
         sortedData.comparatorProperty().bind(playerTable.comparatorProperty());
-        playerTable.setItems(filteredData);
+        playerTable.setItems(sortedData);
     }
     
     private void setFilterPredicate(FilteredList<BaseballPlayer> filteredData, Toggle newValue) {

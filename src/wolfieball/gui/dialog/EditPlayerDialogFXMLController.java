@@ -24,7 +24,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import wolfieball.data.BaseballPlayer;
 import wolfieball.data.DraftManager;
-import wolfieball.data.FantasyTeamPositionComparator;
 import wolfieball.data.Team;
 import wolfieball.gui.MainGUI;
 
@@ -98,17 +97,37 @@ public class EditPlayerDialogFXMLController implements Initializable {
             fantasyTeamCombo.getItems().add(value);
         });
         fantasyTeamCombo.getItems().add(DraftManager.getDraftManager().getDraft().getFreeAgents());
-        fantasyTeamCombo.getSelectionModel().selectLast();
+        fantasyTeamCombo.getSelectionModel().select(DraftManager.getDraftManager().getDraft().getTeams().get(bp.getFantasyTeam()));
+        if(fantasyTeamCombo.getSelectionModel().isEmpty()){
+            fantasyTeamCombo.getSelectionModel().selectLast();
+        }
         
         String [] pos = bp.getQP().split("_");
         positionCombo.getItems().addAll(Arrays.asList(pos));
         
         
-        
+        if(fantasyTeamCombo.getValue().getName().equals("Free Agent")){
+                positionCombo.setDisable(true);
+                contractCombo.setDisable(true);
+                salaryField.setDisable(true);
+            }else{
+                positionCombo.setDisable(false);
+                contractCombo.setDisable(false);
+                salaryField.setDisable(false);
+        }
         
         
         fantasyTeamCombo.setOnAction(e -> {
             Team selectTeam = fantasyTeamCombo.getValue();
+            if(selectTeam.getName().equals("Free Agent")){
+                positionCombo.setDisable(true);
+                contractCombo.setDisable(true);
+                salaryField.setDisable(true);
+            }else{
+                positionCombo.setDisable(false);
+                contractCombo.setDisable(false);
+                salaryField.setDisable(false);
+            }
             if (!selectTeam.equals(DraftManager.getDraftManager().getDraft().getFreeAgents())) {
                 if (selectTeam.getNumberOfCatchers() == 2 && positionCombo.getItems().contains("C")) {
                     positionCombo.getItems().remove("C");
@@ -196,11 +215,14 @@ public class EditPlayerDialogFXMLController implements Initializable {
     private void okAction(ActionEvent e, BaseballPlayer bp, MainGUI gui) throws NumberFormatException {
         Stage window = (Stage)((Node)e.getTarget()).getScene().getWindow();
         
-        if(!fantasyTeamCombo.getSelectionModel().isEmpty() && !positionCombo.getSelectionModel().isEmpty() && !salaryField.getText().isEmpty()){
+        
+        
+        if(!fantasyTeamCombo.getSelectionModel().isEmpty() && !positionCombo.getSelectionModel().isEmpty() && !salaryField.getText().isEmpty() || salaryField.disabledProperty().get()){
             Team selectedTeam = fantasyTeamCombo.getSelectionModel().getSelectedItem();
+            DraftManager.getDraftManager().getDraft().getDraftOrder().remove(bp);
             
             ObservableMap<String, Team> teams = DraftManager.getDraftManager().getDraft().getTeams();
-            System.out.println(bp.getFantasyTeam());
+            gui.print(bp.getFantasyTeam());
             if(bp.getFantasyTeam().equals("Free Agent")){
                 DraftManager.getDraftManager().getDraft().getFreeAgents().removePlayer(bp);
             }else{
@@ -213,7 +235,9 @@ public class EditPlayerDialogFXMLController implements Initializable {
             
             bp.setFantasyPosition(positionCombo.getSelectionModel().getSelectedItem());
             bp.setContract(contractCombo.getSelectionModel().getSelectedItem());
-            bp.setSalary(Double.parseDouble(salaryField.getText()));
+            if(!salaryField.getText().isEmpty())bp.setSalary(Double.parseDouble(salaryField.getText()));
+            
+            if(bp.getContract().equals("S2") && !bp.getFantasyTeam().equals("Free Agent"))DraftManager.getDraftManager().getDraft().getDraftOrder().add(bp);
             
             if(selectedTeam.getName().equals("Free Agent")){
                 bp.setContract("");
@@ -235,7 +259,7 @@ public class EditPlayerDialogFXMLController implements Initializable {
             }
             
             gui.getPlayerTable().setItems(DraftManager.getDraftManager().getDraft().getFreeAgents().getPlayers());
-            gui.getFantasyPlayers().getItems().sort(new FantasyTeamPositionComparator());
+            //gui.getFantasyPlayers().getItems().sort(new FantasyTeamPositionComparator());
         }else{
             errorLbls.setVisible(true);
         }

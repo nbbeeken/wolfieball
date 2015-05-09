@@ -7,7 +7,9 @@
 package wolfieball.data;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import javafx.concurrent.Task;
 
 /**
  *
@@ -19,6 +21,10 @@ public class Draft {
     String name;
     private Team freeAgents = new Team("Free Agent");
     String FREEAGENTS = "Free Agent";
+    
+    private final ObservableList<BaseballPlayer> draftOrder = FXCollections.observableArrayList();
+    private final ObservableList<BaseballPlayer> allHitters = FXCollections.observableArrayList();
+    private final ObservableList<BaseballPlayer> allPitchers = FXCollections.observableArrayList();
 
     public Draft(String name) {
         //this.mlb = FXCollections.observableArrayList();
@@ -71,6 +77,20 @@ public class Draft {
         this.freeAgents = freeAgents;
     }
 
+    public ObservableList<BaseballPlayer> getDraftOrder() {
+        return draftOrder;
+    }
+
+    public ObservableList<BaseballPlayer> getAllHitters() {
+        return allHitters;
+    }
+
+    public ObservableList<BaseballPlayer> getAllPitchers() {
+        return allPitchers;
+    }
+    
+    
+
     void clear() {
         setName("DEFAULT NAME");
         setTeams(FXCollections.observableHashMap());
@@ -79,7 +99,48 @@ public class Draft {
         setFreeAgents(newFreeAgents);
     }
     
+    public void autoDraft(){
+       Task<Void> task = new Task<Void>() {
+
+           @Override
+           protected Void call() throws Exception {
+               freeAgents.getPlayers().sort(new RankedComparator());
+               ObservableList<Team> teamsList = mapToList();
+               for( Team t : teamsList ){
+                   if (t.getNumberOfPlayer() < 23) {
+                       if (t.getNeededPlayers() > 8) {
+                           if (t.getNumberOfPitchers() < 9) {
+                               
+                           }else{
+                               
+                           }
+                       }
+                       if (t.getNeededPlayers() >= 8 && t.getNeededPlayers() > 0) {
+
+                       }
+                   }
+               }
+               
+               return null;
+           }
+       };
+
+          
+        
+
+        Thread thread = new Thread(task);
+        thread.start();
     
     
+    }
+    
+    private ObservableList<Team> mapToList(){
+        ObservableList<Team> list = FXCollections.observableArrayList();
+        teams.entrySet().stream().map((team) -> (Team) team.getValue()).forEach((value) -> {
+            list.add(value);
+        });
+        list.sort(new TeamComparator());
+        return list;
+    }
     
 }

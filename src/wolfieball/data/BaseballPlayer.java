@@ -6,6 +6,8 @@
  */
 package wolfieball.data;
 
+import javafx.beans.binding.NumberBinding;
+import javafx.beans.binding.When;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
@@ -21,6 +23,8 @@ import javafx.beans.property.StringProperty;
  */
 public class BaseballPlayer{
     private final BooleanProperty isHitter = new SimpleBooleanProperty();
+    IntegerProperty nine = new SimpleIntegerProperty(9);
+    IntegerProperty xero = new SimpleIntegerProperty(Integer.MAX_VALUE);
 
     public boolean isIsHitter() {
         return isHitter.get();
@@ -43,6 +47,13 @@ public class BaseballPlayer{
     private final DoubleProperty estimatedValue = new SimpleDoubleProperty();
 
     public BaseballPlayer() {
+        
+        
+        
+        
+        
+        
+        
         
     }
     
@@ -144,19 +155,20 @@ public class BaseballPlayer{
     private final DoubleProperty HR = new SimpleDoubleProperty();
     private final DoubleProperty RBI = new SimpleDoubleProperty();
     private final DoubleProperty SB = new SimpleDoubleProperty();
-    //Calculated
-    private final DoubleProperty BA = new SimpleDoubleProperty();
+    //Calculated //BA.bind(H.divide(AB));
+    private final NumberBinding BA = new When(AB.isEqualTo(0)).then(H.divide(xero)).otherwise(H.divide(AB));
 
     public double getBA() {
-        return BA.get();
+        return 0;
+        //return BA.get();
     }
 
     public void setBA(double value) {
-        BA.set(value);
+        //BA.set(value);
     }
 
     public DoubleProperty BAProperty() {
-        return BA;
+        return new SimpleDoubleProperty(BA.getValue().doubleValue());
     }
     
 
@@ -251,6 +263,9 @@ public class BaseballPlayer{
     
     //Pitcher
     
+//    ERA.bind(nine.multiply(ER.divide(IP)));
+//        WHIP.bind();
+    
     private final DoubleProperty IP = new SimpleDoubleProperty();
     private final DoubleProperty ER = new SimpleDoubleProperty();
     private final DoubleProperty W = new SimpleDoubleProperty();
@@ -259,33 +274,35 @@ public class BaseballPlayer{
     private final DoubleProperty BB = new SimpleDoubleProperty();
     private final DoubleProperty K = new SimpleDoubleProperty();
     //Calculated
-    private final DoubleProperty ERA = new SimpleDoubleProperty();
-    private final DoubleProperty WHIP = new SimpleDoubleProperty();
+    private final NumberBinding ERA = new When(IP.isEqualTo(0)).then(ER.divide(xero)).otherwise(ER.divide(IP));
+    private final NumberBinding WHIP = new When(BB.add(H).isEqualTo(0)).then(IP.divide(xero)).otherwise(IP.divide(BB.add(H)));
     
 
     public double getWHIP() {
-        return WHIP.get();
+        return 0;
+        //return WHIP.get();
     }
 
     public void setWHIP(double value) {
-        WHIP.set(value);
+        //WHIP.set(value);
     }
 
     public DoubleProperty WHIPProperty() {
-        return WHIP;
+        return new SimpleDoubleProperty(WHIP.getValue().doubleValue());
     }
     
     
     public double getERA() {
-        return ERA.get();
+        return 0;
+        //return ERA.get();
     }
 
     public void setERA(double value) {
-        ERA.set(value);
+        //ERA.set(value);
     }
 
     public DoubleProperty ERAProperty() {
-        return ERA;
+        return new SimpleDoubleProperty(ERA.getValue().doubleValue());
     }
     
     
@@ -433,6 +450,11 @@ public class BaseballPlayer{
 
     public StringProperty fantasyTeamProperty() {
         return fantasyTeam;
+    }
+
+    public double getRank() {
+        double val =  (AB.get() + BB.get() + ER.get() + H.get() + HR.get() + H_P.get() + IP.get()  + K.get() + R.get()  + RBI.get() + SB.get()  + SV.get() + W.get());
+        return val;
     }
  
     

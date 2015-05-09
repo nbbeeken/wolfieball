@@ -68,6 +68,7 @@ public class DraftManager {
         try {
             draft.clear();
             jsonManager.loadExistingDraft(draft, draftFile);
+            gui.setDraftNameFld(draft.name);
         } catch (IOException ex) {
             Logger.getLogger(DraftManager.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -111,5 +112,9 @@ public class DraftManager {
     
     public static DraftManager getDraftManager(){
         return dm;
+    }
+
+    public void addPlayerToNextTeam(BaseballPlayer bestPlayer) {
+        throw new UnsupportedOperationException("Not supported yet."); 
     }
 }

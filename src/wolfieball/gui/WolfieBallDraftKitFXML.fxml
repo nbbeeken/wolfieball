@@ -244,31 +244,31 @@
                                     </Label>
                                     <TableView fx:id="taxiSquad" prefHeight="219.0" prefWidth="1204.0">
                                        <columns>
-                                          <TableColumn fx:id="positionsCol2" editable="false" prefWidth="78.0" text="Position" />
-                                          <TableColumn fx:id="lastNameCol2" editable="false" prefWidth="128.0" text="Last Name" />
-                                          <TableColumn fx:id="firstNameCol2" editable="false" prefWidth="118.0" text="First Name" />
-                                          <TableColumn fx:id="teamCol2" editable="false" prefWidth="93.0" text="Pro Team" />
-                                          <TableColumn fx:id="yearOfBirthCol2" editable="false" prefWidth="71.0" text="Born" />
+                                          <TableColumn fx:id="positionsTaxCol" editable="false" prefWidth="78.0" text="Position" />
+                                          <TableColumn fx:id="lastNameTaxCol" editable="false" prefWidth="128.0" text="Last Name" />
+                                          <TableColumn fx:id="firstNameTaxCol" editable="false" prefWidth="118.0" text="First Name" />
+                                          <TableColumn fx:id="teamTaxCol" editable="false" prefWidth="93.0" text="Pro Team" />
+                                          <TableColumn fx:id="yearOfBirthTaxCol" editable="false" prefWidth="71.0" text="Born" />
                                           <TableColumn fx:id="pitcherStatCol2" editable="false" prefWidth="274.0" text="Pitcher Stats">
                                              <columns>
-                                                <TableColumn fx:id="WCol2" editable="false" prefWidth="47.0" text="W" />
-                                                <TableColumn fx:id="SVCol2" editable="false" prefWidth="51.0" text="SV" />
-                                                <TableColumn fx:id="KCol2" editable="false" prefWidth="53.0" text="K" />
-                                                <TableColumn fx:id="ERACol2" editable="false" prefWidth="55.0" text="ERA" />
-                                                <TableColumn fx:id="WHIPCol2" editable="false" prefWidth="68.0" text="WHIP" />
+                                                <TableColumn fx:id="WTaxCol" editable="false" prefWidth="47.0" text="W" />
+                                                <TableColumn fx:id="SVTaxCol" editable="false" prefWidth="51.0" text="SV" />
+                                                <TableColumn fx:id="KTaxCol" editable="false" prefWidth="53.0" text="K" />
+                                                <TableColumn fx:id="ERATaxCol" editable="false" prefWidth="55.0" text="ERA" />
+                                                <TableColumn fx:id="WHIPTaxCol" editable="false" prefWidth="68.0" text="WHIP" />
                                              </columns>
                                           </TableColumn>
                                           <TableColumn fx:id="hitterStatCol2" editable="false" prefWidth="217.0" text="Hitter Stats">
                                              <columns>
-                                                <TableColumn fx:id="RCol2" editable="false" prefWidth="39.0" text="R" />
-                                                <TableColumn fx:id="HRCol2" editable="false" prefWidth="45.0" text="HR" />
-                                                <TableColumn fx:id="RBICol2" editable="false" prefWidth="43.0" text="RBI" />
-                                                <TableColumn fx:id="SBCol2" editable="false" prefWidth="43.0" text="SB" />
-                                                <TableColumn fx:id="BACol2" editable="false" prefWidth="47.0" text="BA" />
+                                                <TableColumn fx:id="RTaxCol" editable="false" prefWidth="39.0" text="R" />
+                                                <TableColumn fx:id="HRTaxCol" editable="false" prefWidth="45.0" text="HR" />
+                                                <TableColumn fx:id="RBITaxCol" editable="false" prefWidth="43.0" text="RBI" />
+                                                <TableColumn fx:id="SBTaxCol" editable="false" prefWidth="43.0" text="SB" />
+                                                <TableColumn fx:id="BATaxCol" editable="false" prefWidth="47.0" text="BA" />
                                              </columns>
                                           </TableColumn>
-                                          <TableColumn prefWidth="89.0" text="Contract" />
-                                          <TableColumn prefWidth="117.0" text="Salary" />
+                                          <TableColumn fx:id="contractTaxCol" prefWidth="89.0" text="Contract" />
+                                          <TableColumn fx:id="salaryTaxCol" prefWidth="117.0" text="Salary" />
                                        </columns>
                                     </TableView>
                                  </children>
@@ -469,21 +469,21 @@
                                  <children>
                                     <TableView fx:id="standingsTable" layoutX="143.0" layoutY="74.0" prefHeight="641.0" prefWidth="1215.0" AnchorPane.bottomAnchor="74.0" AnchorPane.leftAnchor="143.0" AnchorPane.rightAnchor="143.0" AnchorPane.topAnchor="74.0">
                                       <columns>
-                                        <TableColumn prefWidth="150.0" text="Team Name" />
-                                        <TableColumn prefWidth="150.0" text="Players Needed" />
-                                          <TableColumn minWidth="7.0" prefWidth="150.0" text="\$ Left" />
-                                          <TableColumn prefWidth="150.0" text="\$ PerPlayer" />
-                                          <TableColumn prefWidth="40.0" text="R" />
-                                          <TableColumn prefWidth="40.0" text="HR" />
-                                          <TableColumn prefWidth="40.0" text="RBI" />
-                                          <TableColumn prefWidth="40.0" text="SB" />
-                                          <TableColumn prefWidth="40.0" text="BA" />
-                                          <TableColumn prefWidth="40.0" text="W" />
-                                          <TableColumn prefWidth="40.0" text="SV" />
-                                          <TableColumn prefWidth="40.0" text="K" />
-                                          <TableColumn prefWidth="40.0" text="ERA" />
-                                          <TableColumn prefWidth="40.0" text="WHIP" />
-                                          <TableColumn prefWidth="150.0" text="Total Points" />
+                                        <TableColumn fx:id="teamNameStdCol" prefWidth="150.0" text="Team Name" />
+                                        <TableColumn fx:id="playersNeededStdCol" prefWidth="100.0" text="Players Needed" />
+                                          <TableColumn fx:id="moneyLeftStdCol" minWidth="7.0" prefWidth="62.0" text="\$ Left" />
+                                          <TableColumn fx:id="moneyPerPlayerStdCol" prefWidth="83.0" text="\$ PerPlayer" />
+                                          <TableColumn fx:id="R_StdCol" prefWidth="70.0" text="R" />
+                                          <TableColumn fx:id="HR_StdCol" prefWidth="70.0" text="HR" />
+                                          <TableColumn fx:id="RBI_StdCol" prefWidth="70.0" text="RBI" />
+                                          <TableColumn fx:id="SB_StdCol" prefWidth="70.0" text="SB" />
+                                          <TableColumn fx:id="BA_StdCol" prefWidth="70.0" text="BA" />
+                                          <TableColumn fx:id="W_StdCol" prefWidth="70.0" text="W" />
+                                          <TableColumn fx:id="SV_StdCol" prefWidth="70.0" text="SV" />
+                                          <TableColumn fx:id="K_StdCol" prefWidth="70.0" text="K" />
+                                          <TableColumn fx:id="ERA_StdCol" prefWidth="70.0" text="ERA" />
+                                          <TableColumn fx:id="WHIP_StdCol" prefWidth="70.0" text="WHIP" />
+                                          <TableColumn fx:id="totalPointsStdCol" prefWidth="77.0" text="Total Points" />
                                       </columns>
                                     </TableView>
                                  </children>

@@ -6,6 +6,8 @@
  */
 package wolfieball.data;
 
+import javafx.beans.binding.NumberBinding;
+import javafx.beans.binding.When;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -20,6 +22,8 @@ import javafx.collections.ObservableList;
  * @author Neal
  */
 public class Team {
+    IntegerProperty xero = new SimpleIntegerProperty(Integer.MAX_VALUE);
+    
     private final StringProperty name = new SimpleStringProperty();
     private final StringProperty owner = new SimpleStringProperty();
     private final IntegerProperty money = new SimpleIntegerProperty();
@@ -34,6 +38,7 @@ public class Team {
     private final DoubleProperty ERA = new SimpleDoubleProperty();
     private final DoubleProperty WHIP = new SimpleDoubleProperty();
     private final DoubleProperty totalPoints = new SimpleDoubleProperty();
+    
 
     public double getTotalPoints() {
         return totalPoints.get();
@@ -208,8 +213,14 @@ public class Team {
     private ObservableList<BaseballPlayer> players = FXCollections.observableArrayList();;
 
     public Team(String teamName) {
+        
         name.setValue(teamName);
         money.set(260);
+        IntegerProperty twentyThree = new SimpleIntegerProperty(23);
+        neededPlayers.bind(twentyThree.subtract(numberOfPlayer));
+        
+        //moneyPerPlayer.bind(money.divide(neededPlayers));
+        
     }
 
     public ObservableList<BaseballPlayer> getPlayers() {
@@ -532,6 +543,7 @@ public class Team {
         double WHIP_local = 0;
         int numPlayers = players.size();
         numberOfPlayer.set(numPlayers);
+        int salarySum = 0;
         for( BaseballPlayer player : players){
             if(player.isIsHitter()){
                 R_local += player.getR();
@@ -556,6 +568,7 @@ public class Team {
                 WHIP_local += player.getWHIP();
                 WHIP_local /= numPlayers;
             }
+            salarySum += player.getSalary();
         }
         
         R.set(R_local);
@@ -568,8 +581,10 @@ public class Team {
         K.set(K_local);
         ERA.set(ERA_local);
         WHIP.set(WHIP_local);
-        neededPlayers.set(23-numberOfPlayer.get());
-        moneyPerPlayer.set(money.get()/(neededPlayers.get()==0?1:neededPlayers.get()));
+        //neededPlayers.set(23-numberOfPlayer.get());
+        money.set(260 - salarySum);
+        //moneyPerPlayer.set(money.get()/(neededPlayers.get()==0?1:neededPlayers.get()));
+        
     }
     private final IntegerProperty neededPlayers = new SimpleIntegerProperty();
 
@@ -585,18 +600,19 @@ public class Team {
         return neededPlayers;
     }
     
-    private final IntegerProperty moneyPerPlayer = new SimpleIntegerProperty();
+    private final NumberBinding moneyPerPlayer = new When(neededPlayers.isEqualTo(0)).then(money.divide(xero)).otherwise(money.divide(neededPlayers));
 
     public int getMoneyPerPlayer() {
-        return moneyPerPlayer.get();
+        return 0;
+        //return moneyPerPlayer.get();
     }
 
     public void setMoneyPerPlayer(int value) {
-        moneyPerPlayer.set(value);
+        //moneyPerPlayer.set(value);
     }
 
     public IntegerProperty moneyPerPlayerProperty() {
-        return moneyPerPlayer;
+        return new SimpleIntegerProperty(moneyPerPlayer.getValue().intValue());
     }
     
     

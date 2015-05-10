@@ -14,12 +14,14 @@ import wolfieball.data.BaseballPlayer;
  * @author Neal
  */
 public class RankedComparator implements Comparator<BaseballPlayer>{
-
+    
+    
+    
     @Override
     public int compare(BaseballPlayer p1, BaseballPlayer p2) {
         Double p1Rank = p1.getRank();
         Double p2Rank = p2.getRank();
-        return p1Rank.compareTo(p2Rank);
+        return (int)(p2.getRank() - p1.getRank());
     }
     
 }

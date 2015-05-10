@@ -7,11 +7,15 @@
 package wolfieball.data;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.concurrent.Task;
 import wolfieball.data.compare.BAComparator;
 import wolfieball.data.compare.ERAComparator;
@@ -19,6 +23,7 @@ import wolfieball.data.compare.HRComparator;
 import wolfieball.data.compare.KComparator;
 import wolfieball.data.compare.RBIComparator;
 import wolfieball.data.compare.RComparator;
+import wolfieball.data.compare.RankedComparator;
 import wolfieball.data.compare.SBComparator;
 import wolfieball.data.compare.SVComparator;
 import wolfieball.data.compare.TeamComparator;
@@ -122,19 +127,26 @@ public class Draft {
 
             @Override
             protected Void call() throws Exception {
-                int playersNeeded = teams.size()*23;
-                int sumAlreadyDrafted=0;
+                //int playersNeeded = teams.size()*31;
+                //int sumAlreadyDrafted=0;
                 
-                sumAlreadyDrafted = mapToList().stream().map((t) -> t.getNumberOfPlayer()).reduce(sumAlreadyDrafted, Integer::sum);
+                //sumAlreadyDrafted = mapToList().stream().map((t) -> t.getNumberOfPlayer()).reduce(sumAlreadyDrafted, Integer::sum);
                 
-                int loops = playersNeeded - sumAlreadyDrafted;
-                System.out.println(loops);
-                for(int i = 0; i <= loops ; i++){
-                    
-                    if(isPaused)wait();
-                    
-                    draftTheBest();
-                    Thread.sleep(30);
+                
+                //System.out.println(loops);
+                System.out.println(orderedPositions.size());
+                ObservableList<Team> list = mapToList();
+                Collections.sort(list, new TeamComparator());
+                for (Team t : list) {
+
+                    for (String pos : orderedPositions) {
+                        if (isPaused) {
+                            wait();
+                        }
+                        boolean draftTheBest = draftTheBest(pos, t);
+                        if(draftTheBest)Thread.sleep(333);
+                    }
+
                 }
                 
                 
@@ -165,42 +177,55 @@ public class Draft {
         return list;
     }
     
-    public void draftTheBest() throws InterruptedException{
-        ObservableList<Team> list = mapToList();
+    
+    private static final List<String> orderedPositions = Arrays.asList("C_", "C_", "1B", "CI", "2B", "3B", "MI", "SS", "OF","OF","OF","OF","OF", "P", "P", "P", "P", "P", "P", "P", "P", "P" , "U", "", "", "", "", "", "", "", "");
+    
+    public boolean draftTheBest(String pos, Team t) throws InterruptedException {
+        BaseballPlayer bestPlayer;
+        FilteredList<BaseballPlayer> freeFiltered = new FilteredList<>(freeAgents.getPlayers(), (BaseballPlayer p) -> {
+            return p.getQP().contains(pos);
+        });
 
-        Collections.sort(list, new TeamComparator());
-        ObservableList<BaseballPlayer> freePlayers = freeAgents.getPlayers();
-        BaseballPlayer bestPlayer = freePlayers.get(0);
-        for (BaseballPlayer bp : freePlayers) {
-            if ((bp.getRank() > bestPlayer.getRank()) && bp.getFantasyTeam().equals("Free Agent")) {
-                bestPlayer = bp;
-            }
-        }
+        SortedList<BaseballPlayer> sort = new SortedList(freeFiltered, new RankedComparator());
+        bestPlayer = sort.get(0);
+
         bestPlayer.setSalary(1);
-        for (Team t : list) {
-            
-            if (!t.getName().equals("Free Agent")) {
-                if (t.getNeededPlayers() > 8) {
-                    bestPlayer.setContract("S2");
-                    bestPlayer.setFantasyTeam(t.getName());
-                    t.addPlayer(bestPlayer);
-                    draftOrder.add(bestPlayer);
-                    break;
-                }
-                if (t.getNeededPlayers() <= 8 && t.getNeededPlayers() > 0) {
-                    bestPlayer.setContract("X");
-                    bestPlayer.setFantasyTeam(t.getName());
-                    t.addPlayer(bestPlayer);
-                    draftOrder.add(bestPlayer);
-                    break;
-                }
-            }
-            
-            
-            
-            
+        String posi = pos;
+        if (posi.equals("C_")) {
+            posi = "C";
         }
+        
+        bestPlayer.setFantasyPosition(posi);
+        bestPlayer.calcStats();
+            if (!t.getName().equals("Free Agent") && t.draftable(bestPlayer)) {
+                if (t.getPlayers().size() < 23) {
+                    return draftToTeam(bestPlayer, t);
+                }else {
+                    if (t.getTaxi().size() <= 8) {
+                        return draftToTaxi(bestPlayer, t);
+                    }
+                }
 
+            }
+        return false;
+    }
+
+    public boolean draftToTeam(BaseballPlayer bestPlayer, Team t) {
+        bestPlayer.setContract("S2");
+        bestPlayer.setFantasyTeam(t.getName());
+        t.addPlayer(bestPlayer);
+        draftOrder.add(bestPlayer);
+        return freeAgents.getPlayers().remove(bestPlayer);
+    }
+
+    public boolean draftToTaxi(BaseballPlayer bestPlayer, Team t) {
+        bestPlayer.setContract("X");
+        bestPlayer.setFantasyTeam(t.getName());
+        bestPlayer.setFantasyPosition("Taxi Squad");
+        bestPlayer.setSalary(1);
+        t.getTaxi().add(bestPlayer);
+        //draftOrder.add(bestPlayer);
+        return freeAgents.getPlayers().remove(bestPlayer);
     }
 
     public void calcTotalPts() {
@@ -222,9 +247,13 @@ public class Draft {
         for (Comparator comparator : comparators) {
            teamsList.sort(comparator);
            for(Team t : teamsList){
-               t.totalPointsProperty().add(10 * teamsList.indexOf(t));
+               t.totalPointsProperty().set( ( t.getTotalPoints() ) + (10 * (teamsList.indexOf(t)+1) ) );
            } 
         }
+        
+    }
+    
+    public void calcEstValue(){
         
     }
 

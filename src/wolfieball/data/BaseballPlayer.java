@@ -161,8 +161,8 @@ public final class BaseballPlayer{
     private final DoubleProperty BA = new SimpleDoubleProperty();
 
     public double getBA() {
-        return 0;
-        //return BA.get();
+        
+        return BA.get();
     }
 
     public void setBA(double value) {
@@ -281,8 +281,8 @@ public final class BaseballPlayer{
     
 
     public double getWHIP() {
-        return 0;
-        //return WHIP.get();
+      
+        return WHIP.get();
     }
 
     public void setWHIP(double value) {
@@ -295,8 +295,8 @@ public final class BaseballPlayer{
     
     
     public double getERA() {
-        return 0;
-        //return ERA.get();
+       
+        return ERA.get();
     }
 
     public void setERA(double value) {

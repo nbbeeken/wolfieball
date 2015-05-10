@@ -11,7 +11,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" fx:id="root" maxHeight="820.0" maxWidth="1245.0" minHeight="820.0" minWidth="1245.0" prefHeight="820.0" prefWidth="1245.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wolfieball.gui.MainGUI">
+<AnchorPane id="AnchorPane" fx:id="root" maxHeight="864.0" maxWidth="1245.0" minHeight="820.0" minWidth="1245.0" prefHeight="851.0" prefWidth="1245.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wolfieball.gui.MainGUI">
    <children>
       <VBox layoutX="65.0" layoutY="350.0" prefWidth="1359.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -113,7 +113,7 @@
                                     <Point3D />
                                  </rotationAxis>
                               </ImageView>
-                              <Button fx:id="loadDraftBtn" layoutX="947.0" layoutY="544.0" mnemonicParsing="false" text="Load Existing Draft">
+                              <Button fx:id="loadDraftBtn" layoutX="947.0" layoutY="521.0" mnemonicParsing="false" text="Load Existing Draft">
                                  <font>
                                     <Font size="23.0" />
                                  </font>
@@ -125,7 +125,7 @@
                                     </ImageView>
                                  </graphic>
                               </Button>
-                              <Button fx:id="newDraftBtn" layoutX="947.0" layoutY="472.0" mnemonicParsing="false" text="Start New Draft">
+                              <Button fx:id="newDraftBtn" layoutX="947.0" layoutY="450.0" mnemonicParsing="false" text="Start New Draft">
                                  <font>
                                     <Font size="23.0" />
                                  </font>
@@ -137,7 +137,7 @@
                                     </ImageView>
                                  </graphic>
                               </Button>
-                              <Hyperlink fx:id="hplink" layoutX="14.0" layoutY="640.0" text="Artist">
+                              <Hyperlink fx:id="hplink" layoutX="14.0" layoutY="666.0" text="Artist">
                                  <font>
                                     <Font name="System Bold" size="14.0" />
                                  </font></Hyperlink>
@@ -242,7 +242,7 @@
                                           <Font name="System Bold" size="18.0" />
                                        </font>
                                     </Label>
-                                    <TableView fx:id="taxiSquad" prefHeight="219.0" prefWidth="1204.0">
+                                    <TableView fx:id="taxiSquad" prefHeight="252.0" prefWidth="1225.0">
                                        <columns>
                                           <TableColumn fx:id="positionsTaxCol" editable="false" prefWidth="78.0" text="Position" />
                                           <TableColumn fx:id="lastNameTaxCol" editable="false" prefWidth="128.0" text="Last Name" />
@@ -510,7 +510,7 @@
                            <children>
                               <VBox fillWidth="false" layoutX="368.0" layoutY="186.0" prefHeight="682.0" prefWidth="1245.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <HBox prefHeight="36.0" prefWidth="1225.0" spacing="10.0">
+                                    <HBox alignment="CENTER_LEFT" prefHeight="36.0" prefWidth="1225.0" spacing="10.0">
                                        <children>
                                           <Button fx:id="bestPlayerBtn" mnemonicParsing="false" text="Draft Best Player">
                                              <graphic>
@@ -544,17 +544,17 @@
                                     <HBox alignment="CENTER_LEFT" prefHeight="603.0" prefWidth="1205.0" spacing="100.0">
                                        <children>
                                           <TableView fx:id="draftPickTable" maxWidth="-Infinity" prefHeight="603.0" prefWidth="740.0">
+                                             <columns>
+                                                <TableColumn fx:id="pickNumCol" prefWidth="123.3" text="Pick #" />
+                                                <TableColumn fx:id="firstNameDraftSumCol" prefWidth="123.3" text="First Name" />
+                                                <TableColumn fx:id="lastNameDraftSumCol" prefWidth="123.3" text="Last Name" />
+                                                <TableColumn fx:id="fantasyTeamCol" prefWidth="123.3" text="Fantasy Team" />
+                                                <TableColumn fx:id="contractDraftSumCol" prefWidth="123.3" text="Contract" />
+                                                <TableColumn fx:id="salaryDraftSumCol" prefWidth="123.3" text="Salary" />
+                                             </columns>
                                              <columnResizePolicy>
                                                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                              </columnResizePolicy>
-                                             <columns>
-                                                <TableColumn fx:id="pickNumCol" prefWidth="55.0" text="Pick #" />
-                                                <TableColumn fx:id="firstNameDraftSumCol" prefWidth="183.0" text="First Name" />
-                                                <TableColumn fx:id="lastNameDraftSumCol" prefWidth="152.0" text="Last Name" />
-                                                <TableColumn fx:id="fantasyTeamCol" prefWidth="235.0" text="Fantasy Team" />
-                                                <TableColumn fx:id="contractDraftSumCol" prefWidth="75.0" text="Contract" />
-                                                <TableColumn fx:id="salaryDraftSumCol" prefWidth="75.0" text="Salary" />
-                                             </columns>
                                           </TableView>
                                           <ImageView fitHeight="295.0" fitWidth="393.0" pickOnBounds="true" preserveRatio="true">
                                              <image>

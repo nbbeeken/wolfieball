@@ -196,7 +196,7 @@ public class Team {
     
     
     
-    private final IntegerProperty numberOfPlayer = new SimpleIntegerProperty(); // NOT TO EXCEED 23
+    private final IntegerProperty numberOfPlayer = new SimpleIntegerProperty(); // NOT TO EXCEED 31
     private final IntegerProperty numberOfC = new SimpleIntegerProperty(); // 2
     private final IntegerProperty numberOfP = new SimpleIntegerProperty(); // 9
     private final IntegerProperty numberOf1B = new SimpleIntegerProperty(); // 1
@@ -208,16 +208,17 @@ public class Team {
     private final IntegerProperty numberOfOF = new SimpleIntegerProperty(); // 5
     private final IntegerProperty numberOfU = new SimpleIntegerProperty(); // 1
     private final IntegerProperty numberOfTaxi = new SimpleIntegerProperty(); // 8
-    private ObservableList<BaseballPlayer> players = FXCollections.observableArrayList();;
+    private ObservableList<BaseballPlayer> players = FXCollections.observableArrayList();
+    private ObservableList<BaseballPlayer> taxi = FXCollections.observableArrayList();
 
     public Team(String teamName) {
         
         name.setValue(teamName);
         money.set(260);
-        IntegerProperty twentyThree = new SimpleIntegerProperty(23);
+        //IntegerProperty twentyThree = new SimpleIntegerProperty(23);
         //neededPlayers.bind(twentyThree.subtract(numberOfPlayer));
         
-        moneyPerPlayer.bind(money.divide(neededPlayers));
+        //moneyPerPlayer.bind(money.divide(neededPlayers));
         
     }
 
@@ -228,6 +229,11 @@ public class Team {
     public void setPlayers(ObservableList<BaseballPlayer> players) {
         this.players = players;
     }
+
+    public ObservableList<BaseballPlayer> getTaxi() {
+        return taxi;
+    }
+    
     
 
     public void addPlayer(BaseballPlayer player) {
@@ -559,29 +565,39 @@ public class Team {
             if(numPlayers < 1)break;
             if(!player.getQP().equals("P")){
                 R_local += player.getR();
-                R_local /= numPlayers;
+                
                 HR_local += player.getHR();
-                HR_local /= numPlayers;
+                
                 RBI_local += player.getRBI();
-                RBI_local /= numPlayers;
+                
                 SB_local += player.getSB();
-                SB_local /= numPlayers;
-                BA_local += player.getBA();
-                BA_local /= numPlayers;
+                
+                BA_local = BA_local + player.getBA();
+               
             } else {
                 W_local += player.getW();
-                W_local /= numPlayers;
+                
                 SV_local += player.getSV();
-                SV_local /= numPlayers;
+                
                 K_local += player.getK();
-                K_local /= numPlayers;
+                
                 ERA_local += player.getERA();
-                ERA_local /= numPlayers;
+                
                 WHIP_local += player.getWHIP();
-                WHIP_local /= numPlayers;
+                
             }
             salarySum += player.getSalary();
         }
+        R_local /= numPlayers - numberOfP.get();
+        
+        RBI_local /= numPlayers - numberOfP.get();
+        SB_local /= numPlayers - numberOfP.get();
+        BA_local /= numPlayers - numberOfP.get();
+        W_local /= numberOfP.get()==0?Integer.MAX_VALUE:numberOfP.get();
+        SV_local /= numberOfP.get()==0?Integer.MAX_VALUE:numberOfP.get();
+        K_local /= numberOfP.get()==0?Integer.MAX_VALUE:numberOfP.get();
+        ERA_local /= numberOfP.get()==0?Integer.MAX_VALUE:numberOfP.get();
+        WHIP_local /= numberOfP.get()==0?Integer.MAX_VALUE:numberOfP.get();
         
         R.set(R_local);
         HR.set(HR_local);
@@ -593,12 +609,12 @@ public class Team {
         K.set(K_local);
         ERA.set(ERA_local);
         WHIP.set(WHIP_local);
-        neededPlayers.set(23-numberOfPlayer.get());
+        neededPlayers.set(31-numberOfPlayer.get());
         money.set(260 - salarySum);
-        //moneyPerPlayer.set(money.get()/(neededPlayers.get()==0?1:neededPlayers.get()));
+        moneyPerPlayer.set(money.get()/(neededPlayers.get()==0?Integer.MAX_VALUE:neededPlayers.get()));
         
     }
-    private final IntegerProperty neededPlayers = new SimpleIntegerProperty(23);
+    private final IntegerProperty neededPlayers = new SimpleIntegerProperty(31);
 
     public int getNeededPlayers() {
         return neededPlayers.get();
@@ -630,10 +646,10 @@ public class Team {
     public boolean draftable(BaseballPlayer bp){
         String fantasyPosition = bp.getFantasyPosition();
         if (fantasyPosition != null) {
-            if (fantasyPosition.equals("C") && numberOfC.get() > 0) {
+            if (fantasyPosition.equals("C") && numberOfC.get() > 1) {
                 return false;
             }
-            if (fantasyPosition.equals("P") && numberOfP.get() > 8) {
+            if (fantasyPosition.equals("P") && (numberOfP.get() >= 9)) {
                 return false;
             }
             if (fantasyPosition.equals("1B") && numberOf1B.get() > 0) {
@@ -654,10 +670,10 @@ public class Team {
             if (fantasyPosition.equals("MI")  && numberOfMI.get() > 0) {
                 return false;
             }
-            if (fantasyPosition.equals("OF")  && numberOf1B.get() > 5) {
+            if (fantasyPosition.equals("OF")  && (numberOfOF.get() >= 5)) {
                 return false;
             }
-            if (fantasyPosition.equals("U")  && numberOf1B.get() > 0) {
+            if (fantasyPosition.equals("U")  && numberOfU.get() > 0) {
                 return false;
             }
             if(money.get() < bp.getSalary()){

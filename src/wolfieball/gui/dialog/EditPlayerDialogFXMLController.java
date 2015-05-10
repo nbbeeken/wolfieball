@@ -245,6 +245,7 @@ public class EditPlayerDialogFXMLController implements Initializable {
                 bp.setSalary(0);
                 DraftManager.getDraftManager().getDraft().getFreeAgents().addPlayer(bp);
             }else{
+               
                 selectedTeam.addPlayer(bp);
             }
             

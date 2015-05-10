@@ -6,8 +6,6 @@
  */
 package wolfieball.data;
 
-import javafx.beans.binding.NumberBinding;
-import javafx.beans.binding.When;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
@@ -21,7 +19,7 @@ import javafx.beans.property.StringProperty;
  *
  * @author Neal
  */
-public class BaseballPlayer{
+public final class BaseballPlayer{
     private final BooleanProperty isHitter = new SimpleBooleanProperty();
     IntegerProperty nine = new SimpleIntegerProperty(9);
     IntegerProperty xero = new SimpleIntegerProperty(Integer.MAX_VALUE);
@@ -47,14 +45,18 @@ public class BaseballPlayer{
     private final DoubleProperty estimatedValue = new SimpleDoubleProperty();
 
     public BaseballPlayer() {
+        calcStats();
+       
+    }
+
+    public void calcStats() {
+        //BA, ERA, WHIP
         
-        
-        
-        
-        
-        
-        
-        
+        if(AB.get() != 0)BA.set(H.get()/AB.get());
+        if(IP.get() != 0){
+            ERA.set(9 * (ER.get()/IP.get()));
+            WHIP.set((BB.get()+H_P.get())/IP.get());
+        }
     }
     
     public double getEstimatedValue() {
@@ -156,7 +158,7 @@ public class BaseballPlayer{
     private final DoubleProperty RBI = new SimpleDoubleProperty();
     private final DoubleProperty SB = new SimpleDoubleProperty();
     //Calculated //BA.bind(H.divide(AB));
-    private final NumberBinding BA = new When(AB.isEqualTo(0)).then(H.divide(xero)).otherwise(H.divide(AB));
+    private final DoubleProperty BA = new SimpleDoubleProperty();
 
     public double getBA() {
         return 0;
@@ -274,8 +276,8 @@ public class BaseballPlayer{
     private final DoubleProperty BB = new SimpleDoubleProperty();
     private final DoubleProperty K = new SimpleDoubleProperty();
     //Calculated
-    private final NumberBinding ERA = new When(IP.isEqualTo(0)).then(ER.divide(xero)).otherwise(ER.divide(IP));
-    private final NumberBinding WHIP = new When(BB.add(H).isEqualTo(0)).then(IP.divide(xero)).otherwise(IP.divide(BB.add(H)));
+    private final DoubleProperty ERA = new SimpleDoubleProperty();
+    private final DoubleProperty WHIP = new SimpleDoubleProperty();
     
 
     public double getWHIP() {
@@ -288,7 +290,7 @@ public class BaseballPlayer{
     }
 
     public DoubleProperty WHIPProperty() {
-        return new SimpleDoubleProperty(WHIP.getValue().doubleValue());
+        return WHIP;
     }
     
     
@@ -302,7 +304,7 @@ public class BaseballPlayer{
     }
 
     public DoubleProperty ERAProperty() {
-        return new SimpleDoubleProperty(ERA.getValue().doubleValue());
+        return ERA;
     }
     
     

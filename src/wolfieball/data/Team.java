@@ -6,8 +6,6 @@
  */
 package wolfieball.data;
 
-import javafx.beans.binding.NumberBinding;
-import javafx.beans.binding.When;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -217,9 +215,9 @@ public class Team {
         name.setValue(teamName);
         money.set(260);
         IntegerProperty twentyThree = new SimpleIntegerProperty(23);
-        neededPlayers.bind(twentyThree.subtract(numberOfPlayer));
+        //neededPlayers.bind(twentyThree.subtract(numberOfPlayer));
         
-        //moneyPerPlayer.bind(money.divide(neededPlayers));
+        moneyPerPlayer.bind(money.divide(neededPlayers));
         
     }
 
@@ -530,6 +528,19 @@ public class Team {
         return name.get();
     }
 
+
+    public String completePrint() {
+        return "Team{" + "name=" + name + ", \nowner=" + owner + ", \nmoney=" + money + ", \nR=" + R + ", \nHR=" + HR + ", \nRBI=" + RBI 
+                + ", \nSB=" + SB + ", \nBA=" + BA + ", \nW=" + W + ", \nSV=" + SV + ", \nK=" + K + ", \nERA=" + ERA + ", \nWHIP=" + WHIP 
+                + ", \ntotalPoints=" + totalPoints + ", \nnumberOfPlayer=" + numberOfPlayer +/* ", numberOfC=" + numberOfC 
+                + ", numberOfP=" + numberOfP + ", numberOf1B=" + numberOf1B + ", numberOf2B=" + numberOf2B + ", numberOf3B=" 
+                + numberOf3B + ", numberOfCI=" + numberOfCI + ", numberOfSS=" + numberOfSS + ", numberOfMI=" + numberOfMI 
+                + ", numberOfOF=" + numberOfOF + ", numberOfU=" + numberOfU + ", numberOfTaxi=" + numberOfTaxi 
+                + ", neededPlayers=" + neededPlayers + ", moneyPerPlayer=" + moneyPerPlayer +*/ '}';
+    }
+    
+    
+
     public void recalculate() {
         double R_local = 0;
         double HR_local = 0;
@@ -541,11 +552,12 @@ public class Team {
         double K_local = 0;
         double ERA_local = 0;
         double WHIP_local = 0;
-        int numPlayers = players.size();
-        numberOfPlayer.set(numPlayers);
+        double numPlayers = players.size();
+        numberOfPlayer.set(players.size());
         int salarySum = 0;
         for( BaseballPlayer player : players){
-            if(player.isIsHitter()){
+            if(numPlayers < 1)break;
+            if(!player.getQP().equals("P")){
                 R_local += player.getR();
                 R_local /= numPlayers;
                 HR_local += player.getHR();
@@ -581,12 +593,12 @@ public class Team {
         K.set(K_local);
         ERA.set(ERA_local);
         WHIP.set(WHIP_local);
-        //neededPlayers.set(23-numberOfPlayer.get());
+        neededPlayers.set(23-numberOfPlayer.get());
         money.set(260 - salarySum);
         //moneyPerPlayer.set(money.get()/(neededPlayers.get()==0?1:neededPlayers.get()));
         
     }
-    private final IntegerProperty neededPlayers = new SimpleIntegerProperty();
+    private final IntegerProperty neededPlayers = new SimpleIntegerProperty(23);
 
     public int getNeededPlayers() {
         return neededPlayers.get();
@@ -600,7 +612,7 @@ public class Team {
         return neededPlayers;
     }
     
-    private final NumberBinding moneyPerPlayer = new When(neededPlayers.isEqualTo(0)).then(money.divide(xero)).otherwise(money.divide(neededPlayers));
+    private final IntegerProperty moneyPerPlayer = new SimpleIntegerProperty();
 
     public int getMoneyPerPlayer() {
         return 0;
@@ -612,10 +624,49 @@ public class Team {
     }
 
     public IntegerProperty moneyPerPlayerProperty() {
-        return new SimpleIntegerProperty(moneyPerPlayer.getValue().intValue());
+        return moneyPerPlayer;
     }
     
-    
+    public boolean draftable(BaseballPlayer bp){
+        String fantasyPosition = bp.getFantasyPosition();
+        if (fantasyPosition != null) {
+            if (fantasyPosition.equals("C") && numberOfC.get() > 0) {
+                return false;
+            }
+            if (fantasyPosition.equals("P") && numberOfP.get() > 8) {
+                return false;
+            }
+            if (fantasyPosition.equals("1B") && numberOf1B.get() > 0) {
+                return false;
+            }
+            if (fantasyPosition.equals("2B") && numberOf2B.get() > 0) {
+                return false;
+            }
+            if (fantasyPosition.equals("3B") && numberOf3B.get() > 0) {
+                return false;
+            }
+            if (fantasyPosition.equals("CI") && numberOfCI.get() > 0) {
+                return false;
+            }
+            if (fantasyPosition.equals("SS") && numberOfSS.get() > 0) {
+                return false;
+            }
+            if (fantasyPosition.equals("MI")  && numberOfMI.get() > 0) {
+                return false;
+            }
+            if (fantasyPosition.equals("OF")  && numberOf1B.get() > 5) {
+                return false;
+            }
+            if (fantasyPosition.equals("U")  && numberOf1B.get() > 0) {
+                return false;
+            }
+            if(money.get() < bp.getSalary()){
+                return false;
+            }
+        }
+        
+        return true;
+    }
     
     
 }

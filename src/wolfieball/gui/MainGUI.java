@@ -52,10 +52,10 @@ import javafx.util.Callback;
 import javafx.util.StringConverter;
 import wolfieball.data.BaseballPlayer;
 import wolfieball.data.DraftManager;
-import wolfieball.data.FantasyTeamPositionComparator;
 import wolfieball.data.MLBPlayer;
 import wolfieball.data.Team;
-import wolfieball.data.TeamComparator;
+import wolfieball.data.compare.FantasyTeamPositionComparator;
+import wolfieball.data.compare.TeamComparator;
 import wolfieball.file.JsonDraftFileManager;
 import wolfieball.gui.dialog.AddNewPlayerDialogFXMLController;
 import wolfieball.gui.dialog.ConfirmFXMLController;
@@ -411,15 +411,23 @@ public class MainGUI implements Initializable {
 
     private void standingTabInit(){
         standingsTab.setOnSelectionChanged((Event e) -> {
-            ObservableList list = FXCollections.observableArrayList();
-            DraftManager.getDraftManager().getDraft().getTeams().entrySet().stream().map((teamIT) -> (Team) teamIT.getValue()).forEach((value) -> {
-                value.recalculate();
-                list.add(value);
+            ObservableList<Team> list;
+            list = DraftManager.getDraftManager().getDraft().mapToList();
+            list.stream().forEach(t -> {
+                t.recalculate();
             });
+            draftManager.getDraft().calcTotalPts();
             standingsTable.setItems(list);
         });
         
-        ObservableList<TableColumn<Team, ?>> columns = standingsTable.getColumns();
+        standingsTable.setOnMouseClicked(e -> {
+            if(e.getClickCount() == 2){
+                Team selectedItem = standingsTable.getSelectionModel().getSelectedItem();
+                print(selectedItem.completePrint());
+                System.out.println(selectedItem.completePrint());
+            }
+        });
+        
         teamNameStdCol.setCellValueFactory(new PropertyValueFactory("name"));
         playersNeededStdCol.setCellValueFactory(new PropertyValueFactory("neededPlayers"));
         
@@ -468,7 +476,7 @@ public class MainGUI implements Initializable {
         bestPlayerBtn.setOnAction(e -> {
             ObservableList<Team> list = FXCollections.observableArrayList();
             DraftManager.getDraftManager().getDraft().getTeams().entrySet().stream().map((teamIT) -> (Team) teamIT.getValue()).forEach((value) -> {
-                value.recalculate();
+                //value.recalculate();
                 list.add(value);
             });
             Collections.sort(list, new TeamComparator());
@@ -481,7 +489,8 @@ public class MainGUI implements Initializable {
             }
             bestPlayer.setSalary(1);
             for(Team t : list){
-                if (!t.getName().equals("Free Agent")) {
+                if (!t.getName().equals("Free Agent") && t.draftable(bestPlayer)) {
+                    
                     if (t.getNeededPlayers() > 8) {
                         bestPlayer.setContract("S2");
                         bestPlayer.setFantasyTeam(t.getName());
@@ -502,11 +511,12 @@ public class MainGUI implements Initializable {
         });
         
         startAutoDraftBtn.setOnAction(e -> {
+            draftManager.getDraft().autoDraft(false);
             
         });
         
         stopAutoDraftBtn.setOnAction(e -> {
-            
+            draftManager.getDraft().autoDraft(true);
         });
     }
     

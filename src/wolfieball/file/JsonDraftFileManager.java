@@ -119,7 +119,7 @@ public class JsonDraftFileManager implements PlayerFileManager {
             bp.setIsHitter(true);
             bp.setFantasyTeam("Free Agent");
             bp.setFantasyPosition("");
-            //bp.calculate();
+            bp.calcStats();
             draft.getFreeAgents().addPlayer(bp);
             draft.getAllHitters().add(bp);
             //draft.getMlb().add(bp);
@@ -145,7 +145,7 @@ public class JsonDraftFileManager implements PlayerFileManager {
             bp.setIsHitter(false);
             bp.setFantasyTeam("Free Agent");
             bp.setFantasyPosition("");
-            //bp.calculate();
+            bp.calcStats();
             draft.getFreeAgents().addPlayer(bp);
             //draft.getMlb().add(bp);
         }
@@ -348,6 +348,7 @@ public class JsonDraftFileManager implements PlayerFileManager {
             bp.setH_P(Double.parseDouble(player.getString("H_P")));
             bp.setBB(Double.parseDouble(player.getString("BB")));
             bp.setK(Double.parseDouble(player.getString("K")));
+            
             
             
             

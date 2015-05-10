@@ -4,9 +4,10 @@
  * CSE 219 Stony Brook
  * Prof.  Richard McKenna
  */
-package wolfieball.data;
+package wolfieball.data.compare;
 
 import java.util.Comparator;
+import wolfieball.data.BaseballPlayer;
 
 /**
  *

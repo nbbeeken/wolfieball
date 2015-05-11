@@ -410,6 +410,9 @@ public class MainGUI implements Initializable {
         initButtons();
         setUpTable();
         setUpTableSearchFilter();
+        playerTab.setOnSelectionChanged(e -> {
+            draftManager.getDraft().calcEstValue();
+        });
     }     
 
     private void standingTabInit(){
@@ -501,7 +504,9 @@ public class MainGUI implements Initializable {
             final List<String> orderedPositions = Arrays.asList("C_", "C_", "1B", "CI", "2B", "3B", "MI", "SS", "OF","OF","OF","OF","OF", "P", "P", "P", "P", "P", "P", "P", "P", "P" , "U", "", "", "", "", "", "", "", "");
             for(Team t : draftManager.getDraft().mapToList()){
                 try {
-                    draftManager.getDraft().draftTheBest(orderedPositions.get(t.getPlayers().size()), t);
+                    
+                    boolean draftTheBest = draftManager.getDraft().draftTheBest(orderedPositions.get(t.getPlayers().size()), t);
+                    if(draftTheBest)break;
                 } catch (InterruptedException ex) {
                     Logger.getLogger(MainGUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -525,7 +530,7 @@ public class MainGUI implements Initializable {
             mlbCombo.getItems().addAll( "ATL",  "AZ", "CHC", "CIN",
                     "COL", "LAD", "MIA", "MIL",
                     "NYM", "PHI", "PIT", "SD" ,
-                    "SF" , "STL", "WAS");
+                    "SF" , "STL", "WSH");
             final ObservableList<MLBPlayer> ob = JsonDraftFileManager.loadMLB();
             
             
@@ -774,6 +779,8 @@ public class MainGUI implements Initializable {
                 editPlayerDialog(bp);
             }
         });
+        
+        
     }
 
     private void setUpTableSearchFilter() {
@@ -867,6 +874,7 @@ public class MainGUI implements Initializable {
         teamCol.setCellValueFactory(new PropertyValueFactory("TEAM"));
         positionsCol.setCellValueFactory(new PropertyValueFactory("QP"));
         estimatedValueCol.setCellValueFactory(new PropertyValueFactory("estimatedValue"));
+        estimatedValueCol.setCellFactory(decimalTruncate(0));
         yearOfBirthCol.setCellValueFactory(new PropertyValueFactory("YEAR_OF_BIRTH"));
         notesCol.setCellValueFactory(new PropertyValueFactory("NOTES"));
         

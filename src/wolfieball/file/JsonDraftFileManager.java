@@ -21,6 +21,7 @@ import wolfieball.data.BaseballPlayer;
 import wolfieball.data.Draft;
 import wolfieball.data.MLBPlayer;
 import wolfieball.data.Team;
+import wolfieball.data.compare.FantasyTeamPositionComparator;
 
 /**
  *
@@ -50,11 +51,14 @@ public class JsonDraftFileManager implements PlayerFileManager {
         
         JsonObject freeAgentsJson = makeFreeAgentsArray(draft.getFreeAgents());
         
+        JsonArray draftOrderJsonArray = makeDraftOrderArray(draft.getDraftOrder());
+        
         
         JsonObject draftJsonObject = Json.createObjectBuilder()
                 .add("NAME", draft.getName())
                 .add("TEAMS_MAP", teamsMapJsonArray)
                 .add("FREE_AGENTS", freeAgentsJson)
+                .add("DRAFT_ORDER", draftOrderJsonArray)
                 .build();
         
         
@@ -81,7 +85,7 @@ public class JsonDraftFileManager implements PlayerFileManager {
     public void loadExistingDraft(Draft draft, File draftFile) throws IOException {
         JsonObject allData = loadJSONFile(draftFile.getAbsolutePath());
         draft.setName(allData.getString("NAME"));
-        draft.setTeams(buildTeamsMap(allData.getJsonArray("TEAMS_MAP")));
+        draft.setTeams(buildTeamsMap(allData.getJsonArray("TEAMS_MAP"), draft));
         draft.setFreeAgents(buildFreeAgentsTeam(allData.getJsonObject("FREE_AGENTS")));
     }
     
@@ -206,6 +210,11 @@ public class JsonDraftFileManager implements PlayerFileManager {
                 .add("TEAM", player.getTEAM())
                 .add("LAST_NAME", player.getLAST_NAME())
                 .add("FIRST_NAME", player.getFIRST_NAME())
+                .add("NOTES", player.getNOTES())
+                .add("YEAR_OF_BIRTH", player.getYEAR_OF_BIRTH())
+                .add("NATION_OF_BIRTH", player.getNATION_OF_BIRTH())
+                .add("EST_VALUE", player.getEstimatedValue())
+                    
                 .add("QP", player.getQP() + "")
                     
                 .add("IP", player.getIP() + "")
@@ -223,9 +232,9 @@ public class JsonDraftFileManager implements PlayerFileManager {
                 .add("RBI", player.getRBI() + "")
                 .add("SB", player.getSB() + "")
                     
-                .add("NOTES", player.getNOTES())
-                .add("YEAR_OF_BIRTH", player.getYEAR_OF_BIRTH())
-                .add("NATION_OF_BIRTH", player.getNATION_OF_BIRTH())
+                .add("BA", player.getBA()+"")
+                .add("ERA", player.getERA()+"")
+                .add("WHIP", player.getWHIP()+"")
                 
                 .add("FANTASY_TEAM", player.getFantasyTeam())
                 .add("SALARY", player.getSalary() + "")
@@ -237,35 +246,13 @@ public class JsonDraftFileManager implements PlayerFileManager {
         return jsonPlayer;
     }
 
-    private Team loadFantasyTeams(JsonObject teamJson){
-        Team team = new Team("");
-
-        team.setName(teamJson.getString("NAME"));
-        team.setOwner(teamJson.getString("OWNER"));
-        team.setNumberOfPlayer(teamJson.getInt("NUM_PLAYERS"));
-        team.setNumberOfCatchers(teamJson.getInt("NUM_C"));
-        team.setNumberOfPitchers(teamJson.getInt("NUM_P"));
-        team.setNumberOfFirstbasemen(teamJson.getInt("NUM_1B"));
-        team.setNumberOfSecondbasemen(teamJson.getInt("NUM_2B"));
-        team.setNumberOfThirdbasemen(teamJson.getInt("NUM_3B"));
-        team.setNumberOfCornerInfielder(teamJson.getInt("NUM_CI"));
-        team.setNumberOfSS(teamJson.getInt("NUM_SS"));
-        team.setNumberOfMI(teamJson.getInt("NUM_MI"));
-        team.setNumberOfOF(teamJson.getInt("NUM_OF"));
-        team.setNumberOfU(teamJson.getInt("NUM_U"));
-        team.setNumberOfTaxi(teamJson.getInt("NUM_TAXI"));
-        team.setPlayers(buildPlayersArray(teamJson.getJsonArray("PLAYERS")));
-        
-        
-        
-
-        return team;
-    }
+    
 
     private JsonObject makeFantasyTeam(Team team) {
         JsonObject jso = Json.createObjectBuilder()
                 .add("NAME", team.getName())
                 .add("OWNER", team.getOwner())
+                
                 .add("NUM_PLAYERS", team.getNumberOfPlayer())
                 .add("NUM_C", team.getNumberOfCatchers())
                 .add("NUM_P", team.getNumberOfPitchers())
@@ -277,8 +264,30 @@ public class JsonDraftFileManager implements PlayerFileManager {
                 .add("NUM_MI", team.getNumberOfMI())
                 .add("NUM_OF", team.getNumberOfOF())
                 .add("NUM_U", team.getNumberOfU())
-                .add("NUM_TAXI", team.getNumberOfU())
+                .add("NUM_TAXI", team.getNumberOfTaxi())
+                
+                .add("MONEY", team.getMoney())
+                
+                
+                .add("W", team.getW()+"")
+                .add("SV", team.getSV()+"")
+                .add("K", team.getK()+"")
+                .add("R", team.getR()+"")
+                .add("HR", team.getHR()+"")
+                .add("RBI", team.getRBI()+"")
+                .add("SB", team.getSB()+"")
+                
+                .add("BA", team.getBA()+"")
+                .add("ERA", team.getERA()+"")
+                .add("WHIP", team.getWHIP()+"")
+                
+                .add("TOTALPTS", team.getTotalPoints())
+                
+                .add("NEEDPLAYERS", team.getNeededPlayers())
+                .add("MONEYPP", team.getMoneyPerPlayer())
+                
                 .add("PLAYERS", makePlayersArray(team.getPlayers()))
+                .add("TAXI", makePlayersArray(team.getTaxi()))
                 .build();
         return jso;
     }
@@ -307,11 +316,11 @@ public class JsonDraftFileManager implements PlayerFileManager {
         return jsb.build();
     }
 
-    private ObservableMap<String, Team> buildTeamsMap(JsonArray jsonArray) {
+    private ObservableMap<String, Team> buildTeamsMap(JsonArray jsonArray, Draft draft) {
         ObservableMap<String, Team> map = FXCollections.observableHashMap();
         for(int i =0; i < jsonArray.size(); i++){
             JsonObject get = jsonArray.getJsonObject(i);
-            Team team = loadFantasyTeams(get);
+            Team team = loadFantasyTeams(get, draft);
             map.put(team.getName(), team);
         }
         
@@ -319,7 +328,58 @@ public class JsonDraftFileManager implements PlayerFileManager {
     }
 
     private Team buildFreeAgentsTeam(JsonObject teamJson) {
-        return loadFantasyTeams(teamJson);
+        return loadFantasyTeams(teamJson, null);
+    }
+
+    private Team loadFantasyTeams(JsonObject teamJson, Draft draft) {
+        Team team = new Team("");
+
+        team.setName(teamJson.getString("NAME"));
+        team.setOwner(teamJson.getString("OWNER"));
+        
+        team.setNumberOfPlayer(teamJson.getInt("NUM_PLAYERS"));
+        team.setNumberOfCatchers(teamJson.getInt("NUM_C"));
+        team.setNumberOfPitchers(teamJson.getInt("NUM_P"));
+        team.setNumberOfFirstbasemen(teamJson.getInt("NUM_1B"));
+        team.setNumberOfSecondbasemen(teamJson.getInt("NUM_2B"));
+        team.setNumberOfThirdbasemen(teamJson.getInt("NUM_3B"));
+        team.setNumberOfCornerInfielder(teamJson.getInt("NUM_CI"));
+        team.setNumberOfSS(teamJson.getInt("NUM_SS"));
+        team.setNumberOfMI(teamJson.getInt("NUM_MI"));
+        team.setNumberOfOF(teamJson.getInt("NUM_OF"));
+        team.setNumberOfU(teamJson.getInt("NUM_U"));
+        team.setNumberOfTaxi(teamJson.getInt("NUM_TAXI"));
+        
+        team.setMoney(teamJson.getInt("MONEY"));
+        
+        team.setW(Double.parseDouble(teamJson.getString("W")));
+        team.setSV(Double.parseDouble(teamJson.getString("SV")));
+        team.setK(Double.parseDouble(teamJson.getString("K")));
+        team.setR(Double.parseDouble(teamJson.getString("R")));
+        team.setHR(Double.parseDouble(teamJson.getString("HR")));
+        team.setRBI(Double.parseDouble(teamJson.getString("RBI")));
+        team.setSB(Double.parseDouble(teamJson.getString("SB")));
+        team.setBA(Double.parseDouble(teamJson.getString("BA")));
+        team.setERA(Double.parseDouble(teamJson.getString("ERA")));
+        team.setWHIP(Double.parseDouble(teamJson.getString("WHIP")));
+        
+        team.setTotalPoints(teamJson.getInt("TOTALPTS"));
+        team.setNeededPlayers(teamJson.getInt("NEEDPLAYERS"));
+        team.setMoneyPerPlayer(teamJson.getInt("MONEYPP"));
+        
+        team.setTaxi(buildPlayersArray(teamJson.getJsonArray("TAXI")));
+        team.setPlayers(buildPlayersArray(teamJson.getJsonArray("PLAYERS")));
+        
+        if (!team.getName().equals("Free Agent")) {
+            team.getPlayers().sort(new FantasyTeamPositionComparator());
+            for (BaseballPlayer bp : team.getPlayers()) {
+                if (bp.getContract().equals("S2")) {
+                    draft.getDraftOrder().add(bp);
+                }
+            }
+        }
+        
+        return team;
     }
 
     private ObservableList<BaseballPlayer> buildPlayersArray(JsonArray jsonArray) {
@@ -336,10 +396,11 @@ public class JsonDraftFileManager implements PlayerFileManager {
             
             bp.setAB(Double.parseDouble(player.getString("AB")));
             bp.setR(Double.parseDouble(player.getString("R")));
+            bp.setH(Double.parseDouble(player.getString("H")));
             bp.setHR(Double.parseDouble(player.getString("HR")));
             bp.setRBI(Double.parseDouble(player.getString("RBI")));
             bp.setSB(Double.parseDouble(player.getString("SB")));
-            bp.setH(Double.parseDouble(player.getString("H")));
+            
             
             bp.setIP(Double.parseDouble(player.getString("IP")));
             bp.setER(Double.parseDouble(player.getString("ER")));
@@ -349,8 +410,11 @@ public class JsonDraftFileManager implements PlayerFileManager {
             bp.setBB(Double.parseDouble(player.getString("BB")));
             bp.setK(Double.parseDouble(player.getString("K")));
             
+            bp.setBA(Double.parseDouble(player.getString("BA")));
+            bp.setERA(Double.parseDouble(player.getString("ERA")));
+            bp.setWHIP(Double.parseDouble(player.getString("WHIP")));
             
-            
+            bp.setEstimatedValue(player.getInt("EST_VALUE"));
             
             bp.setNOTES(player.getString("NOTES"));
             bp.setYEAR_OF_BIRTH(player.getInt("YEAR_OF_BIRTH"));
@@ -364,5 +428,17 @@ public class JsonDraftFileManager implements PlayerFileManager {
         }
         return list;
     }
+
+    private JsonArray makeDraftOrderArray(ObservableList<BaseballPlayer> draftOrder) {
+        JsonArrayBuilder jsab = Json.createArrayBuilder();
+        draftOrder.stream().forEach((bp) -> {
+            jsab.add(makeJsonPlayer(bp));
+        });
+        return jsab.build();
+    }
+    
+//    private ObservableList<BaseballPlayer> buildDraftOrder(){
+//        
+//    }
 
 }

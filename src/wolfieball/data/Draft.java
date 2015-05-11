@@ -20,7 +20,9 @@ import javafx.concurrent.Task;
 import wolfieball.data.compare.BAComparator;
 import wolfieball.data.compare.ERAComparator;
 import wolfieball.data.compare.HRComparator;
+import wolfieball.data.compare.HitterRankComparator;
 import wolfieball.data.compare.KComparator;
+import wolfieball.data.compare.PitcherRankComparator;
 import wolfieball.data.compare.RBIComparator;
 import wolfieball.data.compare.RComparator;
 import wolfieball.data.compare.RankedComparator;
@@ -116,6 +118,7 @@ public class Draft {
         Team newFreeAgents = new Team(FREEAGENTS);
         newFreeAgents.setOwner("MLB");
         setFreeAgents(newFreeAgents);
+        draftOrder.clear();
     }
     
     private boolean isPaused;
@@ -201,7 +204,7 @@ public class Draft {
                 if (t.getPlayers().size() < 23) {
                     return draftToTeam(bestPlayer, t);
                 }else {
-                    if (t.getTaxi().size() <= 8) {
+                    if (t.getTaxi().size() < 8) {
                         return draftToTaxi(bestPlayer, t);
                     }
                 }
@@ -254,7 +257,53 @@ public class Draft {
     }
     
     public void calcEstValue(){
+        allHitters.clear();
+        allPitchers.clear();
+        int allMoneyLeft = 0;
+        int pitchersNeeded = 0;
+        int hittersNeeded = 0;
         
+        for(Team t : mapToList()){
+            if(t.getPlayers().size() <= 23){
+                allMoneyLeft += t.getMoney();
+                pitchersNeeded += 9 - t.getNumberOfPitchers();
+                hittersNeeded = (23-9) - t.getNumberOfHitters();
+            }
+        }
+        
+        
+        freeAgents.getPlayers().stream().forEach((bp) -> {
+            if(bp.getQP().equals("P")){
+                allPitchers.add(bp);
+            }else{
+                allHitters.add(bp);
+            }
+        });
+        
+        allPitchers.sort(new PitcherRankComparator());
+        allHitters.sort(new HitterRankComparator());
+        
+        int medianSalaryH = allMoneyLeft / ((2 * hittersNeeded)==0?Integer.MAX_VALUE:(2 * hittersNeeded));
+        int medianSalaryP = allMoneyLeft / ((2 * pitchersNeeded)==0?Integer.MAX_VALUE:(2 * pitchersNeeded));
+        
+        int denom = (hittersNeeded + pitchersNeeded);
+        
+        int avgSal;
+        if(denom!=0){
+            avgSal = allMoneyLeft / denom;
+        }else{
+            avgSal = 0;
+        }
+        
+       
+        for(int i = 0; i < pitchersNeeded; i++){
+            BaseballPlayer pitcher = allPitchers.get(i);
+            pitcher.setEstimatedValue(avgSal/(i+1));  /// medianSalaryP * (pitchersNeeded * (2 / (i+1==0?Integer.MAX_VALUE:i+1)))
+        }
+        for(int i = 0; i < hittersNeeded; i++){
+            BaseballPlayer hitter = allHitters.get(i);
+            hitter.setEstimatedValue(avgSal/(i+1)); //medianSalaryH * (hittersNeeded * (2 / (i+1==0?Integer.MAX_VALUE:i+1)))
+        }
     }
 
 

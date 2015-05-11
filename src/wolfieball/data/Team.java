@@ -233,6 +233,10 @@ public class Team {
     public ObservableList<BaseballPlayer> getTaxi() {
         return taxi;
     }
+
+    public void setTaxi(ObservableList<BaseballPlayer> taxi) {
+        this.taxi = taxi;
+    }
     
     
 
@@ -609,11 +613,12 @@ public class Team {
         K.set(K_local);
         ERA.set(ERA_local);
         WHIP.set(WHIP_local);
-        neededPlayers.set(31-numberOfPlayer.get());
+        neededPlayers.set(23-numberOfPlayer.get());
         money.set(260 - salarySum);
         moneyPerPlayer.set(money.get()/(neededPlayers.get()==0?Integer.MAX_VALUE:neededPlayers.get()));
         
     }
+    
     private final IntegerProperty neededPlayers = new SimpleIntegerProperty(31);
 
     public int getNeededPlayers() {
@@ -682,6 +687,16 @@ public class Team {
         }
         
         return true;
+    }
+
+    int getNumberOfHitters() {
+        int sum = 0;
+        for(BaseballPlayer bp : players){
+            if(!bp.getQP().equals("P")){
+                sum++;
+            }
+        }
+        return sum;
     }
     
     

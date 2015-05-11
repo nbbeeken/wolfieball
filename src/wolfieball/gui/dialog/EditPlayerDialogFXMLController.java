@@ -119,6 +119,17 @@ public class EditPlayerDialogFXMLController implements Initializable {
         
         fantasyTeamCombo.setOnAction(e -> {
             Team selectTeam = fantasyTeamCombo.getValue();
+            
+            if(selectTeam.getPlayers().size()<23){
+                contractCombo.getItems().remove("X");
+                filterPosition(selectTeam);
+            }else{
+                contractCombo.getItems().remove("S1");
+                contractCombo.getItems().remove("S2");
+                positionCombo.getItems().clear();
+                positionCombo.getItems().add("Taxi Squad");
+            }
+            
             if(selectTeam.getName().equals("Free Agent")){
                 positionCombo.setDisable(true);
                 contractCombo.setDisable(true);
@@ -128,51 +139,7 @@ public class EditPlayerDialogFXMLController implements Initializable {
                 contractCombo.setDisable(false);
                 salaryField.setDisable(false);
             }
-            if (!selectTeam.equals(DraftManager.getDraftManager().getDraft().getFreeAgents())) {
-                if (selectTeam.getNumberOfCatchers() == 2 && positionCombo.getItems().contains("C")) {
-                    positionCombo.getItems().remove("C");
-                }
-
-                if (selectTeam.getNumberOfCornerInfielder() == 1 && positionCombo.getItems().contains("CI")) {
-                    positionCombo.getItems().remove("CI");
-                }
-
-                if (selectTeam.getNumberOfFirstbasemen() == 1 && positionCombo.getItems().contains("1B")) {
-                    positionCombo.getItems().remove("1B");
-                }
-
-                if (selectTeam.getNumberOfSecondbasemen() == 1 && positionCombo.getItems().contains("2B")) {
-                    positionCombo.getItems().remove("2B");
-                }
-
-                if (selectTeam.getNumberOfThirdbasemen() == 1 && positionCombo.getItems().contains("3B")) {
-                    positionCombo.getItems().remove("3B");
-                }
-
-                if (selectTeam.getNumberOfPitchers() == 9 && positionCombo.getItems().contains("P")) {
-                    positionCombo.getItems().remove("P");
-                }
-
-                if (selectTeam.getNumberOfSS() == 1 && positionCombo.getItems().contains("SS")) {
-                    positionCombo.getItems().remove("SS");
-                }
-
-                if (selectTeam.getNumberOfMI() == 1 && positionCombo.getItems().contains("MI")) {
-                    positionCombo.getItems().remove("MI");
-                }
-
-                if (selectTeam.getNumberOfU() == 1 && positionCombo.getItems().contains("U")) {
-                    positionCombo.getItems().remove("U");
-                }
-
-                if (selectTeam.getNumberOfOF() == 1 && positionCombo.getItems().contains("OF")) {
-                    positionCombo.getItems().remove("OF");
-                }
-
-                if (selectTeam.getNumberOfPlayer() == 23) {
-                    positionCombo.getItems().clear();
-                }
-            }
+            
         });
         
         
@@ -210,6 +177,54 @@ public class EditPlayerDialogFXMLController implements Initializable {
             window.close();
         });
         
+    }
+
+    public void filterPosition(Team selectTeam) {
+        if (!selectTeam.equals(DraftManager.getDraftManager().getDraft().getFreeAgents())) {
+            if (selectTeam.getNumberOfCatchers() == 2 && positionCombo.getItems().contains("C")) {
+                positionCombo.getItems().remove("C");
+            }
+            
+            if (selectTeam.getNumberOfCornerInfielder() == 1 && positionCombo.getItems().contains("CI")) {
+                positionCombo.getItems().remove("CI");
+            }
+            
+            if (selectTeam.getNumberOfFirstbasemen() == 1 && positionCombo.getItems().contains("1B")) {
+                positionCombo.getItems().remove("1B");
+            }
+            
+            if (selectTeam.getNumberOfSecondbasemen() == 1 && positionCombo.getItems().contains("2B")) {
+                positionCombo.getItems().remove("2B");
+            }
+            
+            if (selectTeam.getNumberOfThirdbasemen() == 1 && positionCombo.getItems().contains("3B")) {
+                positionCombo.getItems().remove("3B");
+            }
+            
+            if (selectTeam.getNumberOfPitchers() == 9 && positionCombo.getItems().contains("P")) {
+                positionCombo.getItems().remove("P");
+            }
+            
+            if (selectTeam.getNumberOfSS() == 1 && positionCombo.getItems().contains("SS")) {
+                positionCombo.getItems().remove("SS");
+            }
+            
+            if (selectTeam.getNumberOfMI() == 1 && positionCombo.getItems().contains("MI")) {
+                positionCombo.getItems().remove("MI");
+            }
+            
+            if (selectTeam.getNumberOfU() == 1 && positionCombo.getItems().contains("U")) {
+                positionCombo.getItems().remove("U");
+            }
+            
+            if (selectTeam.getNumberOfOF() == 5 && positionCombo.getItems().contains("OF")) {
+                positionCombo.getItems().remove("OF");
+            }
+            
+            if (selectTeam.getNumberOfPlayer() == 23) {
+                positionCombo.getItems().clear();
+            }
+        }
     }
 
     private void okAction(ActionEvent e, BaseballPlayer bp, MainGUI gui) throws NumberFormatException {
@@ -252,7 +267,7 @@ public class EditPlayerDialogFXMLController implements Initializable {
                }
                 
             }
-            
+            DraftManager.getDraftManager().getDraft().calcEstValue();
             window.close();
             
             
@@ -263,7 +278,7 @@ public class EditPlayerDialogFXMLController implements Initializable {
                 gui.setFantasyTableData(fantasyTeamCombo.getValue().getPlayers());
             }
             
-            gui.getPlayerTable().setItems(DraftManager.getDraftManager().getDraft().getFreeAgents().getPlayers());
+            //gui.getPlayerTable().setItems(DraftManager.getDraftManager().getDraft().getFreeAgents().getPlayers());
             //gui.getFantasyPlayers().getItems().sort(new FantasyTeamPositionComparator());
         }else{
             errorLbls.setVisible(true);

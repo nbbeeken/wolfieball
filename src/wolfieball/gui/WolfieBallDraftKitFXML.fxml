@@ -22,7 +22,7 @@
                         <Image url="@../../../images/Logo.png" />
                      </image>
                   </ImageView>
-                  <TextArea fx:id="infoArea" editable="false" layoutX="618.0" layoutY="7.0" minWidth="-Infinity" opacity="0.3" prefHeight="54.0" prefWidth="553.0" wrapText="true">
+                  <TextArea fx:id="infoArea" editable="false" layoutX="618.0" layoutY="7.0" minWidth="-Infinity" opacity="0.0" prefHeight="54.0" prefWidth="553.0" wrapText="true">
                      <HBox.margin>
                         <Insets bottom="5.0" top="5.0" />
                      </HBox.margin>
@@ -105,15 +105,7 @@
                     <content>
                       <AnchorPane fx:id="startRoot" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <ImageView fx:id="splash" fitHeight="772.0" fitWidth="1294.0" layoutX="-17.0" layoutY="-21.0" pickOnBounds="true">
-                                 <image>
-                                    <Image url="@../../../images/baseball.gif" />
-                                 </image>
-                                 <rotationAxis>
-                                    <Point3D />
-                                 </rotationAxis>
-                              </ImageView>
-                              <Button fx:id="loadDraftBtn" layoutX="947.0" layoutY="521.0" mnemonicParsing="false" text="Load Existing Draft">
+                              <Button fx:id="loadDraftBtn" layoutX="495.0" layoutY="360.0" mnemonicParsing="false" text="Load Existing Draft">
                                  <font>
                                     <Font size="23.0" />
                                  </font>
@@ -125,7 +117,7 @@
                                     </ImageView>
                                  </graphic>
                               </Button>
-                              <Button fx:id="newDraftBtn" layoutX="947.0" layoutY="450.0" mnemonicParsing="false" text="Start New Draft">
+                              <Button fx:id="newDraftBtn" layoutX="512.0" layoutY="285.0" mnemonicParsing="false" text="Start New Draft">
                                  <font>
                                     <Font size="23.0" />
                                  </font>
@@ -137,10 +129,6 @@
                                     </ImageView>
                                  </graphic>
                               </Button>
-                              <Hyperlink fx:id="hplink" layoutX="14.0" layoutY="666.0" text="Artist">
-                                 <font>
-                                    <Font name="System Bold" size="14.0" />
-                                 </font></Hyperlink>
                            </children>
                         </AnchorPane>
                     </content>
@@ -203,7 +191,7 @@
                                                       <Insets left="20.0" />
                                                    </padding>
                                                 </Label>
-                                                <ComboBox fx:id="fTeamCombo" prefHeight="25.0" prefWidth="164.0" promptText="Select a Fantasy Team" />
+                                                <ComboBox fx:id="fTeamCombo" prefHeight="39.0" prefWidth="250.0" promptText="Select a Fantasy Team" />
                                              </children>
                                           </HBox>
                                        </children>

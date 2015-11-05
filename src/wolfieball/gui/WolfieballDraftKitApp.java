@@ -49,8 +49,8 @@ public class WolfieballDraftKitApp extends Application {
         Screen screen = Screen.getPrimary();
         Rectangle2D bounds = screen.getVisualBounds();
         
-        stage.setMaxWidth(bounds.getWidth() / 1.5);
-        stage.setMaxHeight(bounds.getHeight() / 1.2);
+        //stage.setMaxWidth(bounds.getWidth() / 1.5);
+        //stage.setMaxHeight(bounds.getHeight() / 1.2);
         //stage.setFullScreen(true);
         stage.setTitle("Wolfieball Draft Kit");
         stage.show();

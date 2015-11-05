@@ -272,8 +272,8 @@ public class MainGUI implements Initializable {
     private Button headerExportBtn;
     @FXML
     private Button headerQuitBtn;
-    @FXML
-    private Hyperlink hplink;
+//    @FXML
+//    private Hyperlink hplink;
     @FXML
     private Window window;
     
@@ -639,9 +639,9 @@ public class MainGUI implements Initializable {
         //Main Buttons:
         //headerSaveBtn.setDisable(true);
         headerExportBtn.setDisable(true);
-        hplink.setOnAction(e -> {
-            WolfieballDraftKitApp.getHost().showDocument("http://www.rebeccamock.com/");
-        });
+//        hplink.setOnAction(e -> {
+//            WolfieballDraftKitApp.getHost().showDocument("http://www.rebeccamock.com/");
+//        });
         
         //Set Events
         headerQuitBtn.setOnAction((ActionEvent e) ->{
